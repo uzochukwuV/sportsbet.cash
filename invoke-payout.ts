@@ -1,4 +1,4 @@
-import { SignatureTemplate } from "cashscript";
+import { ElectrumNetworkProvider, Output, SignatureTemplate, TransactionBuilder } from "cashscript";
 import { hexToBin, vmNumberToBigInt } from "@bitauth/libauth";
 import { Wallet, TestNetWallet } from "mainnet-js";
 import { tokenId, collectionSize, payoutAddress, network } from "./mintingParams.ts";
@@ -22,6 +22,9 @@ console.log('Total balance contracts:', await contract.getBalance());
 
 const contractUtxos = await contract.getUtxos();
 
+// Initialise a network provider for network operations
+const provider = new ElectrumNetworkProvider(network);
+
 for (const contractUtxo of contractUtxos) {
   // Filter UTXOs on smart contract address
   const isMintingUtxo = contractUtxo?.token?.category == tokenId && contractUtxo?.token?.nft?.capability == "minting";
@@ -29,20 +32,30 @@ for (const contractUtxo of contractUtxos) {
 
   const payoutAmount = contractUtxo.satoshis - 2000n;
   if (payoutAmount < 1000) continue
-  const tokenDetails = contractUtxo.token;
+
+  const contractCommitment = contractUtxo.token?.nft?.commitment as string
+  const contractMintingState = vmNumberToBigInt(hexToBin(contractCommitment))
+  if(typeof contractMintingState == "string") throw new Error("Error in vmNumberToBigInt")
+
+  let newContractOutput: Output | undefined
+  // Check commitment to see minting contract is ongoing
+  if (contractMintingState < BigInt(collectionSize)){
+    newContractOutput = {
+      to: contract.address,
+      amount: 1000n,
+      token: contractUtxo.token
+    };
+  }
+
+  const payoutOutput = { to: payoutAddress, amount: payoutAmount };
 
   try {
-    const transaction = contract.functions
-      .payout(signatureTemplate, signatureTemplate.getPublicKey())
-      .from(contractUtxo)
-      .withoutChange()
-    // Check commitment to see minting contract is ongoing
-    const contractCommitment = vmNumberToBigInt(hexToBin(contractUtxo?.token?.nft?.commitment as string))
-    if(typeof contractCommitment == "string") throw new Error("Error in vmNumberToBigInt")
+    const transactionBuilder = new TransactionBuilder({ provider })
+    transactionBuilder.addInput(contractUtxo, contract.unlock.payout(signatureTemplate, signatureTemplate.getPublicKey()))
     // If mint is ongoing, need to recreate minting contract at payout
-    if (contractCommitment <= BigInt(collectionSize)) transaction.to(contract.tokenAddress, 1000n, tokenDetails);
-    transaction.to(payoutAddress, payoutAmount);
-    const { txid } = await transaction.send();
+    if(newContractOutput) transactionBuilder.addOutput(newContractOutput);
+    transactionBuilder.addOutput(payoutOutput);
+    const { txid } = await transactionBuilder.send();
     console.log(`Payout transaction of ${payoutAmount} satoshis succesfully sent! \ntxid: ${txid}`);
   } catch (error) { console.log(error) }
 }

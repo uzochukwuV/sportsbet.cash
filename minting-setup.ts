@@ -38,10 +38,9 @@ if(!mintingUtxo || !fundingUtxo) throw new Error("Error in mintingUtxo || fundin
 const inputsMint = [ mintingUtxo, fundingUtxo ];
 console.log(inputsMint);
 
-const transactionBuilder = new TransactionBuilder({ provider })
+const transactionBuilder = new TransactionBuilder({ provider, maximumFeeSatoshis: 2000n })
   .addInputs(inputsMint, signatureTemplate.unlockP2PKH())
   .addOutputs(mintingThreads)
-  .setMaxFee(2000n)
 
 const changeAmount = mintingUtxo.satoshis + fundingUtxo.satoshis - 1100n * BigInt(numberOfThreads) - 500n;
 if(changeAmount > 2000n) transactionBuilder.addOutput({to: wallet.cashaddr, amount: changeAmount});
