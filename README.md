@@ -1,94 +1,292 @@
-# BCH Minting Contract
+# SportsBet.cash
 
-Multi-threaded minting smart contract for the Bitcoin Cash network.
+**On-Chain Sports Betting AMM for Bitcoin Cash**
 
-The CashScript code for the smart contract is `contract/mint.cash` and the corresponding artifact `contract/mint.json`.
+A fully on-chain prediction market for simulated sports matches. Uses VRF (Verifiable Random Function) via commit-reveal scheme for fair, verifiable score generation, and AMM mechanics (CPMM) for continuous liquidity trading.
 
-The repo also includes helper functions to set up a smart contract with `minting-setup.ts` and to claim payouts with `invoke-payout.ts`.
+## Features
 
-## Contract Design
+- **AMM Prediction Market** - Polymarket-style trading with Constant Product Market Maker
+- **VRF Score Generation** - Verifiable random scores via cryptographic commit-reveal
+- **Progressive Score Reveal** - Halftime scores revealed mid-match for dynamic trading
+- **CashTokens Integration** - Outcome tokens as fungible CashTokens
+- **Trustless Settlement** - Automatic payout based on final scores
 
-### Multi-threaded
+## How It Works
 
-The contract design is multi-threaded meaning multiple contract UTXOs running in parallel. This set up enables multiple simultaneous mint interactions. Clients can randomly pick one of the threads or an application server can manage idle/active UTXOs.
+### 1. Match Creation
+```
+Oracle generates: secret = random_256_bits
+Oracle commits: hash256(secret || matchId)
+Trading opens with 50/50 odds
+```
 
-This design also means the mint is not actually sequential, i.e. NFT number 16 can be minted before NFT number 12, depending on how much each of the different threads is used.
+### 2. Trading Phase 1 (Pre-Match)
+```
+Users buy HOME_WIN or AWAY_WIN tokens
+Prices adjust based on demand (CPMM: x * y = k)
+Price reflects market's implied probability
+```
 
-### Practical
+### 3. Halftime Reveal
+```
+Oracle reveals: secret
+Scores generated: hash(secret + 'H') → deterministic scores
+Anyone can verify: hash256(secret || matchId) == commitment
+```
 
-The minting contract is designed to be practical.
-For example the smart contract separates the NFT output to the user from their change output to ensure compatibility with different CashTokens wallets.
-The contract also has a separate payout function instead of having a payout output on each minting transaction, which would create thousands of small payout outputs.
-Lastly, it burns the minting NFTs when the contract ends, this way there are no inactive minting NFTs remaining at the end of the contract.
+### 4. Trading Phase 2 (Halftime Trading)
+```
+Market reacts to halftime scores
+New trading opportunity
+Odds adjust based on current game state
+```
 
-### Optimized & Clean
+### 5. Final Reveal & Settlement
+```
+Oracle reveals second half scores
+Winners redeem tokens for 1 BCH unit each
+Losers' tokens worth 0
+Draws: both token types worth 0.5 BCH units
+```
 
-The minting contract is optimized to be minimal in size (the redeem script is only 163 bytes).
-For example, the `tokenId` is not included as a contract constructor argument which saves ~30 bytes in contract size.
-The size for the different txs are as follows:
+## AMM Mechanics
 
-- Minting transaction, no change ~505 bytes
-- Minting transaction, with change ~539 bytes
-- Payout transaction, continue mint ~430 bytes
-- Payout transaction, end mint ~350 bytes
+Uses Constant Product Market Maker (like Uniswap):
 
-The contract code itself is clean & commented as to easily be auditable and serve as an example for contract creators.
-The contract is flexible, it allows for an optional change output in `mintNFT` and does not impose fixed, hardcoded miner fees.
-The contract combines `burnMintingNft` functionality in a minimal way into the `payout` function.
+```
+Formula: x * y = k
+
+Where:
+  x = HOME_WIN tokens in pool
+  y = AWAY_WIN tokens in pool
+  k = constant (liquidity depth)
+
+Price calculation:
+  Price(HOME) = y / (x + y)
+  Price(AWAY) = x / (x + y)
+
+Constraint: Price_HOME + Price_AWAY = 1
+```
+
+### Example Trade
+
+```
+Initial: 10,000 HOME, 10,000 AWAY
+Prices: HOME = 0.50 (50%), AWAY = 0.50 (50%)
+
+User buys 1,000 HOME tokens for ~1,111 sats:
+New state: 9,000 HOME, 11,111 AWAY
+New prices: HOME = 0.55 (55%), AWAY = 0.45 (45%)
+```
 
 ## Installation
 
-```
-git clone git@github.com:cashninjas/minting-contract.git
+```bash
+git clone https://github.com/uuzor/sportsbet.cash.git
+cd sportsbet.cash
 yarn install
 ```
 
-## Usage
-
-You need to create a minting NFT with a CashTokens wallet in advance and you need to separate the authChain so you can manage your NFT collection's metadata.
-For more info about CashTokens metadata, see the [bcmr specification](https://github.com/bitjson/chip-bcmr#zeroth-descendant-transaction-chains).
-
-Next, to set up a minting contract, configure the parameters of the mint in `mintingParams.ts`:
-
-```js
-{
-    tokenId: "",
-    collectionSize: 10_000,
-    mintPriceSats: 5_000_000,
-    payoutAddres: "", // with bitcoincash: or bchtest: prefix
-    numberOfThreads: 5,
-    network : "chipnet"
-}
-```
-To actually do the minting setup on-chain, configure the wallet holding the minting NFT and a little BCH in a `.env` file.
-Example .env file:
+## Quick Start
 
 ```bash
-SEEDPHRASE_SETUP = ""
-DERIVATIONPATH_SETUP = "m/44'/145'/0'/0/0"
-
-SEEDPHRASE_PAYOUT = ""
-DERIVATIONPATH_PAYOUT = "m/44'/145'/0'/0/0"
+# Run the interactive demo
+yarn demo
 ```
 
-You need to provide the correct `DERIVATIONPATH_SETUP` to an adrress so mainnet-js can initialize a single address wallet.
-For example if your minting NFT is at address index 4 in your Electron Cash, change `m/44'/145'/0'/0/0` to `m/44'/145'/0'/0/4`.
+### Programmatic Usage
 
-Then create the minting set up with
+```typescript
+import { createSportsBetClient, SportType } from 'sportsbet-cash';
+
+// Create client
+const client = createSportsBetClient('chipnet');
+
+// Create a match
+const match = await client.matchManager.createMatch({
+  sportType: SportType.BASKETBALL,
+  homeTeam: 'LAL1',
+  awayTeam: 'GSW1',
+  startTime: Math.floor(Date.now() / 1000) + 3600,
+  halftimeTime: Math.floor(Date.now() / 1000) + 5400,
+  endTime: Math.floor(Date.now() / 1000) + 7200,
+  initialLiquidity: 1000000n
+}, oracleSignature);
+
+// Get current odds
+const pool = await client.matchManager.getPool(match.config.matchId);
+const state = await pool.getPoolState();
+console.log(`Lakers: ${state.priceHome}, Warriors: ${state.priceAway}`);
+
+// Buy tokens
+const result = await pool.buyTokens({
+  matchId: match.config.matchId,
+  outcomeType: 'HOME_WIN',
+  amount: 100000n, // sats
+  maxSlippage: 0.01, // 1%
+  isBuy: true
+}, userUtxos, userAddress, signatureTemplate);
+```
+
+## Project Structure
 
 ```
-tsx minting-setup.ts
+sportsbet.cash/
+├── contracts/
+│   ├── amm-pool.cash         # AMM swap logic
+│   ├── match-factory.cash    # Match creation & token minting
+│   ├── oracle.cash           # VRF commit-reveal
+│   └── settlement.cash       # Winner redemption
+├── src/
+│   ├── types.ts              # TypeScript type definitions
+│   ├── amm.ts                # AMM calculations & pool interaction
+│   ├── oracle.ts             # VRF/Oracle management
+│   ├── match.ts              # Match lifecycle management
+│   ├── settlement.ts         # Settlement & payout logic
+│   └── index.ts              # Main exports
+├── test/
+│   ├── vrf.test.ts           # VRF/Oracle tests
+│   ├── amm.test.ts           # AMM calculation tests
+│   └── settlement.test.ts    # Settlement tests
+└── scripts/
+    └── demo.ts               # Interactive demo
 ```
 
-This will create the different threads for the minting contract with the CashScript advanced TransactionBuilder.
+## Scripts
 
-Each tread is a UTXO on the smart contract address with a minting NFT.
-The minting NFTs each have a different starting commitment, starting from the VMnumber zero (an empty commitment).
+```bash
+# Build TypeScript
+yarn build
 
-To invoke the payouts from the minting contract, configure the wallet authorized to claim the payout in the `.env` file.
+# Compile CashScript contracts
+yarn compile:contracts
 
-Then claim the contract payouts with
+# Run demo
+yarn demo
 
+# Run tests
+yarn test
+
+# Create a new match
+yarn create-match
+
+# Execute a trade
+yarn trade
+
+# Settle a match
+yarn settle
 ```
-tsx invoke-payout.ts
+
+## Sport Types
+
+| Sport | Score Range (per half) | Typical Final |
+|-------|------------------------|---------------|
+| Basketball | 30-75 | 100-130 |
+| Football (Soccer) | 0-4 | 0-5 |
+| American Football | 0-28 | 14-35 |
+
+## VRF Security Model
+
+The commit-reveal scheme ensures fairness:
+
+1. **Pre-commitment**: Oracle commits to randomness BEFORE any bets
+2. **Unpredictability**: Users cannot predict outcomes from commitment
+3. **Binding**: Oracle cannot change outcome after commitment
+4. **Verifiability**: Anyone can verify the reveal matches commitment
+
+```typescript
+// Oracle commits (before trading)
+commitment = hash256(hash256(secret || matchId))
+
+// Oracle reveals (after trading closes)
+reveal(secret)
+
+// Anyone verifies
+assert(hash256(hash256(secret || matchId)) === commitment)
+
+// Scores derived deterministically
+halfTimeScores = deriveScores(hash256(secret + 'H'))
+finalScores = deriveScores(hash256(secret + 'F'))
 ```
+
+## Token Model
+
+Each match creates two fungible token categories:
+
+| Token | Represents | Settlement |
+|-------|------------|------------|
+| `HOME_WIN` | Home team wins | 1.0 BCH if home wins |
+| `AWAY_WIN` | Away team wins | 1.0 BCH if away wins |
+
+**Draw Handling**: Both tokens redeem for 0.5 BCH units.
+
+## Fee Structure
+
+| Fee | Amount | Recipient |
+|-----|--------|-----------|
+| Trading Fee | 0.3% | Liquidity Pool |
+| Protocol Fee | 0.1% | Treasury |
+
+## Environment Configuration
+
+Create a `.env` file:
+
+```bash
+# Oracle wallet
+SEEDPHRASE_ORACLE = "your oracle seed phrase"
+DERIVATIONPATH_ORACLE = "m/44'/145'/0'/0/0"
+
+# Treasury wallet
+SEEDPHRASE_TREASURY = "your treasury seed phrase"
+DERIVATIONPATH_TREASURY = "m/44'/145'/0'/0/0"
+
+# Network
+NETWORK = "chipnet"  # or "mainnet"
+```
+
+## Security Considerations
+
+1. **Oracle Trust**: Single oracle model - future versions will support multi-oracle threshold
+2. **Front-running**: Mitigated by commit-reveal for both oracle and optionally user bets
+3. **Liquidity**: Initial liquidity must be sufficient to prevent manipulation
+4. **Time-locks**: State transitions are time-locked to prevent premature reveals
+
+## Roadmap
+
+### Phase 1: MVP (Current)
+- [x] Architecture design
+- [x] CashScript contracts (AMM, Oracle, Settlement)
+- [x] TypeScript SDK
+- [x] VRF commit-reveal implementation
+- [x] Basic test suite
+
+### Phase 2: Enhanced
+- [ ] Contract deployment scripts
+- [ ] Multi-oracle VRF
+- [ ] LP token rewards
+- [ ] Web UI
+
+### Phase 3: Advanced
+- [ ] ZK-private bets
+- [ ] Additional sport types
+- [ ] Cross-chain settlement
+- [ ] Governance token
+
+## Contributing
+
+Contributions welcome! Please read our contributing guidelines.
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+## Acknowledgments
+
+- [CashScript](https://cashscript.org/) - Bitcoin Cash smart contracts
+- [Polymarket](https://polymarket.com/) - AMM prediction market inspiration
+- [Uniswap](https://uniswap.org/) - CPMM formula
+
+---
+
+**SportsBet.cash** - Trustless. Verifiable. On-chain.

@@ -1,0 +1,323 @@
+/**
+ * SportsBet.cash - AMM Tests
+ *
+ * Tests for the Constant Product Market Maker (CPMM) logic.
+ */
+
+import { describe, it } from 'node:test';
+import assert from 'node:assert';
+import {
+  calculatePrices,
+  calculateTokensOut,
+  calculateBchOut,
+  calculateBchRequired,
+  calculatePriceImpact,
+  calculateMinTokensOut,
+  parsePoolState,
+  encodePoolState,
+} from '../src/amm.js';
+
+describe('Price Calculations', () => {
+  it('should calculate 50/50 prices for equal reserves', () => {
+    const { priceHome, priceAway } = calculatePrices(1000n, 1000n);
+
+    assert.strictEqual(priceHome, 0.5, 'Home price should be 0.5');
+    assert.strictEqual(priceAway, 0.5, 'Away price should be 0.5');
+  });
+
+  it('should sum to 1.0', () => {
+    const { priceHome, priceAway } = calculatePrices(7500n, 2500n);
+
+    assert.ok(
+      Math.abs(priceHome + priceAway - 1.0) < 0.0001,
+      'Prices should sum to 1.0'
+    );
+  });
+
+  it('should calculate correct prices for unequal reserves', () => {
+    // 75% HOME, 25% AWAY in reserves means HOME is cheaper (more supply)
+    const { priceHome, priceAway } = calculatePrices(7500n, 2500n);
+
+    // Price = otherReserve / total
+    // priceHome = 2500 / 10000 = 0.25
+    assert.strictEqual(priceHome, 0.25, 'Home price should be 0.25');
+    assert.strictEqual(priceAway, 0.75, 'Away price should be 0.75');
+  });
+
+  it('should handle zero reserves gracefully', () => {
+    const { priceHome, priceAway } = calculatePrices(0n, 0n);
+
+    assert.strictEqual(priceHome, 0.5, 'Should default to 0.5');
+    assert.strictEqual(priceAway, 0.5, 'Should default to 0.5');
+  });
+});
+
+describe('Token Out Calculation (Buying)', () => {
+  it('should calculate tokens out with no fee', () => {
+    // reserveToken = 10000, reserveOther = 10000
+    // bchIn = 1000
+    // tokensOut = (10000 * 1000) / (10000 + 1000) = 10000000 / 11000 = 909
+    const tokensOut = calculateTokensOut(1000n, 10000n, 10000n, 0n, 10000n);
+
+    assert.strictEqual(tokensOut, 909n, 'Should get ~909 tokens');
+  });
+
+  it('should return fewer tokens with fee', () => {
+    const tokensOutNoFee = calculateTokensOut(1000n, 10000n, 10000n, 0n, 10000n);
+    const tokensOutWithFee = calculateTokensOut(1000n, 10000n, 10000n, 30n, 10000n);
+
+    assert.ok(
+      tokensOutWithFee < tokensOutNoFee,
+      'Tokens with fee should be less'
+    );
+  });
+
+  it('should handle large trades', () => {
+    // Buying half the reserve
+    const tokensOut = calculateTokensOut(10000n, 10000n, 10000n, 0n, 10000n);
+
+    // tokensOut = (10000 * 10000) / (10000 + 10000) = 5000
+    assert.strictEqual(tokensOut, 5000n, 'Should get 5000 tokens');
+  });
+
+  it('should approach but never reach full reserve', () => {
+    // Even a very large trade can't drain the pool completely
+    const tokensOut = calculateTokensOut(1000000n, 10000n, 10000n, 0n, 10000n);
+
+    assert.ok(tokensOut < 10000n, 'Can never drain full reserve');
+  });
+});
+
+describe('BCH Out Calculation (Selling)', () => {
+  it('should calculate BCH out when selling tokens', () => {
+    // reserveToken = 10000, reserveOther = 10000
+    // tokensIn = 1000
+    // bchOut = (10000 * 1000) / (10000 + 1000) = 909
+    const bchOut = calculateBchOut(1000n, 10000n, 10000n, 0n, 10000n);
+
+    assert.strictEqual(bchOut, 909n, 'Should get ~909 BCH');
+  });
+
+  it('should be symmetric with buying (minus fees)', () => {
+    const reserveToken = 10000n;
+    const reserveOther = 10000n;
+
+    // Buy 500 tokens
+    const bchIn = 526n; // Amount that gives ~500 tokens
+    const tokensBought = calculateTokensOut(bchIn, reserveToken, reserveOther, 0n, 10000n);
+
+    // New reserves after buy
+    const newReserveToken = reserveToken - tokensBought;
+    const newReserveOther = reserveOther + bchIn;
+
+    // Sell those tokens back
+    const bchBack = calculateBchOut(tokensBought, newReserveToken, newReserveOther, 0n, 10000n);
+
+    // Should get back slightly less due to price impact
+    assert.ok(bchBack <= bchIn, 'Should get back less or equal BCH');
+  });
+});
+
+describe('BCH Required Calculation', () => {
+  it('should calculate BCH required for exact token amount', () => {
+    const tokensWanted = 500n;
+    const bchRequired = calculateBchRequired(tokensWanted, 10000n, 10000n, 0n, 10000n);
+
+    // Verify: using this BCH should give us the tokens we want
+    const actualTokens = calculateTokensOut(bchRequired, 10000n, 10000n, 0n, 10000n);
+
+    assert.ok(actualTokens >= tokensWanted, 'Should get at least the tokens wanted');
+  });
+
+  it('should throw for impossible amounts', () => {
+    assert.throws(
+      () => calculateBchRequired(10001n, 10000n, 10000n, 0n, 10000n),
+      /Cannot buy more tokens than in reserve/
+    );
+  });
+
+  it('should account for fees', () => {
+    const tokensWanted = 500n;
+    const bchNoFee = calculateBchRequired(tokensWanted, 10000n, 10000n, 0n, 10000n);
+    const bchWithFee = calculateBchRequired(tokensWanted, 10000n, 10000n, 30n, 10000n);
+
+    assert.ok(bchWithFee > bchNoFee, 'Should need more BCH with fees');
+  });
+});
+
+describe('Price Impact', () => {
+  it('should calculate price impact for buy', () => {
+    const impact = calculatePriceImpact(1000n, 10000n, 10000n, true);
+
+    assert.ok(impact > 0, 'Price impact should be positive');
+    assert.ok(impact < 1, 'Price impact should be less than 100%');
+  });
+
+  it('should calculate price impact for sell', () => {
+    const impact = calculatePriceImpact(1000n, 10000n, 10000n, false);
+
+    assert.ok(impact > 0, 'Price impact should be positive');
+  });
+
+  it('should have higher impact for larger trades', () => {
+    const smallImpact = calculatePriceImpact(100n, 10000n, 10000n, true);
+    const largeImpact = calculatePriceImpact(5000n, 10000n, 10000n, true);
+
+    assert.ok(largeImpact > smallImpact, 'Larger trades should have more impact');
+  });
+
+  it('should have lower impact on deeper pools', () => {
+    const shallowImpact = calculatePriceImpact(1000n, 10000n, 10000n, true);
+    const deepImpact = calculatePriceImpact(1000n, 100000n, 100000n, true);
+
+    assert.ok(deepImpact < shallowImpact, 'Deeper pools should have less impact');
+  });
+});
+
+describe('Slippage Protection', () => {
+  it('should calculate minimum tokens with slippage', () => {
+    const expected = 1000n;
+    const minTokens = calculateMinTokensOut(expected, 0.01); // 1% slippage
+
+    assert.strictEqual(minTokens, 990n, 'Should be 99% of expected');
+  });
+
+  it('should handle zero slippage', () => {
+    const expected = 1000n;
+    const minTokens = calculateMinTokensOut(expected, 0);
+
+    assert.strictEqual(minTokens, 1000n, 'Zero slippage should return exact amount');
+  });
+
+  it('should handle high slippage tolerance', () => {
+    const expected = 1000n;
+    const minTokens = calculateMinTokensOut(expected, 0.5); // 50% slippage
+
+    assert.strictEqual(minTokens, 500n, '50% slippage should return half');
+  });
+});
+
+describe('Constant Product Invariant', () => {
+  it('should maintain k after trade (approximately)', () => {
+    const reserveHome = 10000n;
+    const reserveAway = 10000n;
+    const k = reserveHome * reserveAway;
+
+    // Simulate a buy of HOME tokens
+    const bchIn = 2000n;
+    const tokensOut = calculateTokensOut(bchIn, reserveHome, reserveAway, 0n, 10000n);
+
+    const newReserveHome = reserveHome - tokensOut;
+    const newReserveAway = reserveAway + bchIn;
+    const newK = newReserveHome * newReserveAway;
+
+    // k should be preserved (with fees, k actually increases slightly)
+    assert.ok(
+      newK >= k,
+      'k should be maintained or increased with fees'
+    );
+  });
+});
+
+describe('Pool State Encoding/Decoding', () => {
+  it('should encode and decode pool state', () => {
+    const state = 1; // TRADING
+    const reserveHome = 12345n;
+    const reserveAway = 67890n;
+
+    // Create dummy commitment data
+    const existingData = new Uint8Array(82);
+    existingData[0] = 0; // Original state
+
+    const encoded = encodePoolState(state, reserveHome, reserveAway, existingData);
+
+    assert.strictEqual(encoded[0], state, 'State should match');
+
+    const decoded = parsePoolState(encoded);
+
+    assert.strictEqual(decoded.reserveHome, reserveHome, 'Reserve home should match');
+    assert.strictEqual(decoded.reserveAway, reserveAway, 'Reserve away should match');
+  });
+
+  it('should calculate k from parsed state', () => {
+    const reserveHome = 10000n;
+    const reserveAway = 10000n;
+
+    const existingData = new Uint8Array(82);
+    const encoded = encodePoolState(0, reserveHome, reserveAway, existingData);
+    const decoded = parsePoolState(encoded);
+
+    assert.strictEqual(decoded.k, reserveHome * reserveAway, 'k should be product of reserves');
+  });
+
+  it('should calculate prices from parsed state', () => {
+    const reserveHome = 7500n;
+    const reserveAway = 2500n;
+
+    const existingData = new Uint8Array(82);
+    const encoded = encodePoolState(0, reserveHome, reserveAway, existingData);
+    const decoded = parsePoolState(encoded);
+
+    assert.strictEqual(decoded.priceHome, 0.25, 'Home price should be 0.25');
+    assert.strictEqual(decoded.priceAway, 0.75, 'Away price should be 0.75');
+  });
+});
+
+describe('Edge Cases', () => {
+  it('should handle very small reserves', () => {
+    const { priceHome, priceAway } = calculatePrices(1n, 1n);
+
+    assert.strictEqual(priceHome, 0.5);
+    assert.strictEqual(priceAway, 0.5);
+  });
+
+  it('should handle very large reserves', () => {
+    const largeReserve = BigInt(10 ** 15); // 1 quadrillion
+    const { priceHome, priceAway } = calculatePrices(largeReserve, largeReserve);
+
+    assert.strictEqual(priceHome, 0.5);
+    assert.strictEqual(priceAway, 0.5);
+  });
+
+  it('should handle asymmetric large reserves', () => {
+    const { priceHome, priceAway } = calculatePrices(
+      BigInt(10 ** 15),
+      BigInt(10 ** 12)
+    );
+
+    // Total = 1000000000000000 + 1000000000000 = 1001000000000000
+    // priceHome = 1000000000000 / 1001000000000000 ≈ 0.000999
+    assert.ok(priceHome < 0.01, 'Price should be very low');
+    assert.ok(priceAway > 0.99, 'Away price should be very high');
+  });
+});
+
+describe('Fee Calculation Accuracy', () => {
+  it('should apply 0.3% fee correctly', () => {
+    const bchIn = 10000n;
+    const fee = 30n; // 0.3% = 30 basis points
+    const denominator = 10000n;
+
+    const effectiveIn = (bchIn * (denominator - fee)) / denominator;
+    const expectedEffective = 9970n; // 10000 * 0.997
+
+    assert.strictEqual(effectiveIn, expectedEffective, 'Fee should reduce by 0.3%');
+  });
+
+  it('should give fewer tokens with standard 0.3% fee', () => {
+    const bchIn = 10000n;
+    const reserve = 100000n;
+
+    const tokensNoFee = calculateTokensOut(bchIn, reserve, reserve, 0n, 10000n);
+    const tokensWith03Fee = calculateTokensOut(bchIn, reserve, reserve, 30n, 10000n);
+
+    // 0.3% less tokens (approximately)
+    const expectedReduction = Number(tokensNoFee) * 0.003;
+    const actualReduction = Number(tokensNoFee - tokensWith03Fee);
+
+    assert.ok(
+      Math.abs(actualReduction - expectedReduction) < expectedReduction * 0.1,
+      'Fee reduction should be approximately 0.3%'
+    );
+  });
+});
