@@ -72,7 +72,7 @@ export {
 } from './amm.js';
 
 // =============================================================================
-// ORACLE EXPORTS
+// ORACLE EXPORTS (Commit-Reveal - Legacy)
 // =============================================================================
 
 export {
@@ -91,6 +91,37 @@ export {
   generateMatchId,
   encodeMatchId,
 } from './oracle.js';
+
+// =============================================================================
+// BLOCK HASH VRF EXPORTS (Recommended - Better UX)
+// =============================================================================
+
+export {
+  // Block timing
+  calculateTargetBlocks,
+  estimateTimeToBlock,
+  // Score generation
+  generateSeedFromBlocks,
+  generateScoresFromSeed,
+  generateMatchScoresFromBlocks,
+  // Block provider
+  createElectrumBlockProvider,
+  fetchBlockHashes,
+  // Match configuration
+  createBlockBasedMatch,
+  calculateMatchTimeline,
+  // Verification
+  verifyScoresFromBlocks,
+  // Security analysis
+  calculateManipulationCost,
+  recommendBlocksForPoolSize,
+} from './blockhash-vrf.js';
+
+export type {
+  BlockInfo,
+  BlockHashProvider,
+  BlockBasedMatchConfig,
+} from './blockhash-vrf.js';
 
 // =============================================================================
 // MATCH MANAGEMENT EXPORTS

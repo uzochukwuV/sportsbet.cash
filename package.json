@@ -12,6 +12,7 @@
     "setup": "tsx minting-setup.ts",
     "payout": "tsx invoke-payout.ts",
     "demo": "tsx scripts/demo.ts",
+    "demo:blockhash": "tsx scripts/demo-blockhash.ts",
     "create-match": "tsx scripts/create-match.ts",
     "trade": "tsx scripts/trade.ts",
     "settle": "tsx scripts/settle.ts",
