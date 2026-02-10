@@ -1,72 +1,67 @@
 import { Layout } from './components/Layout';
 import { MatchCard, Match } from './components/MatchCard';
-import { TrendingUp, Zap, Shield, Clock } from 'lucide-react';
-import { WalletProvider } from './hooks/useWallet';
+import { TrendingUp, Zap, Shield, Clock, Wifi, WifiOff } from 'lucide-react';
+import { useMatches } from './hooks/useMatches';
+import { useBlockchain } from './hooks/useBlockchain';
 
-// Demo matches data
-const demoMatches: Match[] = [
-  {
-    id: '1',
-    homeTeam: 'Lakers',
-    awayTeam: 'Warriors',
-    homeOdds: 0.55,
-    awayOdds: 0.45,
-    volume: '12.5',
-    traders: 47,
-    status: 'trading',
-    timeRemaining: '45m',
-    sport: 'basketball',
-  },
-  {
-    id: '2',
-    homeTeam: 'Chiefs',
-    awayTeam: 'Eagles',
-    homeOdds: 0.48,
-    awayOdds: 0.52,
-    volume: '8.2',
-    traders: 31,
-    status: 'trading',
-    timeRemaining: '1h 20m',
-    sport: 'american-football',
-  },
-  {
-    id: '3',
-    homeTeam: 'Barcelona',
-    awayTeam: 'Real Madrid',
-    homeOdds: 0.42,
-    awayOdds: 0.58,
-    volume: '5.8',
-    traders: 23,
-    status: 'halftime',
-    homeScore: 1,
-    awayScore: 2,
-    sport: 'football',
-  },
-  {
-    id: '4',
-    homeTeam: 'Celtics',
-    awayTeam: 'Heat',
-    homeOdds: 0.62,
-    awayOdds: 0.38,
-    volume: '15.3',
-    traders: 58,
-    status: 'final',
-    homeScore: 108,
-    awayScore: 95,
-    sport: 'basketball',
-  },
-];
-
-const stats = [
-  { label: 'Total Volume', value: '156.8 BCH', icon: TrendingUp },
-  { label: 'Active Markets', value: '12', icon: Zap },
-  { label: 'Unique Traders', value: '234', icon: Shield },
-  { label: 'Avg Settlement', value: '< 1 block', icon: Clock },
-];
+// Map match data from hook to MatchCard format
+function mapMatchToCard(match: ReturnType<typeof useMatches>['matches'][0]): Match {
+  return {
+    id: match.id,
+    homeTeam: match.homeTeam,
+    awayTeam: match.awayTeam,
+    homeOdds: match.homePrice,
+    awayOdds: match.awayPrice,
+    volume: (Number(match.totalVolume) / 100_000_000).toFixed(1),
+    traders: Math.floor(Math.random() * 50) + 10, // Mock for now
+    status: match.status === 'live' ? 'trading' :
+            match.status === 'halftime' ? 'halftime' :
+            match.status === 'settled' ? 'final' : 'trading',
+    timeRemaining: match.status === 'upcoming' ? '1h' : undefined,
+    homeScore: match.homeScoreFinal ?? match.homeScore1H,
+    awayScore: match.awayScoreFinal ?? match.awayScore1H,
+    sport: match.sport === 'basketball' ? 'basketball' :
+           match.sport === 'football' ? 'football' : 'american-football',
+  };
+}
 
 function HomePage() {
+  const { matches, isLoading } = useMatches();
+  const { blockHeight, isConnected: isChainConnected, network } = useBlockchain();
+
+  const matchCards = matches.map(mapMatchToCard);
+  const activeMatches = matchCards.filter(m => m.status === 'trading' || m.status === 'halftime');
+  const settledMatches = matchCards.filter(m => m.status === 'final');
+
+  // Calculate total volume
+  const totalVolume = matches.reduce((sum, m) => sum + Number(m.totalVolume), 0) / 100_000_000;
+
+  const stats = [
+    { label: 'Total Volume', value: `${totalVolume.toFixed(1)} BCH`, icon: TrendingUp },
+    { label: 'Active Markets', value: activeMatches.length.toString(), icon: Zap },
+    { label: 'Block Height', value: blockHeight > 0 ? blockHeight.toLocaleString() : '...', icon: Shield },
+    { label: 'Network', value: network, icon: Clock },
+  ];
+
   return (
     <div className="space-y-8">
+      {/* Network Status */}
+      <div className={`flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm ${
+        isChainConnected ? 'bg-win-500/10 text-win-400' : 'bg-lose-500/10 text-lose-400'
+      }`}>
+        {isChainConnected ? (
+          <>
+            <Wifi className="w-4 h-4" />
+            Connected to {network} · Block {blockHeight.toLocaleString()}
+          </>
+        ) : (
+          <>
+            <WifiOff className="w-4 h-4" />
+            Connecting to Electrum...
+          </>
+        )}
+      </div>
+
       {/* Hero */}
       <div className="text-center py-8">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
@@ -95,24 +90,40 @@ function HomePage() {
           <h2 className="text-xl font-bold text-slate-100">Live Markets</h2>
           <div className="flex items-center gap-2 text-sm text-slate-400">
             <div className="w-2 h-2 rounded-full bg-win-500 animate-pulse" />
-            {demoMatches.filter(m => m.status === 'trading').length} active
+            {activeMatches.length} active
           </div>
         </div>
-        <div className="grid md:grid-cols-2 gap-4">
-          {demoMatches.filter(m => m.status === 'trading' || m.status === 'halftime').map((match) => (
-            <MatchCard key={match.id} match={match} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="glass rounded-xl p-8 text-center text-slate-400">
+            Loading matches...
+          </div>
+        ) : activeMatches.length > 0 ? (
+          <div className="grid md:grid-cols-2 gap-4">
+            {activeMatches.map((match) => (
+              <MatchCard key={match.id} match={match} />
+            ))}
+          </div>
+        ) : (
+          <div className="glass rounded-xl p-8 text-center text-slate-400">
+            No active markets. Check back soon!
+          </div>
+        )}
       </div>
 
       {/* Recent Settlements */}
       <div>
         <h2 className="text-xl font-bold text-slate-100 mb-4">Recent Settlements</h2>
-        <div className="grid md:grid-cols-2 gap-4">
-          {demoMatches.filter(m => m.status === 'final').map((match) => (
-            <MatchCard key={match.id} match={match} />
-          ))}
-        </div>
+        {settledMatches.length > 0 ? (
+          <div className="grid md:grid-cols-2 gap-4">
+            {settledMatches.map((match) => (
+              <MatchCard key={match.id} match={match} />
+            ))}
+          </div>
+        ) : (
+          <div className="glass rounded-xl p-8 text-center text-slate-400">
+            No settled matches yet.
+          </div>
+        )}
       </div>
 
       {/* How it Works */}
@@ -154,11 +165,9 @@ function HomePage() {
 
 function App() {
   return (
-    <WalletProvider>
-      <Layout>
-        <HomePage />
-      </Layout>
-    </WalletProvider>
+    <Layout>
+      <HomePage />
+    </Layout>
   );
 }
 
