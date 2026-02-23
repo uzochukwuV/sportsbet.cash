@@ -315,13 +315,18 @@ export class AmmPool {
     userAddress: string,
     signatureTemplate: SignatureTemplate
   ): Promise<TradeResult> {
+    if (params.bchIn === undefined) {
+      throw new Error('bchIn is required for buy trades');
+    }
+    const bchIn = params.bchIn;
+
     const state = await this.getPoolState();
     const isHome = params.outcomeType === 'HOME_WIN';
 
     // Calculate expected output
     const { tokensOut, effectivePrice, priceImpact } = await this.quoteBuy(
       params.outcomeType,
-      params.amount
+      bchIn
     );
 
     // Slippage check
@@ -346,7 +351,7 @@ export class AmmPool {
     }
 
     // Find user UTXO with enough BCH
-    const userUtxo = userUtxos.find((u) => u.satoshis >= params.amount + TX_FEE);
+    const userUtxo = userUtxos.find((u) => u.satoshis >= bchIn + TX_FEE);
     if (!userUtxo) {
       throw new Error('Insufficient BCH in user UTXOs');
     }
@@ -361,7 +366,7 @@ export class AmmPool {
     const reserveToken = isHome ? state.reserveHome : state.reserveAway;
     const reserveOther = isHome ? state.reserveAway : state.reserveHome;
     const newReserveToken = reserveToken - tokensOut;
-    const newReserveOther = reserveOther + params.amount;
+    const newReserveOther = reserveOther + bchIn;
 
     const newPoolState: PoolState = {
       reserveHome: isHome ? newReserveToken : newReserveOther,
@@ -377,12 +382,12 @@ export class AmmPool {
     // Send transaction
     const txResult = await tx.send();
 
-    const fee = (params.amount * FEE_NUMERATOR) / FEE_DENOMINATOR;
+    const fee = (bchIn * FEE_NUMERATOR) / FEE_DENOMINATOR;
 
     return {
       txId: txResult.txid,
       tokensTraded: tokensOut,
-      bchAmount: params.amount,
+      bchAmount: bchIn,
       effectivePrice,
       fee,
       newPoolState,
@@ -398,13 +403,18 @@ export class AmmPool {
     userAddress: string,
     signatureTemplate: SignatureTemplate
   ): Promise<TradeResult> {
+    if (params.tokenAmount === undefined) {
+      throw new Error('tokenAmount is required for sell trades');
+    }
+    const tokenAmount = params.tokenAmount;
+
     const state = await this.getPoolState();
     const isHome = params.outcomeType === 'HOME_WIN';
 
     // Calculate expected output
     const { bchOut, effectivePrice, priceImpact } = await this.quoteSell(
       params.outcomeType,
-      params.amount
+      tokenAmount
     );
 
     if (priceImpact > params.maxSlippage) {
@@ -436,7 +446,7 @@ export class AmmPool {
     // Calculate new state
     const reserveToken = isHome ? state.reserveHome : state.reserveAway;
     const reserveOther = isHome ? state.reserveAway : state.reserveHome;
-    const newReserveToken = reserveToken + params.amount;
+    const newReserveToken = reserveToken + tokenAmount;
     const newReserveOther = reserveOther - bchOut;
 
     const newPoolState: PoolState = {
@@ -450,11 +460,11 @@ export class AmmPool {
       totalValueLocked: state.totalValueLocked,
     };
 
-    const fee = (params.amount * FEE_NUMERATOR) / FEE_DENOMINATOR;
+    const fee = (tokenAmount * FEE_NUMERATOR) / FEE_DENOMINATOR;
 
     return {
       txId: txResult.txid,
-      tokensTraded: params.amount,
+      tokensTraded: tokenAmount,
       bchAmount: bchOut,
       effectivePrice,
       fee,

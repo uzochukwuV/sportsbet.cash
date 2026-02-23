@@ -221,13 +221,14 @@ contract AmmPool(
         int homeScore1H = int(scoreHash.split(2)[0]) % 76;
         int awayScore1H = int(scoreHash.split(4)[0].split(2)[1]) % 76;
 
-        // Preserve reserves, update state and scores
-        bytes newCommitment = bytes1(2) +                    // State = halftime trading
-                              commitment.split(17)[0].split(1)[1] + // Reserves unchanged
-                              commitment.split(49)[0].split(17)[1] + // Oracle commitment
-                              bytes1(homeScore1H) +
-                              bytes1(awayScore1H) +
-                              bytes2(0);                      // Final scores TBD
+        // Preserve reserves + oracle commitment + match metadata (bytes 1-77), set scores at 78-81
+        // Full 82-byte format: state(1) + reserves(16) + oracleCommitment(32) + metadata(29) + scores(4)
+        bytes newCommitment = bytes1(2) +                          // State = halftime trading
+                              commitment.split(17)[0].split(1)[1] + // Reserves (bytes 1-16)
+                              commitment.split(78)[0].split(17)[1] + // Oracle commitment + metadata (bytes 17-77)
+                              bytes1(homeScore1H) +                  // homeScore1H (byte 78)
+                              bytes1(awayScore1H) +                  // awayScore1H (byte 79)
+                              bytes2(0);                             // Final scores TBD (bytes 80-81)
 
         require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
         require(tx.outputs[0].nftCommitment == newCommitment);
@@ -259,19 +260,20 @@ contract AmmPool(
         int homeScore2H = int(scoreHash.split(2)[0]) % 76;
         int awayScore2H = int(scoreHash.split(4)[0].split(2)[1]) % 76;
 
-        // Calculate final scores (1H + 2H)
-        int homeScore1H = int(commitment.split(50)[0].split(49)[1]);
-        int awayScore1H = int(commitment.split(51)[0].split(50)[1]);
+        // Read 1H scores from bytes 78-79 (set by revealHalftime)
+        int homeScore1H = int(commitment.split(79)[0].split(78)[1]);
+        int awayScore1H = int(commitment.split(80)[0].split(79)[1]);
         int homeScoreFinal = homeScore1H + homeScore2H;
         int awayScoreFinal = awayScore1H + awayScore2H;
 
-        bytes newCommitment = bytes1(3) +                    // State = final
-                              commitment.split(17)[0].split(1)[1] +
-                              commitment.split(49)[0].split(17)[1] +
-                              bytes1(homeScore1H) +
-                              bytes1(awayScore1H) +
-                              bytes1(homeScoreFinal) +
-                              bytes1(awayScoreFinal);
+        // Preserve reserves + oracle commitment + metadata (bytes 1-77), update all scores
+        bytes newCommitment = bytes1(3) +                          // State = final
+                              commitment.split(17)[0].split(1)[1] + // Reserves (bytes 1-16)
+                              commitment.split(78)[0].split(17)[1] + // Oracle commitment + metadata (bytes 17-77)
+                              bytes1(homeScore1H) +                  // homeScore1H (byte 78)
+                              bytes1(awayScore1H) +                  // awayScore1H (byte 79)
+                              bytes1(homeScoreFinal) +               // homeScoreFinal (byte 80)
+                              bytes1(awayScoreFinal);                // awayScoreFinal (byte 81)
 
         require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
         require(tx.outputs[0].nftCommitment == newCommitment);
@@ -294,9 +296,9 @@ contract AmmPool(
         // Must be in final state
         require(state == 3);
 
-        // Get final scores
-        int homeScoreFinal = int(commitment.split(52)[0].split(51)[1]);
-        int awayScoreFinal = int(commitment.split(53)[0].split(52)[1]);
+        // Get final scores from bytes 80-81
+        int homeScoreFinal = int(commitment.split(81)[0].split(80)[1]);
+        int awayScoreFinal = int(commitment.split(82)[0].split(81)[1]);
 
         // Determine winner
         bool homeWins = homeScoreFinal > awayScoreFinal;

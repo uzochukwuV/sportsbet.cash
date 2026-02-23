@@ -183,7 +183,11 @@ async function runDemo() {
   console.log('Oracle reveals the secret...');
   const halftimeReveal = await oracle.revealScores(matchId, 'halftime', SportType.BASKETBALL);
 
-  console.log(`\nRevealed Secret: ${halftimeReveal.secret}`);
+  // Only show full secret when DEBUG is explicitly enabled to avoid logging secrets in CI/shared environments
+  const secretDisplay = process.env.DEBUG === '1'
+    ? halftimeReveal.secret
+    : `${halftimeReveal.secret.slice(0, 8)}...[redacted]`;
+  console.log(`\nRevealed Secret: ${secretDisplay}`);
   console.log('');
   console.log('Generated Halftime Scores:');
   console.log(`  Lakers: ${halftimeReveal.generatedScores.homeScore1H}`);

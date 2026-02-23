@@ -111,13 +111,18 @@ export interface UserPosition {
 
 /**
  * Trade parameters
+ *
+ * For buy trades (isBuy=true):  supply bchIn (satoshis to spend).
+ * For sell trades (isBuy=false): supply tokenAmount (token units to sell).
+ * Exactly one of bchIn / tokenAmount must be set according to isBuy.
  */
 export interface TradeParams {
   matchId: string;
   outcomeType: OutcomeType;
-  amount: bigint;            // Amount of tokens to buy/sell
+  bchIn?: bigint;            // BCH to spend in satoshis (required when isBuy=true)
+  tokenAmount?: bigint;      // Token units to sell (required when isBuy=false)
   maxSlippage: number;       // Maximum slippage tolerance (0.01 = 1%)
-  isBuy: boolean;            // true = buy tokens, false = sell tokens
+  isBuy: boolean;            // true = buy tokens with BCH, false = sell tokens for BCH
 }
 
 /**

@@ -15,7 +15,9 @@ pragma cashscript ^0.12.0;
 
 contract Settlement(
     int pricePerUnit,            // Satoshis per token unit (e.g., 10000)
-    bytes20 treasuryPkh          // Protocol treasury for any residual
+    bytes20 treasuryPkh,         // Protocol treasury for any residual
+    bytes32 homeTokenCategory,   // Category ID of HOME_WIN tokens
+    bytes32 awayTokenCategory    // Category ID of AWAY_WIN tokens
 ) {
     /**
      * Redeem winning tokens
@@ -69,25 +71,21 @@ contract Settlement(
 
         require(tokenAmount > 0);
 
-        // Determine if tokens are winners and calculate payout
+        // Validate token category and determine payout multiplier
         int payoutMultiplier; // In basis points (10000 = 100%)
 
-        // We need to know which token category is HOME vs AWAY
-        // This should be encoded in the match state or derived from match creation
-        // For simplicity, assume HOME token category is stored in commitment
-        // In practice, this would be verified against known categories
-
-        // Parse token categories from match state (stored after basic info)
-        // Simplified: we assume the contract parameters include this
-        // For now, use a generic check
-
         if (isDraw) {
-            // Both token types pay 50%
+            // Draw: both token types pay 50%
+            // Must be a valid outcome token (home or away), not an arbitrary token
+            require(tokenCategory == homeTokenCategory || tokenCategory == awayTokenCategory);
             payoutMultiplier = 5000;
+        } else if (homeWins) {
+            // Only HOME_WIN tokens pay out in a home win
+            require(tokenCategory == homeTokenCategory);
+            payoutMultiplier = 10000;
         } else {
-            // Only winning tokens pay 100%
-            // This requires knowing which category is which
-            // We'll verify in the full implementation
+            // Only AWAY_WIN tokens pay out in an away win
+            require(tokenCategory == awayTokenCategory);
             payoutMultiplier = 10000;
         }
 
