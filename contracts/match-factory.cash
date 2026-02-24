@@ -1,0 +1,269 @@
+/**
+ * SportsBet.cash - Match Factory Contract
+ *
+ * Creates new prediction markets for sports matches.
+ * Mints the initial outcome tokens (HOME_WIN and AWAY_WIN) and seeds the AMM pool.
+ *
+ * Process:
+ * 1. Oracle calls createMatch with commitment and match parameters
+ * 2. Factory mints HOME_WIN and AWAY_WIN fungible tokens
+ * 3. Factory creates AMM pool with initial 50/50 liquidity
+ * 4. Trading begins when start time is reached
+ *
+ * Token Minting:
+ * - Uses CashTokens genesis (first input's outpoint becomes category)
+ * - Mints equal amounts of both outcome tokens
+ * - Tokens are deposited into the AMM pool
+ */
+pragma cashscript ^0.12.0;
+
+contract MatchFactory(
+    bytes20 oraclePkh,           // Oracle authorized to create matches
+    bytes20 treasuryPkh,         // Protocol treasury
+    int initialLiquidity,        // Initial tokens per side (e.g., 1,000,000)
+    int creationFee              // Fee in satoshis to create a match
+) {
+    /**
+     * Create a new match and initialize AMM pool
+     *
+     * This function:
+     * 1. Verifies oracle authorization
+     * 2. Mints HOME_WIN and AWAY_WIN tokens (equal amounts)
+     * 3. Creates the AMM pool state NFT
+     * 4. Deposits liquidity into the pool
+     *
+     * @param oracleSig - Oracle's signature
+     * @param oraclePk - Oracle's public key
+     * @param commitment - hash256(secret || matchId) for VRF
+     * @param matchId - Unique match identifier
+     * @param matchType - Sport type (0=basketball, 1=football, 2=american_football)
+     * @param homeTeam - Home team identifier (for display)
+     * @param awayTeam - Away team identifier (for display)
+     * @param startTime - Trading start timestamp
+     * @param halftimeTime - Halftime reveal timestamp
+     * @param endTime - Final reveal timestamp
+     * @param ammPoolBytecode - Locking bytecode of the AMM pool contract
+     */
+    function createMatch(
+        sig oracleSig,
+        pubkey oraclePk,
+        bytes32 commitment,
+        bytes8 matchId,
+        int matchType,
+        bytes4 homeTeam,
+        bytes4 awayTeam,
+        int startTime,
+        int halftimeTime,
+        int endTime,
+        bytes ammPoolBytecode
+    ) {
+        require(this.activeInputIndex == 0);
+        require(hash160(oraclePk) == oraclePkh);
+        require(checkSig(oracleSig, oraclePk));
+
+        // Validate match type
+        require(matchType >= 0 && matchType <= 2);
+
+        // Validate timing
+        require(startTime < halftimeTime);
+        require(halftimeTime < endTime);
+        require(startTime > tx.time); // Must be in the future
+
+        // Genesis transaction creates new token category from input 0's outpoint
+        // This will be the category for match tokens
+        // Input 0 provides the genesis capability
+
+        // Construct AMM pool state commitment
+        // State: trading=0, reserves, oracle commitment, scores
+        bytes poolCommitment = bytes1(0) +                    // State = CREATED
+                               bytes8(initialLiquidity) +     // Reserve HOME
+                               bytes8(initialLiquidity) +     // Reserve AWAY
+                               commitment +                   // Oracle commitment (32 bytes)
+                               bytes1(matchType) +
+                               matchId +
+                               homeTeam +
+                               awayTeam +
+                               bytes4(startTime) +
+                               bytes4(halftimeTime) +
+                               bytes4(endTime) +
+                               bytes4(0);                     // Scores (0,0,0,0)
+
+        // Output 0: Factory contract continues (with reduced genesis capability)
+        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+
+        // Output 1: AMM Pool with state NFT (mutable)
+        // The pool receives the minting NFT to track state
+        require(tx.outputs[1].lockingBytecode == ammPoolBytecode);
+        require(tx.outputs[1].nftCommitment == poolCommitment);
+
+        // Output 2: HOME_WIN fungible tokens (to pool or for initial LP)
+        // These are minted via the genesis transaction
+        require(tx.outputs[2].tokenAmount == initialLiquidity);
+
+        // Output 3: AWAY_WIN fungible tokens
+        require(tx.outputs[3].tokenAmount == initialLiquidity);
+
+        // Output 4: Creation fee to treasury
+        bytes25 treasuryLock = new LockingBytecodeP2PKH(treasuryPkh);
+        require(tx.outputs[4].lockingBytecode == treasuryLock);
+        require(tx.outputs[4].value >= creationFee);
+    }
+
+    /**
+     * Add liquidity to existing pool
+     *
+     * Liquidity providers can add more tokens to increase pool depth.
+     * Must add equal value of both tokens to maintain price.
+     *
+     * @param lpSig - LP's signature
+     * @param lpPk - LP's public key
+     * @param homeAmount - HOME tokens to add
+     * @param awayAmount - AWAY tokens to add
+     */
+    function addLiquidity(
+        sig lpSig,
+        pubkey lpPk,
+        int homeAmount,
+        int awayAmount
+    ) {
+        require(checkSig(lpSig, lpPk));
+
+        // Input 0: Factory
+        // Input 1: Pool state NFT
+        // Input 2: LP's HOME tokens
+        // Input 3: LP's AWAY tokens
+
+        bytes poolState = tx.inputs[1].nftCommitment;
+        int state = int(poolState.split(1)[0]);
+
+        // Can only add liquidity during trading states
+        require(state == 0 || state == 1 || state == 3);
+
+        // Parse current reserves
+        int reserveHome = int(poolState.split(9)[0].split(1)[1]);
+        int reserveAway = int(poolState.split(17)[0].split(9)[1]);
+
+        // Verify LP is providing proportional amounts
+        // homeAmount / reserveHome should equal awayAmount / reserveAway
+        // Cross multiply to avoid division: homeAmount * reserveAway == awayAmount * reserveHome
+        // Allow 1% slippage
+        int product1 = homeAmount * reserveAway;
+        int product2 = awayAmount * reserveHome;
+        int diff = product1 - product2;
+        if (diff < 0) { diff = -diff; }
+        require(diff * 100 <= product1); // Within 1%
+
+        // Update reserves
+        int newReserveHome = reserveHome + homeAmount;
+        int newReserveAway = reserveAway + awayAmount;
+
+        bytes newPoolState = poolState.split(1)[0] +
+                             bytes8(newReserveHome) +
+                             bytes8(newReserveAway) +
+                             poolState.split(17)[1];
+
+        // Output 0: Factory continues
+        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+
+        // Output 1: Updated pool
+        require(tx.outputs[1].nftCommitment == newPoolState);
+
+        // Output 2: LP token receipt (NFT representing LP position)
+        // LP receives an NFT tracking their share
+        bytes lpCommitment = bytes8(homeAmount) + bytes8(awayAmount) + bytes20(hash160(lpPk));
+        require(tx.outputs[2].nftCommitment == lpCommitment);
+    }
+
+    /**
+     * Remove liquidity from pool
+     *
+     * LP can withdraw their proportional share of the pool.
+     */
+    function removeLiquidity(
+        sig lpSig,
+        pubkey lpPk,
+        int sharePercent  // Percentage to remove (1-100)
+    ) {
+        require(checkSig(lpSig, lpPk));
+        require(sharePercent > 0 && sharePercent <= 100);
+
+        // Input 0: Factory
+        // Input 1: Pool state NFT
+        // Input 2: LP token NFT
+
+        bytes poolState = tx.inputs[1].nftCommitment;
+        bytes lpToken = tx.inputs[2].nftCommitment;
+
+        // Verify LP owns this position
+        bytes20 lpPkh = bytes20(lpToken.split(20)[0].split(16)[1]);
+        require(lpPkh == hash160(lpPk));
+
+        int lpHomeAmount = int(lpToken.split(8)[0]);
+        int lpAwayAmount = int(lpToken.split(16)[0].split(8)[1]);
+
+        // Calculate withdrawal amounts
+        int withdrawHome = (lpHomeAmount * sharePercent) / 100;
+        int withdrawAway = (lpAwayAmount * sharePercent) / 100;
+
+        // Update pool reserves
+        int reserveHome = int(poolState.split(9)[0].split(1)[1]);
+        int reserveAway = int(poolState.split(17)[0].split(9)[1]);
+
+        int newReserveHome = reserveHome - withdrawHome;
+        int newReserveAway = reserveAway - withdrawAway;
+
+        require(newReserveHome > 0);
+        require(newReserveAway > 0);
+
+        bytes newPoolState = poolState.split(1)[0] +
+                             bytes8(newReserveHome) +
+                             bytes8(newReserveAway) +
+                             poolState.split(17)[1];
+
+        // Update LP token or burn if fully withdrawn
+        int remainingHome = lpHomeAmount - withdrawHome;
+        int remainingAway = lpAwayAmount - withdrawAway;
+
+        // Output 0: Factory continues
+        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+
+        // Output 1: Updated pool
+        require(tx.outputs[1].nftCommitment == newPoolState);
+
+        // Output 2: Withdrawn HOME tokens to LP
+        require(tx.outputs[2].tokenAmount >= withdrawHome);
+
+        // Output 3: Withdrawn AWAY tokens to LP
+        require(tx.outputs[3].tokenAmount >= withdrawAway);
+
+        // Output 4: Updated LP token (if remaining > 0)
+        if (remainingHome > 0) {
+            bytes newLpToken = bytes8(remainingHome) + bytes8(remainingAway) + lpPkh;
+            require(tx.outputs[4].nftCommitment == newLpToken);
+        }
+    }
+
+    /**
+     * Emergency shutdown - Oracle can close a match early
+     *
+     * Used for exceptional circumstances. Refunds all bettors proportionally.
+     */
+    function emergencyShutdown(sig oracleSig, pubkey oraclePk) {
+        require(hash160(oraclePk) == oraclePkh);
+        require(checkSig(oracleSig, oraclePk));
+
+        bytes poolState = tx.inputs[1].nftCommitment;
+        int state = int(poolState.split(1)[0]);
+
+        // Cannot shutdown already settled matches
+        require(state < 4);
+
+        // Set state to CANCELLED (5)
+        bytes newPoolState = poolState.split(1)[0].split(0)[1] +
+                             bytes1(5) +
+                             poolState.split(1)[1];
+
+        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+        require(tx.outputs[1].nftCommitment == newPoolState);
+    }
+}

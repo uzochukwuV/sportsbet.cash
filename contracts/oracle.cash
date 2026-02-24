@@ -1,0 +1,290 @@
+/**
+ * SportsBet.cash - VRF Oracle Contract
+ *
+ * Implements a commit-reveal scheme for verifiable random score generation.
+ * This allows the oracle to commit to randomness BEFORE bets are placed,
+ * ensuring fairness and verifiability.
+ *
+ * Flow:
+ * 1. Oracle creates match with commitment = hash256(secret || matchId)
+ * 2. Users place bets (cannot predict outcome)
+ * 3. Oracle reveals secret, anyone can verify it matches commitment
+ * 4. Scores are deterministically derived from the revealed secret
+ *
+ * Match State NFT Commitment Format:
+ *   [0]: matchType (1 byte) - 0=basketball, 1=football, 2=american_football
+ *   [1-8]: matchId (8 bytes) - unique match identifier
+ *   [9-40]: oracleCommitment (32 bytes) - hash256(secret || matchId)
+ *   [41-44]: startTime (4 bytes) - unix timestamp when trading starts
+ *   [45-48]: halftimeTime (4 bytes) - unix timestamp for halftime reveal
+ *   [49-52]: endTime (4 bytes) - unix timestamp for final reveal
+ *   [53]: state (1 byte) - current match state
+ *   [54-57]: scores (4 bytes) - home1H, away1H, homeFinal, awayFinal
+ */
+pragma cashscript ^0.12.0;
+
+contract Oracle(
+    bytes20 oraclePkh,      // Oracle operator's public key hash
+    bytes20 treasuryPkh     // Treasury for fees
+) {
+    /**
+     * Create a new match
+     *
+     * Oracle commits to random seed before any bets can be placed.
+     * This ensures the oracle cannot manipulate outcomes based on bet patterns.
+     *
+     * @param oracleSig - Oracle's signature
+     * @param oraclePk - Oracle's public key
+     * @param matchType - Type of sport (0=basketball, 1=football, 2=american_football)
+     * @param matchId - Unique 8-byte match identifier
+     * @param commitment - hash256(secret || matchId)
+     * @param startTime - When trading starts
+     * @param halftimeTime - When halftime scores are revealed
+     * @param endTime - When final scores are revealed
+     */
+    function createMatch(
+        sig oracleSig,
+        pubkey oraclePk,
+        int matchType,
+        bytes8 matchId,
+        bytes32 commitment,
+        bytes4 startTime,
+        bytes4 halftimeTime,
+        bytes4 endTime
+    ) {
+        require(this.activeInputIndex == 0);
+        require(hash160(oraclePk) == oraclePkh);
+        require(checkSig(oracleSig, oraclePk));
+
+        // Validate match type
+        require(matchType >= 0 && matchType <= 2);
+
+        // Validate timing: start < halftime < end
+        require(int(startTime) < int(halftimeTime));
+        require(int(halftimeTime) < int(endTime));
+
+        // Construct match state NFT commitment
+        bytes matchCommitment = bytes1(matchType) +
+                                matchId +
+                                commitment +
+                                startTime +
+                                halftimeTime +
+                                endTime +
+                                bytes1(0) +      // state = CREATED
+                                bytes4(0);       // scores = 0,0,0,0
+
+        // Output 0: Oracle contract continues
+        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+
+        // Output 1: Match state NFT (mutable NFT for state tracking)
+        // The NFT should be sent to the AMM pool contract
+        require(tx.outputs[1].nftCommitment == matchCommitment);
+    }
+
+    /**
+     * Reveal halftime scores
+     *
+     * Oracle reveals the secret, proving the commitment was valid.
+     * Scores are deterministically generated from the secret.
+     *
+     * @param oracleSig - Oracle's signature
+     * @param oraclePk - Oracle's public key
+     * @param secret - The 32-byte secret that was committed
+     */
+    function revealHalftime(
+        sig oracleSig,
+        pubkey oraclePk,
+        bytes32 secret
+    ) {
+        require(this.activeInputIndex == 0);
+        require(hash160(oraclePk) == oraclePkh);
+        require(checkSig(oracleSig, oraclePk));
+
+        // Input 1 must be the match state NFT
+        bytes matchState = tx.inputs[1].nftCommitment;
+
+        // Parse match data
+        int matchType = int(matchState.split(1)[0]);
+        bytes8 matchId = bytes8(matchState.split(9)[0].split(1)[1]);
+        bytes32 storedCommitment = bytes32(matchState.split(41)[0].split(9)[1]);
+        bytes4 halftimeTime = bytes4(matchState.split(49)[0].split(45)[1]);
+        int state = int(matchState.split(54)[0].split(53)[1]);
+
+        // Verify state is TRADING (1) - trading period must have started
+        require(state == 1);
+
+        // Verify we're past halftime time
+        require(tx.time >= int(halftimeTime));
+
+        // Verify the reveal: hash256(secret || matchId) must equal stored commitment
+        require(hash256(secret + matchId) == storedCommitment);
+
+        // Generate halftime scores from secret
+        bytes32 scoreHash = hash256(secret + bytes1(0x48)); // 'H' for halftime
+
+        // Score ranges depend on match type
+        int homeScore1H;
+        int awayScore1H;
+
+        if (matchType == 0) {
+            // Basketball: 30-75 points per half
+            homeScore1H = 30 + (int(scoreHash.split(2)[0]) % 46);
+            awayScore1H = 30 + (int(scoreHash.split(4)[0].split(2)[1]) % 46);
+        } else if (matchType == 1) {
+            // Football (soccer): 0-4 goals per half
+            homeScore1H = int(scoreHash.split(1)[0]) % 5;
+            awayScore1H = int(scoreHash.split(2)[0].split(1)[1]) % 5;
+        } else {
+            // American football: 0-28 points per half
+            homeScore1H = int(scoreHash.split(2)[0]) % 29;
+            awayScore1H = int(scoreHash.split(4)[0].split(2)[1]) % 29;
+        }
+
+        // Construct updated match state
+        bytes newMatchState = matchState.split(53)[0] +  // Keep type, id, commitment, times
+                              bytes1(2) +                 // state = HALFTIME_REVEALED
+                              bytes1(homeScore1H) +
+                              bytes1(awayScore1H) +
+                              bytes2(0);                  // Final scores TBD
+
+        // Output 0: Oracle contract continues
+        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+
+        // Output 1: Updated match state NFT
+        require(tx.outputs[1].nftCommitment == newMatchState);
+    }
+
+    /**
+     * Reveal final scores
+     *
+     * Complete the match by revealing second half scores.
+     */
+    function revealFinal(
+        sig oracleSig,
+        pubkey oraclePk,
+        bytes32 secret
+    ) {
+        require(this.activeInputIndex == 0);
+        require(hash160(oraclePk) == oraclePkh);
+        require(checkSig(oracleSig, oraclePk));
+
+        bytes matchState = tx.inputs[1].nftCommitment;
+
+        int matchType = int(matchState.split(1)[0]);
+        bytes8 matchId = bytes8(matchState.split(9)[0].split(1)[1]);
+        bytes32 storedCommitment = bytes32(matchState.split(41)[0].split(9)[1]);
+        bytes4 endTime = bytes4(matchState.split(53)[0].split(49)[1]);
+        int state = int(matchState.split(54)[0].split(53)[1]);
+
+        // Must be in HALFTIME_TRADING state (3)
+        require(state == 3);
+
+        // Verify past end time
+        require(tx.time >= int(endTime));
+
+        // Verify reveal
+        require(hash256(secret + matchId) == storedCommitment);
+
+        // Generate second half scores
+        bytes32 scoreHash = hash256(secret + bytes1(0x46)); // 'F' for final
+
+        int homeScore2H;
+        int awayScore2H;
+
+        if (matchType == 0) {
+            homeScore2H = 30 + (int(scoreHash.split(2)[0]) % 46);
+            awayScore2H = 30 + (int(scoreHash.split(4)[0].split(2)[1]) % 46);
+        } else if (matchType == 1) {
+            homeScore2H = int(scoreHash.split(1)[0]) % 5;
+            awayScore2H = int(scoreHash.split(2)[0].split(1)[1]) % 5;
+        } else {
+            homeScore2H = int(scoreHash.split(2)[0]) % 29;
+            awayScore2H = int(scoreHash.split(4)[0].split(2)[1]) % 29;
+        }
+
+        // Get halftime scores
+        int homeScore1H = int(matchState.split(55)[0].split(54)[1]);
+        int awayScore1H = int(matchState.split(56)[0].split(55)[1]);
+
+        // Calculate finals
+        int homeScoreFinal = homeScore1H + homeScore2H;
+        int awayScoreFinal = awayScore1H + awayScore2H;
+
+        bytes newMatchState = matchState.split(53)[0] +
+                              bytes1(4) +                 // state = FINAL
+                              bytes1(homeScore1H) +
+                              bytes1(awayScore1H) +
+                              bytes1(homeScoreFinal) +
+                              bytes1(awayScoreFinal);
+
+        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+        require(tx.outputs[1].nftCommitment == newMatchState);
+    }
+
+    /**
+     * Start trading
+     *
+     * Transitions match from CREATED to TRADING state.
+     * Anyone can call this once start time is reached.
+     */
+    function startTrading() {
+        require(this.activeInputIndex == 0);
+
+        bytes matchState = tx.inputs[1].nftCommitment;
+        bytes4 startTime = bytes4(matchState.split(45)[0].split(41)[1]);
+        int state = int(matchState.split(54)[0].split(53)[1]);
+
+        // Must be in CREATED state
+        require(state == 0);
+
+        // Must be past start time
+        require(tx.time >= int(startTime));
+
+        // Update state to TRADING
+        bytes newMatchState = matchState.split(53)[0] +
+                              bytes1(1) +                 // state = TRADING
+                              matchState.split(54)[1];    // Keep scores
+
+        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+        require(tx.outputs[1].nftCommitment == newMatchState);
+    }
+
+    /**
+     * Start halftime trading
+     *
+     * Transitions from HALFTIME_REVEALED to HALFTIME_TRADING.
+     */
+    function startHalftimeTrading() {
+        require(this.activeInputIndex == 0);
+
+        bytes matchState = tx.inputs[1].nftCommitment;
+        int state = int(matchState.split(54)[0].split(53)[1]);
+
+        // Must be in HALFTIME_REVEALED state
+        require(state == 2);
+
+        bytes newMatchState = matchState.split(53)[0] +
+                              bytes1(3) +                 // state = HALFTIME_TRADING
+                              matchState.split(54)[1];
+
+        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+        require(tx.outputs[1].nftCommitment == newMatchState);
+    }
+
+    /**
+     * Withdraw oracle fees
+     */
+    function withdrawFees(sig oracleSig, pubkey oraclePk, int amount) {
+        require(hash160(oraclePk) == oraclePkh);
+        require(checkSig(oracleSig, oraclePk));
+        require(amount > 0);
+
+        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+        require(tx.outputs[0].value >= tx.inputs[0].value - amount - 1000);
+
+        // Payout to treasury
+        bytes25 treasuryLock = new LockingBytecodeP2PKH(treasuryPkh);
+        require(tx.outputs[1].lockingBytecode == treasuryLock);
+        require(tx.outputs[1].value >= amount);
+    }
+}

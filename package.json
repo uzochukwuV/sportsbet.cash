@@ -1,29 +1,57 @@
 {
-  "name": "minting-contract",
-  "version": "1.0.0",
-  "description": "",
-  "main": "",
+  "name": "sportsbet-cash",
+  "version": "0.1.0",
+  "description": "On-chain sports betting AMM for Bitcoin Cash with VRF score generation",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
+    "build": "tsc",
+    "compile:contracts": "cashc contracts/*.cash --output contracts/",
     "generate": "tsx generateContract.ts",
-    "setup": "tsx invoke-setup.ts",
-    "payout": "tsx invoke-payout.ts"
+    "setup": "tsx minting-setup.ts",
+    "payout": "tsx invoke-payout.ts",
+    "demo": "tsx scripts/demo.ts",
+    "demo:blockhash": "tsx scripts/demo-blockhash.ts",
+    "create-match": "tsx scripts/create-match.ts",
+    "trade": "tsx scripts/trade.ts",
+    "settle": "tsx scripts/settle.ts",
+    "test": "tsx --test test/*.test.ts",
+    "lint": "eslint src/**/*.ts",
+    "clean": "rm -rf dist contracts/*.json"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cashninjas/minting-contract.git"
+    "url": "git+https://github.com/uuzor/sportsbet.cash.git"
   },
+  "keywords": [
+    "bitcoin-cash",
+    "bch",
+    "prediction-market",
+    "sports-betting",
+    "amm",
+    "vrf",
+    "cashtokens",
+    "cashscript"
+  ],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cashninjas/minting-contract/issues"
+    "url": "https://github.com/uuzor/sportsbet.cash/issues"
   },
-  "homepage": "https://github.com/cashninjas/minting-contract#readme",
+  "homepage": "https://github.com/uuzor/sportsbet.cash#readme",
   "dependencies": {
     "@bitauth/libauth": "^3.1.0-next.8",
     "cashscript": "^0.12.0",
     "dotenv": "^16.3.1",
-    "mainnet-js": "^2.7.19",
-    "tsx": "^4.20.6"
+    "mainnet-js": "^2.7.19"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.20.6",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }
