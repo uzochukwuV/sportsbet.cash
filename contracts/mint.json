@@ -1,0 +1,138 @@
+{
+  "contractName": "Mint",
+  "constructorInputs": [
+    {
+      "name": "mintPrice",
+      "type": "int"
+    },
+    {
+      "name": "increment",
+      "type": "int"
+    },
+    {
+      "name": "pkhPayout",
+      "type": "bytes20"
+    },
+    {
+      "name": "maximumCount",
+      "type": "int"
+    }
+  ],
+  "abi": [
+    {
+      "name": "mintNFT",
+      "inputs": []
+    },
+    {
+      "name": "payout",
+      "inputs": [
+        {
+          "name": "sigPayout",
+          "type": "sig"
+        },
+        {
+          "name": "pkPayout",
+          "type": "pubkey"
+        }
+      ]
+    }
+  ],
+  "bytecode": "OP_4 OP_PICK OP_0 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_BIN2NUM OP_DUP OP_5 OP_ROLL OP_LESSTHANOREQUAL OP_VERIFY OP_TXOUTPUTCOUNT OP_3 OP_LESSTHANOREQUAL OP_VERIFY OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCATEGORY OP_0 OP_UTXOTOKENCATEGORY OP_EQUALVERIFY OP_DUP OP_3 OP_ROLL OP_ADD OP_0 OP_OUTPUTTOKENCOMMITMENT OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_3 OP_ROLL OP_ADD OP_NUMEQUALVERIFY OP_1 OP_OUTPUTVALUE e803 OP_NUMEQUALVERIFY OP_1 OP_OUTPUTTOKENCOMMITMENT OP_EQUALVERIFY OP_0 OP_UTXOTOKENCATEGORY 20 OP_SPLIT OP_DROP OP_1 OP_OUTPUTTOKENCATEGORY OP_EQUALVERIFY OP_TXOUTPUTCOUNT OP_3 OP_NUMEQUAL OP_IF OP_2 OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_ENDIF OP_2DROP OP_1 OP_ELSE OP_4 OP_ROLL OP_1 OP_NUMEQUALVERIFY OP_5 OP_PICK OP_HASH160 OP_3 OP_ROLL OP_EQUALVERIFY OP_3 OP_ROLL OP_4 OP_ROLL OP_CHECKSIGVERIFY OP_TXINPUTCOUNT OP_1 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_BIN2NUM OP_3 OP_ROLL OP_LESSTHANOREQUAL OP_IF OP_TXOUTPUTCOUNT OP_2 OP_NUMEQUALVERIFY OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCATEGORY OP_0 OP_UTXOTOKENCATEGORY OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_0 OP_UTXOTOKENCOMMITMENT OP_EQUALVERIFY OP_1 OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_ELSE OP_TXOUTPUTCOUNT OP_1 OP_NUMEQUALVERIFY OP_0 OP_OUTPUTTOKENCATEGORY OP_0 OP_EQUALVERIFY OP_ENDIF OP_2DROP OP_1 OP_ENDIF",
+  "source": "pragma cashscript ^0.12.0;\r\n\r\n// Multi-threaded minting smart contract\r\n\r\n// Contract holds the next NFT nummber to mint as state in the commitment field of the minting NFT\r\n// Contract consists of a mintNFT and a payout function\r\n\r\n// Opcode count: 84 (max 201)\r\n// Bytesize: 163 (max 520)\r\n\r\ncontract Mint(\r\n    int mintPrice,\r\n    int increment,\r\n    bytes20 pkhPayout,\r\n    int maximumCount\r\n) {\r\n    function mintNFT() {\r\n        // require minting contract to be at input index zero\r\n        require(this.activeInputIndex == 0);\r\n\r\n        // Read nftNumber from contract commitment\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int nftNumber = int(commitment);\r\n        \r\n        // Check if minting is still allowed\r\n        require(nftNumber <= maximumCount);\r\n\r\n        // Limit the max number of outputs to 3\r\n        require(tx.outputs.length <= 3);\r\n            \r\n        // Output#0 preserves the NFT minting contract with a minting nft holding the new state and increased BCH value\r\n        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n        require(tx.outputs[0].tokenCategory == tx.inputs[0].tokenCategory);\r\n        int nextNftNumber = nftNumber + increment;\r\n        require(tx.outputs[0].nftCommitment == bytes(nextNftNumber));\r\n        require(tx.outputs[0].value == tx.inputs[0].value + mintPrice);\r\n\r\n        // Output#1 for the minted NFT\r\n        require(tx.outputs[1].value == 1000);\r\n        require(tx.outputs[1].nftCommitment == bytes(nftNumber));\r\n        // Strip capability to get the tokenId for an immutable NFT\r\n        bytes tokenId = tx.inputs[0].tokenCategory.split(32)[0];\r\n        require(tx.outputs[1].tokenCategory == tokenId);\r\n\r\n        // Allow for BCH change output\r\n        if(tx.outputs.length == 3){\r\n            // Output#2 BCH change output for minter\r\n            require(tx.outputs[2].tokenCategory == 0x);\r\n        }\r\n    }\r\n    function payout(sig sigPayout, pubkey pkPayout) {\r\n        // Check the signature & public key against pkhPayout\r\n        require(hash160(pkPayout) == pkhPayout);\r\n        require(checkSig(sigPayout, pkPayout));\r\n        \r\n        // require minting contract to be at input index zero\r\n        require(tx.inputs.length == 1);\r\n\r\n        // Read count from contract commitment\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int nftNumber = int(commitment);\r\n\r\n        // Check if minting is still ongoing\r\n        if(nftNumber <= maximumCount){\r\n            // Limit the number of outputs to 2\r\n            require(tx.outputs.length == 2);\r\n                \r\n            // Output#0 preserves the NFT minting contract with same minting nft\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].tokenCategory == tx.inputs[0].tokenCategory);\r\n            require(tx.outputs[0].nftCommitment == tx.inputs[0].nftCommitment);\r\n\r\n            // Output#1 payout output\r\n            require(tx.outputs[1].tokenCategory == 0x);\r\n        } else {\r\n            // Output#0 payout output\r\n            require(tx.outputs.length == 1);\r\n\r\n            // Burns minting NFT\r\n            require(tx.outputs[0].tokenCategory == 0x);\r\n        }\r\n    }\r\n}\r\n",
+  "debug": {
+    "bytecode": "5479009c63c0009d00cf8176557aa169c453a16900cd00c78800d100ce8876537a9300d28800cc00c6537a939d51cc02e8039d51d28800ce01207f7551d188c4539c6352d10088686d5167547a519d5579a9537a88537a547aadc3519d00cf81537aa163c4529d00cd00c78800d100ce8800d200cf8851d1008867c4519d00d10088686d5168",
+    "sourceMap": "17:4:50:5;;;;;19:16:19:37;:41::42;:8::44:1;22:37:22:38:0;:27::53:1;23:24:23:39;26:16:26:25:0;:29::41;;:16:::1;:8::43;29:16:29:33:0;:37::38;:16:::1;:8::40;32:27:32:28:0;:16::45:1;:59::60:0;:49::77:1;:8::79;33:27:33:28:0;:16::43:1;:57::58:0;:47::73:1;:8::75;34:28:34:37:0;:40::49;;:28:::1;35:27:35:28:0;:16::43:1;:8::69;36:27:36:28:0;:16::35:1;:49::50:0;:39::57:1;:60::69:0;;:39:::1;:8::71;39:27:39:28:0;:16::35:1;:39::43:0;:8::45:1;40:27:40:28:0;:16::43:1;:8::65;42:34:42:35:0;:24::50:1;:57::59:0;:24::60:1;:::63;43:27:43:28:0;:16::43:1;:8::56;46:11:46:28:0;:32::33;:11:::1;:34:49:9:0;48:31:48:32;:20::47:1;:51::53:0;:12::55:1;46:34:49:9;17:4:50:5;;;51::82::0;;;;53:24:53:32;;:16::33:1;:37::46:0;;:8::48:1;54:25:54:34:0;;:36::44;;:8::47:1;57:16:57:32:0;:36::37;:8::39:1;60:37:60:38:0;:27::53:1;61:24:61:39;64::64:36:0;;:11:::1;:37:75:9:0;66:20:66:37;:41::42;:12::44:1;69:31:69:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;70:31:70:32:0;:20::47:1;:61::62:0;:51::77:1;:12::79;71:31:71:32:0;:20::47:1;:61::62:0;:51::77:1;:12::79;74:31:74:32:0;:20::47:1;:51::53:0;:12::55:1;75:15:81:9:0;77:20:77:37;:41::42;:12::44:1;80:31:80:32:0;:20::47:1;:51::53:0;:12::55:1;75:15:81:9;51:4:82:5;;11:0:83:1",
+    "logs": [],
+    "requires": [
+      {
+        "ip": 11,
+        "line": 19
+      },
+      {
+        "ip": 19,
+        "line": 26
+      },
+      {
+        "ip": 23,
+        "line": 29
+      },
+      {
+        "ip": 28,
+        "line": 32
+      },
+      {
+        "ip": 33,
+        "line": 33
+      },
+      {
+        "ip": 40,
+        "line": 35
+      },
+      {
+        "ip": 48,
+        "line": 36
+      },
+      {
+        "ip": 52,
+        "line": 39
+      },
+      {
+        "ip": 55,
+        "line": 40
+      },
+      {
+        "ip": 63,
+        "line": 43
+      },
+      {
+        "ip": 71,
+        "line": 48
+      },
+      {
+        "ip": 85,
+        "line": 53
+      },
+      {
+        "ip": 90,
+        "line": 54
+      },
+      {
+        "ip": 93,
+        "line": 57
+      },
+      {
+        "ip": 103,
+        "line": 66
+      },
+      {
+        "ip": 108,
+        "line": 69
+      },
+      {
+        "ip": 113,
+        "line": 70
+      },
+      {
+        "ip": 118,
+        "line": 71
+      },
+      {
+        "ip": 122,
+        "line": 74
+      },
+      {
+        "ip": 126,
+        "line": 77
+      },
+      {
+        "ip": 130,
+        "line": 80
+      }
+    ]
+  },
+  "compiler": {
+    "name": "cashc",
+    "version": "0.12.1"
+  },
+  "updatedAt": "2026-02-24T20:52:41.264Z"
+}

@@ -57,66 +57,73 @@ export function calculatePrices(reserveHome: bigint, reserveAway: bigint): { pri
 /**
  * Calculate tokens received when buying with BCH
  *
- * Using CPMM formula:
- * tokensOut = (reserve * effectiveIn) / (otherReserve + effectiveIn)
+ * Both reserves are in satoshis (BCH-denominated CPMM).
+ * k = reserveHomeSats * reserveAwaySats is preserved across trades.
+ *
+ * Formula:
+ *   effectiveIn = bchIn * (1 - fee)
+ *   satsBought  = (reserveSats * effectiveIn) / (otherReserveSats + effectiveIn)
+ *   tokensOut   = satsBought / pricePerUnit
  */
 export function calculateTokensOut(
   bchIn: bigint,
-  reserveToken: bigint,
-  reserveOther: bigint,
+  reserveSats: bigint,
+  otherReserveSats: bigint,
   feeNumerator: bigint = FEE_NUMERATOR,
-  feeDenominator: bigint = FEE_DENOMINATOR
+  feeDenominator: bigint = FEE_DENOMINATOR,
+  pricePerUnit: bigint = 10000n
 ): bigint {
-  // Apply fee
   const effectiveIn = (bchIn * (feeDenominator - feeNumerator)) / feeDenominator;
-
-  // CPMM calculation
-  const tokensOut = (reserveToken * effectiveIn) / (reserveOther + effectiveIn);
-
-  return tokensOut;
+  const satsBought = (reserveSats * effectiveIn) / (otherReserveSats + effectiveIn);
+  return satsBought / pricePerUnit;
 }
 
 /**
- * Calculate BCH received when selling tokens
+ * Calculate BCH (satoshis) received when selling tokens
+ *
+ * Tokens are converted to their sats equivalent, then CPMM gives satsOut.
+ *
+ * Formula:
+ *   satsIn      = tokensIn * pricePerUnit
+ *   effectiveSats = satsIn * (1 - fee)
+ *   satsOut     = (otherReserveSats * effectiveSats) / (reserveSats + effectiveSats)
  */
 export function calculateBchOut(
   tokensIn: bigint,
-  reserveToken: bigint,
-  reserveOther: bigint,
+  reserveSats: bigint,
+  otherReserveSats: bigint,
   feeNumerator: bigint = FEE_NUMERATOR,
-  feeDenominator: bigint = FEE_DENOMINATOR
+  feeDenominator: bigint = FEE_DENOMINATOR,
+  pricePerUnit: bigint = 10000n
 ): bigint {
-  // Apply fee
-  const effectiveIn = (tokensIn * (feeDenominator - feeNumerator)) / feeDenominator;
-
-  // CPMM calculation
-  const bchOut = (reserveOther * effectiveIn) / (reserveToken + effectiveIn);
-
-  return bchOut;
+  const satsIn = tokensIn * pricePerUnit;
+  const effectiveSats = (satsIn * (feeDenominator - feeNumerator)) / feeDenominator;
+  return (otherReserveSats * effectiveSats) / (reserveSats + effectiveSats);
 }
 
 /**
  * Calculate BCH required to buy a specific amount of tokens
+ *
+ * Inverse of calculateTokensOut, solving for bchIn given tokensWanted.
+ *   satsBought  = tokensWanted * pricePerUnit
+ *   effectiveIn = (satsBought * otherReserveSats) / (reserveSats - satsBought)
+ *   bchRequired = effectiveIn / (1 - fee)
  */
 export function calculateBchRequired(
   tokensWanted: bigint,
-  reserveToken: bigint,
-  reserveOther: bigint,
+  reserveSats: bigint,
+  otherReserveSats: bigint,
   feeNumerator: bigint = FEE_NUMERATOR,
-  feeDenominator: bigint = FEE_DENOMINATOR
+  feeDenominator: bigint = FEE_DENOMINATOR,
+  pricePerUnit: bigint = 10000n
 ): bigint {
-  // Inverse of tokensOut formula
-  // tokensOut = (reserveToken * effectiveIn) / (reserveOther + effectiveIn)
-  // Solving for effectiveIn:
-  // effectiveIn = (tokensOut * reserveOther) / (reserveToken - tokensOut)
+  const satsBought = tokensWanted * pricePerUnit;
 
-  if (tokensWanted >= reserveToken) {
+  if (satsBought >= reserveSats) {
     throw new Error('Cannot buy more tokens than in reserve');
   }
 
-  const effectiveIn = (tokensWanted * reserveOther) / (reserveToken - tokensWanted);
-
-  // Reverse fee calculation
+  const effectiveIn = (satsBought * otherReserveSats) / (reserveSats - satsBought);
   const bchRequired = (effectiveIn * feeDenominator) / (feeDenominator - feeNumerator);
 
   return bchRequired + 1n; // Add 1 sat for rounding
@@ -124,12 +131,17 @@ export function calculateBchRequired(
 
 /**
  * Calculate price impact of a trade
+ *
+ * Both reserveToken and reserveOther are in satoshis.
+ * For a buy: amount is bchIn (sats). satsBought is removed from reserveToken, amount added to reserveOther.
+ * For a sell: amount is tokensIn. satsEquivalent is added to reserveToken, satsOut removed from reserveOther.
  */
 export function calculatePriceImpact(
   amount: bigint,
   reserveToken: bigint,
   reserveOther: bigint,
-  isBuy: boolean
+  isBuy: boolean,
+  pricePerUnit: bigint = 10000n
 ): number {
   const { priceHome: priceBefore } = calculatePrices(reserveToken, reserveOther);
 
@@ -137,13 +149,18 @@ export function calculatePriceImpact(
   let newReserveOther: bigint;
 
   if (isBuy) {
-    const tokensOut = calculateTokensOut(amount, reserveToken, reserveOther);
-    newReserveToken = reserveToken - tokensOut;
+    // amount = bchIn (sats); satsBought is drained from reserveToken
+    const effectiveIn = (amount * (FEE_DENOMINATOR - FEE_NUMERATOR)) / FEE_DENOMINATOR;
+    const satsBought = (reserveToken * effectiveIn) / (reserveOther + effectiveIn);
+    newReserveToken = reserveToken - satsBought;
     newReserveOther = reserveOther + amount;
   } else {
-    const bchOut = calculateBchOut(amount, reserveToken, reserveOther);
-    newReserveToken = reserveToken + amount;
-    newReserveOther = reserveOther - bchOut;
+    // amount = tokensIn; convert to sats equivalent, add to reserveToken, drain satsOut from reserveOther
+    const satsIn = amount * pricePerUnit;
+    const effectiveSats = (satsIn * (FEE_DENOMINATOR - FEE_NUMERATOR)) / FEE_DENOMINATOR;
+    const satsOut = (reserveOther * effectiveSats) / (reserveToken + effectiveSats);
+    newReserveToken = reserveToken + satsIn;
+    newReserveOther = reserveOther - satsOut;
   }
 
   const { priceHome: priceAfter } = calculatePrices(newReserveToken, newReserveOther);
@@ -362,10 +379,12 @@ export class AmmPool {
       .from(poolUtxo)
       .fromP2PKH(userUtxo, signatureTemplate);
 
-    // Calculate new reserves
+    // Calculate new reserves (both in satoshis)
     const reserveToken = isHome ? state.reserveHome : state.reserveAway;
     const reserveOther = isHome ? state.reserveAway : state.reserveHome;
-    const newReserveToken = reserveToken - tokensOut;
+    const effectiveIn = (bchIn * (FEE_DENOMINATOR - FEE_NUMERATOR)) / FEE_DENOMINATOR;
+    const satsBought = (reserveToken * effectiveIn) / (reserveOther + effectiveIn);
+    const newReserveToken = reserveToken - satsBought;
     const newReserveOther = reserveOther + bchIn;
 
     const newPoolState: PoolState = {
@@ -443,10 +462,11 @@ export class AmmPool {
 
     const txResult = await tx.send();
 
-    // Calculate new state
+    // Calculate new state (both reserves in satoshis)
     const reserveToken = isHome ? state.reserveHome : state.reserveAway;
     const reserveOther = isHome ? state.reserveAway : state.reserveHome;
-    const newReserveToken = reserveToken + tokenAmount;
+    const satsEquivalent = tokenAmount * 10000n; // pricePerUnit
+    const newReserveToken = reserveToken + satsEquivalent;
     const newReserveOther = reserveOther - bchOut;
 
     const newPoolState: PoolState = {

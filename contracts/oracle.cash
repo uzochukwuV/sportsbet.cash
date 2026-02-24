@@ -114,7 +114,7 @@ contract Oracle(
         require(state == 1);
 
         // Verify we're past halftime time
-        require(tx.time >= int(halftimeTime));
+        require(tx.locktime >= int(halftimeTime));
 
         // Verify the reveal: hash256(secret || matchId) must equal stored commitment
         require(hash256(secret + matchId) == storedCommitment);
@@ -123,35 +123,40 @@ contract Oracle(
         bytes32 scoreHash = hash256(secret + bytes1(0x48)); // 'H' for halftime
 
         // Score ranges depend on match type
-        int homeScore1H;
-        int awayScore1H;
-
-        if (matchType == 0) {
-            // Basketball: 30-75 points per half
-            homeScore1H = 30 + (int(scoreHash.split(2)[0]) % 46);
-            awayScore1H = 30 + (int(scoreHash.split(4)[0].split(2)[1]) % 46);
-        } else if (matchType == 1) {
-            // Football (soccer): 0-4 goals per half
-            homeScore1H = int(scoreHash.split(1)[0]) % 5;
-            awayScore1H = int(scoreHash.split(2)[0].split(1)[1]) % 5;
-        } else {
-            // American football: 0-28 points per half
-            homeScore1H = int(scoreHash.split(2)[0]) % 29;
-            awayScore1H = int(scoreHash.split(4)[0].split(2)[1]) % 29;
-        }
-
-        // Construct updated match state
-        bytes newMatchState = matchState.split(53)[0] +  // Keep type, id, commitment, times
-                              bytes1(2) +                 // state = HALFTIME_REVEALED
-                              bytes1(homeScore1H) +
-                              bytes1(awayScore1H) +
-                              bytes2(0);                  // Final scores TBD
-
         // Output 0: Oracle contract continues
         require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
 
-        // Output 1: Updated match state NFT
-        require(tx.outputs[1].nftCommitment == newMatchState);
+        if (matchType == 0) {
+            // Basketball: 30-75 points per half
+            int homeScore1H = 30 + (int(scoreHash.split(2)[0]) % 46);
+            int awayScore1H = 30 + (int(scoreHash.split(4)[0].split(2)[1]) % 46);
+            bytes newMatchState = matchState.split(53)[0] +
+                                  bytes1(2) +
+                                  bytes1(homeScore1H) +
+                                  bytes1(awayScore1H) +
+                                  bytes2(0);
+            require(tx.outputs[1].nftCommitment == newMatchState);
+        } else if (matchType == 1) {
+            // Football (soccer): 0-4 goals per half
+            int homeScore1H = int(scoreHash.split(1)[0]) % 5;
+            int awayScore1H = int(scoreHash.split(2)[0].split(1)[1]) % 5;
+            bytes newMatchState = matchState.split(53)[0] +
+                                  bytes1(2) +
+                                  bytes1(homeScore1H) +
+                                  bytes1(awayScore1H) +
+                                  bytes2(0);
+            require(tx.outputs[1].nftCommitment == newMatchState);
+        } else {
+            // American football: 0-28 points per half
+            int homeScore1H = int(scoreHash.split(2)[0]) % 29;
+            int awayScore1H = int(scoreHash.split(4)[0].split(2)[1]) % 29;
+            bytes newMatchState = matchState.split(53)[0] +
+                                  bytes1(2) +
+                                  bytes1(homeScore1H) +
+                                  bytes1(awayScore1H) +
+                                  bytes2(0);
+            require(tx.outputs[1].nftCommitment == newMatchState);
+        }
     }
 
     /**
@@ -180,7 +185,7 @@ contract Oracle(
         require(state == 3);
 
         // Verify past end time
-        require(tx.time >= int(endTime));
+        require(tx.locktime >= int(endTime));
 
         // Verify reveal
         require(hash256(secret + matchId) == storedCommitment);
@@ -188,37 +193,50 @@ contract Oracle(
         // Generate second half scores
         bytes32 scoreHash = hash256(secret + bytes1(0x46)); // 'F' for final
 
-        int homeScore2H;
-        int awayScore2H;
-
-        if (matchType == 0) {
-            homeScore2H = 30 + (int(scoreHash.split(2)[0]) % 46);
-            awayScore2H = 30 + (int(scoreHash.split(4)[0].split(2)[1]) % 46);
-        } else if (matchType == 1) {
-            homeScore2H = int(scoreHash.split(1)[0]) % 5;
-            awayScore2H = int(scoreHash.split(2)[0].split(1)[1]) % 5;
-        } else {
-            homeScore2H = int(scoreHash.split(2)[0]) % 29;
-            awayScore2H = int(scoreHash.split(4)[0].split(2)[1]) % 29;
-        }
-
         // Get halftime scores
         int homeScore1H = int(matchState.split(55)[0].split(54)[1]);
         int awayScore1H = int(matchState.split(56)[0].split(55)[1]);
 
-        // Calculate finals
-        int homeScoreFinal = homeScore1H + homeScore2H;
-        int awayScoreFinal = awayScore1H + awayScore2H;
-
-        bytes newMatchState = matchState.split(53)[0] +
-                              bytes1(4) +                 // state = FINAL
-                              bytes1(homeScore1H) +
-                              bytes1(awayScore1H) +
-                              bytes1(homeScoreFinal) +
-                              bytes1(awayScoreFinal);
-
+        // Output 0: Oracle contract continues
         require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
-        require(tx.outputs[1].nftCommitment == newMatchState);
+
+        if (matchType == 0) {
+            int homeScore2H = 30 + (int(scoreHash.split(2)[0]) % 46);
+            int awayScore2H = 30 + (int(scoreHash.split(4)[0].split(2)[1]) % 46);
+            int homeScoreFinal = homeScore1H + homeScore2H;
+            int awayScoreFinal = awayScore1H + awayScore2H;
+            bytes newMatchState = matchState.split(53)[0] +
+                                  bytes1(4) +
+                                  bytes1(homeScore1H) +
+                                  bytes1(awayScore1H) +
+                                  bytes1(homeScoreFinal) +
+                                  bytes1(awayScoreFinal);
+            require(tx.outputs[1].nftCommitment == newMatchState);
+        } else if (matchType == 1) {
+            int homeScore2H = int(scoreHash.split(1)[0]) % 5;
+            int awayScore2H = int(scoreHash.split(2)[0].split(1)[1]) % 5;
+            int homeScoreFinal = homeScore1H + homeScore2H;
+            int awayScoreFinal = awayScore1H + awayScore2H;
+            bytes newMatchState = matchState.split(53)[0] +
+                                  bytes1(4) +
+                                  bytes1(homeScore1H) +
+                                  bytes1(awayScore1H) +
+                                  bytes1(homeScoreFinal) +
+                                  bytes1(awayScoreFinal);
+            require(tx.outputs[1].nftCommitment == newMatchState);
+        } else {
+            int homeScore2H = int(scoreHash.split(2)[0]) % 29;
+            int awayScore2H = int(scoreHash.split(4)[0].split(2)[1]) % 29;
+            int homeScoreFinal = homeScore1H + homeScore2H;
+            int awayScoreFinal = awayScore1H + awayScore2H;
+            bytes newMatchState = matchState.split(53)[0] +
+                                  bytes1(4) +
+                                  bytes1(homeScore1H) +
+                                  bytes1(awayScore1H) +
+                                  bytes1(homeScoreFinal) +
+                                  bytes1(awayScoreFinal);
+            require(tx.outputs[1].nftCommitment == newMatchState);
+        }
     }
 
     /**
@@ -238,7 +256,7 @@ contract Oracle(
         require(state == 0);
 
         // Must be past start time
-        require(tx.time >= int(startTime));
+        require(tx.locktime >= int(startTime));
 
         // Update state to TRADING
         bytes newMatchState = matchState.split(53)[0] +

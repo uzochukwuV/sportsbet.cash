@@ -1,0 +1,231 @@
+{
+  "contractName": "Settlement",
+  "constructorInputs": [
+    {
+      "name": "pricePerUnit",
+      "type": "int"
+    },
+    {
+      "name": "treasuryPkh",
+      "type": "bytes20"
+    },
+    {
+      "name": "homeTokenCategory",
+      "type": "bytes32"
+    },
+    {
+      "name": "awayTokenCategory",
+      "type": "bytes32"
+    }
+  ],
+  "abi": [
+    {
+      "name": "redeemWinning",
+      "inputs": []
+    },
+    {
+      "name": "redeemCancelled",
+      "inputs": []
+    },
+    {
+      "name": "collectLosingTokens",
+      "inputs": [
+        {
+          "name": "amount",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "withdrawResidual",
+      "inputs": [
+        {
+          "name": "amount",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "fundPool",
+      "inputs": []
+    }
+  ],
+  "bytecode": "OP_4 OP_PICK OP_0 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_1 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_4 OP_GREATERTHANOREQUAL OP_VERIFY 52 OP_2DUP OP_SPLIT OP_DROP OP_SWAP OP_4 OP_SUB OP_SPLIT OP_NIP OP_DUP OP_3 OP_SPLIT OP_DROP OP_2 OP_SPLIT OP_NIP OP_BIN2NUM OP_SWAP OP_4 OP_SPLIT OP_DROP OP_3 OP_SPLIT OP_NIP OP_BIN2NUM OP_2DUP OP_GREATERTHAN OP_ROT OP_ROT OP_NUMEQUAL OP_2 OP_UTXOTOKENCATEGORY OP_2 OP_UTXOTOKENAMOUNT OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_ROT OP_IF OP_OVER OP_7 OP_PICK OP_EQUAL OP_2 OP_PICK OP_9 OP_PICK OP_EQUAL OP_BOOLOR OP_VERIFY OP_DUP 8813 OP_MUL OP_5 OP_PICK OP_MUL 1027 OP_DIV OP_0 OP_UTXOVALUE OP_OVER e803 OP_ADD OP_GREATERTHANOREQUAL OP_VERIFY OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_2 OP_PICK OP_SUB e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTTOKENCOMMITMENT OP_5 OP_PICK OP_EQUALVERIFY OP_2 OP_OUTPUTVALUE OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_DROP OP_ELSE OP_2 OP_PICK OP_IF OP_OVER OP_7 OP_PICK OP_EQUALVERIFY OP_DUP 1027 OP_MUL OP_5 OP_PICK OP_MUL 1027 OP_DIV OP_0 OP_UTXOVALUE OP_OVER e803 OP_ADD OP_GREATERTHANOREQUAL OP_VERIFY OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_2 OP_PICK OP_SUB e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTTOKENCOMMITMENT OP_5 OP_PICK OP_EQUALVERIFY OP_2 OP_OUTPUTVALUE OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_DROP OP_ELSE OP_OVER OP_8 OP_PICK OP_EQUALVERIFY OP_DUP 1027 OP_MUL OP_5 OP_PICK OP_MUL 1027 OP_DIV OP_0 OP_UTXOVALUE OP_OVER e803 OP_ADD OP_GREATERTHANOREQUAL OP_VERIFY OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_2 OP_PICK OP_SUB e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTTOKENCOMMITMENT OP_5 OP_PICK OP_EQUALVERIFY OP_2 OP_OUTPUTVALUE OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_DROP OP_ENDIF OP_ENDIF OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_DROP OP_1 OP_ELSE OP_4 OP_PICK OP_1 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_1 OP_UTXOTOKENCOMMITMENT OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_5 OP_NUMEQUALVERIFY OP_2 OP_UTXOTOKENAMOUNT OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_SWAP OP_MUL OP_2 OP_DIV OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_2 OP_PICK OP_SUB e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_2 OP_OUTPUTVALUE OP_LESSTHANOREQUAL OP_VERIFY OP_2DROP OP_2DROP OP_1 OP_ELSE OP_4 OP_PICK OP_2 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_1 OP_UTXOTOKENCOMMITMENT OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_4 OP_GREATERTHANOREQUAL OP_VERIFY OP_5 OP_ROLL OP_0 OP_GREATERTHAN OP_VERIFY OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_2DROP OP_2DROP OP_DROP OP_1 OP_ELSE OP_4 OP_PICK OP_3 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_5 OP_PICK OP_0 OP_GREATERTHAN OP_VERIFY OP_1 OP_UTXOTOKENCOMMITMENT OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_4 OP_GREATERTHANOREQUAL OP_VERIFY 76a914 OP_ROT OP_CAT 88ac OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_7 OP_PICK OP_SUB e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_1 OP_OUTPUTVALUE OP_5 OP_ROLL OP_GREATERTHANOREQUAL OP_VERIFY OP_2DROP OP_2DROP OP_1 OP_ELSE OP_4 OP_ROLL OP_4 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_GREATERTHANOREQUAL OP_VERIFY OP_2DROP OP_2DROP OP_1 OP_ENDIF OP_ENDIF OP_ENDIF OP_ENDIF",
+  "source": "/**\r\n * SportsBet.cash - Settlement Contract\r\n *\r\n * Handles the final settlement of prediction markets.\r\n * After match completion, winning token holders redeem their tokens for BCH.\r\n *\r\n * Settlement Rules:\r\n * - Winning tokens: Redeem for 1 BCH unit each\r\n * - Losing tokens: Worth 0, can be burned\r\n * - Draw: Both tokens redeem for 0.5 BCH units each\r\n *\r\n * Price per unit is configurable (e.g., 10,000 sats = 0.0001 BCH)\r\n */\r\npragma cashscript ^0.12.0;\r\n\r\ncontract Settlement(\r\n    int pricePerUnit,            // Satoshis per token unit (e.g., 10000)\r\n    bytes20 treasuryPkh,         // Protocol treasury for any residual\r\n    bytes32 homeTokenCategory,   // Category ID of HOME_WIN tokens\r\n    bytes32 awayTokenCategory    // Category ID of AWAY_WIN tokens\r\n) {\r\n    /**\r\n     * Redeem winning tokens\r\n     *\r\n     * Users submit their winning outcome tokens and receive BCH.\r\n     * The contract verifies the match is settled and the tokens are winners.\r\n     *\r\n     * Inputs:\r\n     *   [0]: This settlement contract\r\n     *   [1]: Match state NFT (to verify outcome)\r\n     *   [2]: User's winning tokens\r\n     *\r\n     * Outputs:\r\n     *   [0]: Settlement contract continues\r\n     *   [1]: Updated match state NFT\r\n     *   [2]: BCH payout to user\r\n     *   [3]: Optional change\r\n     */\r\n    function redeemWinning() {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        // Read match state from NFT\r\n        bytes matchState = tx.inputs[1].nftCommitment;\r\n\r\n        // Parse state (byte at position 0 or depends on format)\r\n        // Using AMM pool format: state at byte 0\r\n        int state = int(matchState.split(1)[0]);\r\n\r\n        // Must be in FINAL state (4) or later\r\n        require(state >= 4);\r\n\r\n        // Parse scores - using extended format with scores at end\r\n        // Format: state(1) + reserves(16) + commitment(32) + type(1) + matchId(8) + teams(8) + times(12) + scores(4)\r\n        // Let's use a simpler check based on the last 4 bytes being scores\r\n        int matchLen = 82; // Total expected length\r\n        bytes scores = matchState.split(matchLen)[0].split(matchLen - 4)[1];\r\n\r\n        int homeScoreFinal = int(scores.split(3)[0].split(2)[1]);\r\n        int awayScoreFinal = int(scores.split(4)[0].split(3)[1]);\r\n\r\n        // Determine outcome\r\n        bool homeWins = homeScoreFinal > awayScoreFinal;\r\n        bool isDraw = homeScoreFinal == awayScoreFinal;\r\n\r\n        // Get user's tokens from input 2\r\n        bytes tokenCategory = tx.inputs[2].tokenCategory;\r\n        int tokenAmount = tx.inputs[2].tokenAmount;\r\n\r\n        require(tokenAmount > 0);\r\n\r\n        // Validate token category and calculate payout\r\n        if (isDraw) {\r\n            // Draw: both token types pay 50%\r\n            require(tokenCategory == homeTokenCategory || tokenCategory == awayTokenCategory);\r\n            int payout = (tokenAmount * 5000 * pricePerUnit) / 10000;\r\n            require(tx.inputs[0].value >= payout + 1000);\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);\r\n            require(tx.outputs[1].nftCommitment == matchState);\r\n            require(tx.outputs[2].value >= payout);\r\n        } else if (homeWins) {\r\n            // Only HOME_WIN tokens pay out in a home win\r\n            require(tokenCategory == homeTokenCategory);\r\n            int payout = (tokenAmount * 10000 * pricePerUnit) / 10000;\r\n            require(tx.inputs[0].value >= payout + 1000);\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);\r\n            require(tx.outputs[1].nftCommitment == matchState);\r\n            require(tx.outputs[2].value >= payout);\r\n        } else {\r\n            // Only AWAY_WIN tokens pay out in an away win\r\n            require(tokenCategory == awayTokenCategory);\r\n            int payout = (tokenAmount * 10000 * pricePerUnit) / 10000;\r\n            require(tx.inputs[0].value >= payout + 1000);\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);\r\n            require(tx.outputs[1].nftCommitment == matchState);\r\n            require(tx.outputs[2].value >= payout);\r\n        }\r\n\r\n        // Tokens are burned (not forwarded)\r\n    }\r\n\r\n    /**\r\n     * Redeem tokens in cancelled match\r\n     *\r\n     * If a match was cancelled (emergency shutdown), all token holders\r\n     * can redeem at original purchase price (refund mechanism).\r\n     *\r\n     * Note: This is a simplified refund - actual implementation would\r\n     * need to track original purchase prices per token.\r\n     */\r\n    function redeemCancelled() {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes matchState = tx.inputs[1].nftCommitment;\r\n        int state = int(matchState.split(1)[0]);\r\n\r\n        // Must be in CANCELLED state (5)\r\n        require(state == 5);\r\n\r\n        int tokenAmount = tx.inputs[2].tokenAmount;\r\n        require(tokenAmount > 0);\r\n\r\n        // For cancelled matches, refund at 50% (mid-price)\r\n        // This is fair since tokens were trading around market price\r\n        int payout = (tokenAmount * pricePerUnit) / 2;\r\n\r\n        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n        require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);\r\n        require(tx.outputs[2].value >= payout);\r\n    }\r\n\r\n    /**\r\n     * Collect expired losing tokens\r\n     *\r\n     * After settlement period, losing tokens can be collected and burned.\r\n     * Any residual value goes to treasury.\r\n     *\r\n     * @param amount - Amount of losing tokens to burn\r\n     */\r\n    function collectLosingTokens(int amount) {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes matchState = tx.inputs[1].nftCommitment;\r\n        int state = int(matchState.split(1)[0]);\r\n\r\n        // Must be settled\r\n        require(state >= 4);\r\n\r\n        // Verify tokens are losers (not winners)\r\n        // Implementation would check token category against outcome\r\n        require(amount > 0);\r\n\r\n        // Losing tokens have no payout\r\n        // Just burn them by not including in outputs\r\n\r\n        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n    }\r\n\r\n    /**\r\n     * Withdraw residual funds to treasury\r\n     *\r\n     * After all settlements complete, any remaining funds go to treasury.\r\n     * Only callable after a grace period post-settlement.\r\n     */\r\n    function withdrawResidual(int amount) {\r\n        require(this.activeInputIndex == 0);\r\n        require(amount > 0);\r\n\r\n        // Verify match is fully settled and grace period passed\r\n        bytes matchState = tx.inputs[1].nftCommitment;\r\n        int state = int(matchState.split(1)[0]);\r\n        require(state >= 4);\r\n\r\n        // Grace period: 30 days after settlement (in blocks, ~4320 blocks)\r\n        // This would need block height tracking in practice\r\n\r\n        // Treasury payout\r\n        bytes25 treasuryLock = new LockingBytecodeP2PKH(treasuryPkh);\r\n\r\n        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n        require(tx.outputs[0].value >= tx.inputs[0].value - amount - 1000);\r\n        require(tx.outputs[1].lockingBytecode == treasuryLock);\r\n        require(tx.outputs[1].value >= amount);\r\n    }\r\n\r\n    /**\r\n     * Fund settlement pool\r\n     *\r\n     * Anyone can add BCH to the settlement pool to ensure payouts.\r\n     * This is typically done by the match creator/oracle.\r\n     */\r\n    function fundPool() {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        // Simply accept any incoming BCH\r\n        // Verify output maintains the contract\r\n        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n        require(tx.outputs[0].value >= tx.inputs[0].value);\r\n    }\r\n}\r\n",
+  "debug": {
+    "bytecode": "5479009c63c0009d51cf76517f758154a26901526e7f757c54947f7776537f75527f77817c547f75537f77816ea07b7b9c52ce52d07600a0697b637857798752795979879b6976028813955579950210279600c67802e80393a26900cd00c78800cc00c652799402e80394a26951d255798852cc78a26975675279637857798876021027955579950210279600c67802e80393a26900cd00c78800cc00c652799402e80394a26951d255798852cc78a26975677858798876021027955579950210279600c67802e80393a26900cd00c78800cc00c652799402e80394a26951d255798852cc78a2697568686d6d6d6d7551675479519c63c0009d51cf517f7581559d52d07600a0697c95529600cd00c78800cc00c652799402e80394a26952cca1696d6d51675479529c63c0009d51cf517f758154a269557a00a06900cd00c7886d6d7551675479539c63c0009d557900a06951cf517f758154a2690376a9147b7e0288ac7e00cd00c78800cc00c657799402e80394a26951cd8851cc557aa2696d6d5167547a549dc0009d00cd00c78800cc00c6a2696d6d5168686868",
+    "sourceMap": "39:4:102:5;;;;;40:16:40:37;:41::42;:8::44:1;43:37:43:38:0;:27::53:1;47:24:47:34:0;:41::42;:24::43:1;:::46;:20::47;50:25:50:26:0;:16:::1;:8::28;55:23:55:25:0;56::56:48;:::49:1;:::52;:59::67:0;:70::71;:59:::1;:23::72;:::75;58:33:58:39:0;:46::47;:33::48:1;:::51;:58::59:0;:33::60:1;:::63;:29::64;59:33:59:39:0;:46::47;:33::48:1;:::51;:58::59:0;:33::60:1;:::63;:29::64;62:24:62:55:0;::::1;63:22:63:36:0;:40::54;:22:::1;66:40:66:41:0;:30::56:1;67:36:67:37:0;:26::50:1;69:16:69:27:0;:30::31;:16:::1;:8::33;72:12:72:18:0;:20:81:9;74::74:33;:37::54;;:20:::1;:58::71:0;;:75::92;;:58:::1;:20;:12::94;75:26:75:37:0;:40::44;:26:::1;:47::59:0;;:26:::1;:63::68:0;:25:::1;76:30:76:31:0;:20::38:1;:42::48:0;:51::55;:42:::1;:20;:12::57;77:31:77:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;78:31:78:32:0;:20::39:1;:53::54:0;:43::61:1;:64::70:0;;:43:::1;:73::77:0;:43:::1;:20;:12::79;79:31:79:32:0;:20::47:1;:51::61:0;;:12::63:1;80:31:80:32:0;:20::39:1;:43::49:0;:20:::1;:12::51;72:20:81:9;81:15:99::0;:19:81:27;;:29:90:9;83:20:83:33;:37::54;;:12::56:1;84:26:84:37:0;:40::45;:26:::1;:48::60:0;;:26:::1;:64::69:0;:25:::1;85:30:85:31:0;:20::38:1;:42::48:0;:51::55;:42:::1;:20;:12::57;86:31:86:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;87:31:87:32:0;:20::39:1;:53::54:0;:43::61:1;:64::70:0;;:43:::1;:73::77:0;:43:::1;:20;:12::79;88:31:88:32:0;:20::47:1;:51::61:0;;:12::63:1;89:31:89:32:0;:20::39:1;:43::49:0;:20:::1;:12::51;81:29:90:9;90:15:99::0;92:20:92:33;:37::54;;:12::56:1;93:26:93:37:0;:40::45;:26:::1;:48::60:0;;:26:::1;:64::69:0;:25:::1;94:30:94:31:0;:20::38:1;:42::48:0;:51::55;:42:::1;:20;:12::57;95:31:95:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;96:31:96:32:0;:20::39:1;:53::54:0;:43::61:1;:64::70:0;;:43:::1;:73::77:0;:43:::1;:20;:12::79;97:31:97:32:0;:20::47:1;:51::61:0;;:12::63:1;98:31:98:32:0;:20::39:1;:43::49:0;:20:::1;:12::51;90:15:99:9;;81;39:4:102:5;;;;;;;113::132::0;;;;;114:16:114:37;:41::42;:8::44:1;116:37:116:38:0;:27::53:1;117:41:117:42:0;:24::43:1;:::46;:20::47;120:25:120:26:0;:8::28:1;122:36:122:37:0;:26::50:1;123:16:123:27:0;:30::31;:16:::1;:8::33;127:36:127:48:0;:22:::1;:52::53:0;:21:::1;129:27:129:28:0;:16::45:1;:59::60:0;:49::77:1;:8::79;130:27:130:28:0;:16::35:1;:49::50:0;:39::57:1;:60::66:0;;:39:::1;:69::73:0;:39:::1;:16;:8::75;131:27:131:28:0;:16::35:1;:::45;:8::47;113:4:132:5;;;;142::159::0;;;;;143:16:143:37;:41::42;:8::44:1;145:37:145:38:0;:27::53:1;146:41:146:42:0;:24::43:1;:::46;:20::47;149:25:149:26:0;:16:::1;:8::28;153:16:153:22:0;;:25::26;:16:::1;:8::28;158:27:158::0;:16::45:1;:59::60:0;:49::77:1;:8::79;142:4:159:5;;;;;167::186::0;;;;;168:16:168:37;:41::42;:8::44:1;169:16:169:22:0;;:25::26;:16:::1;:8::28;172:37:172:38:0;:27::53:1;173:41:173:42:0;:24::43:1;:::46;:20::47;174:25:174:26:0;:16:::1;:8::28;180:31:180:68:0;:56::67;:31::68:1;;;182:27:182:28:0;:16::45:1;:59::60:0;:49::77:1;:8::79;183:27:183:28:0;:16::35:1;:49::50:0;:39::57:1;:60::66:0;;:39:::1;:69::73:0;:39:::1;:16;:8::75;184:27:184:28:0;:16::45:1;:8::63;185:27:185:28:0;:16::35:1;:39::45:0;;:16:::1;:8::47;167:4:186:5;;;;194::201::0;;;;195:16:195:37;:41::42;:8::44:1;199:27:199:28:0;:16::45:1;:59::60:0;:49::77:1;:8::79;200:27:200:28:0;:16::35:1;:49::50:0;:39::57:1;:16;:8::59;194:4:201:5;;;16:0:202:1;;;",
+    "logs": [],
+    "requires": [
+      {
+        "ip": 11,
+        "line": 40
+      },
+      {
+        "ip": 21,
+        "line": 50
+      },
+      {
+        "ip": 59,
+        "line": 69
+      },
+      {
+        "ip": 72,
+        "line": 74
+      },
+      {
+        "ip": 87,
+        "line": 76
+      },
+      {
+        "ip": 92,
+        "line": 77
+      },
+      {
+        "ip": 103,
+        "line": 78
+      },
+      {
+        "ip": 108,
+        "line": 79
+      },
+      {
+        "ip": 113,
+        "line": 80
+      },
+      {
+        "ip": 122,
+        "line": 83
+      },
+      {
+        "ip": 137,
+        "line": 85
+      },
+      {
+        "ip": 142,
+        "line": 86
+      },
+      {
+        "ip": 153,
+        "line": 87
+      },
+      {
+        "ip": 158,
+        "line": 88
+      },
+      {
+        "ip": 163,
+        "line": 89
+      },
+      {
+        "ip": 169,
+        "line": 92
+      },
+      {
+        "ip": 184,
+        "line": 94
+      },
+      {
+        "ip": 189,
+        "line": 95
+      },
+      {
+        "ip": 200,
+        "line": 96
+      },
+      {
+        "ip": 205,
+        "line": 97
+      },
+      {
+        "ip": 210,
+        "line": 98
+      },
+      {
+        "ip": 228,
+        "line": 114
+      },
+      {
+        "ip": 236,
+        "line": 120
+      },
+      {
+        "ip": 242,
+        "line": 123
+      },
+      {
+        "ip": 251,
+        "line": 129
+      },
+      {
+        "ip": 262,
+        "line": 130
+      },
+      {
+        "ip": 266,
+        "line": 131
+      },
+      {
+        "ip": 278,
+        "line": 143
+      },
+      {
+        "ip": 287,
+        "line": 149
+      },
+      {
+        "ip": 292,
+        "line": 153
+      },
+      {
+        "ip": 297,
+        "line": 158
+      },
+      {
+        "ip": 310,
+        "line": 168
+      },
+      {
+        "ip": 315,
+        "line": 169
+      },
+      {
+        "ip": 324,
+        "line": 174
+      },
+      {
+        "ip": 334,
+        "line": 182
+      },
+      {
+        "ip": 345,
+        "line": 183
+      },
+      {
+        "ip": 348,
+        "line": 184
+      },
+      {
+        "ip": 354,
+        "line": 185
+      },
+      {
+        "ip": 365,
+        "line": 195
+      },
+      {
+        "ip": 370,
+        "line": 199
+      },
+      {
+        "ip": 376,
+        "line": 200
+      }
+    ]
+  },
+  "compiler": {
+    "name": "cashc",
+    "version": "0.12.1"
+  },
+  "updatedAt": "2026-02-24T21:07:51.085Z"
+}

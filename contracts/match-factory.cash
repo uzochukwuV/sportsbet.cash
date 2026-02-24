@@ -67,7 +67,7 @@ contract MatchFactory(
         // Validate timing
         require(startTime < halftimeTime);
         require(halftimeTime < endTime);
-        require(startTime > tx.time); // Must be in the future
+        require(startTime > tx.locktime); // Must be in the future
 
         // Genesis transaction creates new token category from input 0's outpoint
         // This will be the category for match tokens
@@ -149,9 +149,10 @@ contract MatchFactory(
         // Allow 1% slippage
         int product1 = homeAmount * reserveAway;
         int product2 = awayAmount * reserveHome;
-        int diff = product1 - product2;
-        if (diff < 0) { diff = -diff; }
-        require(diff * 100 <= product1); // Within 1%
+        int diffRaw = product1 - product2;
+        // Absolute value: check both directions are within 1% slippage
+        require(diffRaw * 100 <= product1);
+        require(diffRaw * -100 <= product1);
 
         // Update reserves
         int newReserveHome = reserveHome + homeAmount;
@@ -194,8 +195,8 @@ contract MatchFactory(
         bytes poolState = tx.inputs[1].nftCommitment;
         bytes lpToken = tx.inputs[2].nftCommitment;
 
-        // Verify LP owns this position
-        bytes20 lpPkh = bytes20(lpToken.split(20)[0].split(16)[1]);
+        // Verify LP owns this position (LP token stores pkh at bytes 16-35)
+        bytes lpPkh = lpToken.split(36)[0].split(16)[1];
         require(lpPkh == hash160(lpPk));
 
         int lpHomeAmount = int(lpToken.split(8)[0]);

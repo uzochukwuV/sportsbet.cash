@@ -1,0 +1,281 @@
+{
+  "contractName": "MatchFactory",
+  "constructorInputs": [
+    {
+      "name": "oraclePkh",
+      "type": "bytes20"
+    },
+    {
+      "name": "treasuryPkh",
+      "type": "bytes20"
+    },
+    {
+      "name": "initialLiquidity",
+      "type": "int"
+    },
+    {
+      "name": "creationFee",
+      "type": "int"
+    }
+  ],
+  "abi": [
+    {
+      "name": "createMatch",
+      "inputs": [
+        {
+          "name": "oracleSig",
+          "type": "sig"
+        },
+        {
+          "name": "oraclePk",
+          "type": "pubkey"
+        },
+        {
+          "name": "commitment",
+          "type": "bytes32"
+        },
+        {
+          "name": "matchId",
+          "type": "bytes8"
+        },
+        {
+          "name": "matchType",
+          "type": "int"
+        },
+        {
+          "name": "homeTeam",
+          "type": "bytes4"
+        },
+        {
+          "name": "awayTeam",
+          "type": "bytes4"
+        },
+        {
+          "name": "startTime",
+          "type": "int"
+        },
+        {
+          "name": "halftimeTime",
+          "type": "int"
+        },
+        {
+          "name": "endTime",
+          "type": "int"
+        },
+        {
+          "name": "ammPoolBytecode",
+          "type": "bytes"
+        }
+      ]
+    },
+    {
+      "name": "addLiquidity",
+      "inputs": [
+        {
+          "name": "lpSig",
+          "type": "sig"
+        },
+        {
+          "name": "lpPk",
+          "type": "pubkey"
+        },
+        {
+          "name": "homeAmount",
+          "type": "int"
+        },
+        {
+          "name": "awayAmount",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "removeLiquidity",
+      "inputs": [
+        {
+          "name": "lpSig",
+          "type": "sig"
+        },
+        {
+          "name": "lpPk",
+          "type": "pubkey"
+        },
+        {
+          "name": "sharePercent",
+          "type": "int"
+        }
+      ]
+    },
+    {
+      "name": "emergencyShutdown",
+      "inputs": [
+        {
+          "name": "oracleSig",
+          "type": "sig"
+        },
+        {
+          "name": "oraclePk",
+          "type": "pubkey"
+        }
+      ]
+    }
+  ],
+  "bytecode": "OP_4 OP_PICK OP_0 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_6 OP_PICK OP_HASH160 OP_EQUALVERIFY OP_2ROT OP_SWAP OP_CHECKSIGVERIFY OP_6 OP_PICK OP_0 OP_GREATERTHANOREQUAL OP_7 OP_PICK OP_2 OP_LESSTHANOREQUAL OP_BOOLAND OP_VERIFY OP_9 OP_PICK OP_11 OP_PICK OP_LESSTHAN OP_VERIFY OP_10 OP_PICK OP_12 OP_PICK OP_LESSTHAN OP_VERIFY OP_9 OP_PICK OP_TXLOCKTIME OP_GREATERTHAN OP_VERIFY OP_0 OP_1 OP_NUM2BIN OP_2 OP_PICK OP_8 OP_NUM2BIN OP_CAT OP_2 OP_PICK OP_8 OP_NUM2BIN OP_CAT OP_5 OP_ROLL OP_CAT OP_6 OP_ROLL OP_1 OP_NUM2BIN OP_CAT OP_5 OP_ROLL OP_CAT OP_5 OP_ROLL OP_CAT OP_5 OP_ROLL OP_CAT OP_5 OP_ROLL OP_4 OP_NUM2BIN OP_CAT OP_5 OP_ROLL OP_4 OP_NUM2BIN OP_CAT OP_5 OP_ROLL OP_4 OP_NUM2BIN OP_CAT OP_0 OP_4 OP_NUM2BIN OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_1 OP_OUTPUTBYTECODE OP_6 OP_ROLL OP_EQUALVERIFY OP_1 OP_OUTPUTTOKENCOMMITMENT OP_EQUALVERIFY OP_2 OP_OUTPUTTOKENAMOUNT OP_2 OP_PICK OP_NUMEQUALVERIFY OP_3 OP_OUTPUTTOKENAMOUNT OP_ROT OP_NUMEQUALVERIFY 76a914 OP_SWAP OP_CAT 88ac OP_CAT OP_4 OP_OUTPUTBYTECODE OP_EQUALVERIFY OP_4 OP_OUTPUTVALUE OP_LESSTHANOREQUAL OP_NIP OP_ELSE OP_4 OP_PICK OP_1 OP_NUMEQUAL OP_IF OP_5 OP_ROLL OP_6 OP_PICK OP_CHECKSIGVERIFY OP_1 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_DUP OP_0 OP_NUMEQUAL OP_OVER OP_1 OP_NUMEQUAL OP_BOOLOR OP_SWAP OP_3 OP_NUMEQUAL OP_BOOLOR OP_VERIFY OP_DUP OP_9 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_BIN2NUM OP_OVER 11 OP_SPLIT OP_DROP OP_9 OP_SPLIT OP_NIP OP_BIN2NUM OP_9 OP_PICK OP_OVER OP_MUL OP_11 OP_PICK OP_3 OP_PICK OP_MUL OP_OVER OP_SWAP OP_SUB OP_DUP 64 OP_MUL OP_2 OP_PICK OP_LESSTHANOREQUAL OP_VERIFY e4 OP_MUL OP_GREATERTHANOREQUAL OP_VERIFY OP_SWAP OP_9 OP_PICK OP_ADD OP_SWAP OP_10 OP_PICK OP_ADD OP_2 OP_PICK OP_1 OP_SPLIT OP_DROP OP_ROT OP_8 OP_NUM2BIN OP_CAT OP_SWAP OP_8 OP_NUM2BIN OP_CAT OP_SWAP 11 OP_SPLIT OP_NIP OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_1 OP_OUTPUTTOKENCOMMITMENT OP_EQUALVERIFY OP_6 OP_ROLL OP_8 OP_NUM2BIN OP_7 OP_ROLL OP_8 OP_NUM2BIN OP_CAT OP_6 OP_ROLL OP_HASH160 OP_CAT OP_2 OP_OUTPUTTOKENCOMMITMENT OP_EQUALVERIFY OP_2DROP OP_2DROP OP_DROP OP_1 OP_ELSE OP_4 OP_PICK OP_2 OP_NUMEQUAL OP_IF OP_5 OP_ROLL OP_6 OP_PICK OP_CHECKSIGVERIFY OP_6 OP_PICK OP_0 OP_GREATERTHAN OP_7 OP_PICK 64 OP_LESSTHANOREQUAL OP_BOOLAND OP_VERIFY OP_1 OP_UTXOTOKENCOMMITMENT OP_2 OP_UTXOTOKENCOMMITMENT OP_DUP 24 OP_SPLIT OP_DROP OP_16 OP_SPLIT OP_NIP OP_DUP OP_9 OP_ROLL OP_HASH160 OP_EQUALVERIFY OP_OVER OP_8 OP_SPLIT OP_DROP OP_BIN2NUM OP_ROT OP_16 OP_SPLIT OP_DROP OP_8 OP_SPLIT OP_NIP OP_BIN2NUM OP_OVER OP_10 OP_PICK OP_MUL 64 OP_DIV OP_OVER OP_11 OP_ROLL OP_MUL 64 OP_DIV OP_5 OP_PICK OP_9 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_BIN2NUM OP_6 OP_PICK 11 OP_SPLIT OP_DROP OP_9 OP_SPLIT OP_NIP OP_BIN2NUM OP_SWAP OP_3 OP_PICK OP_SUB OP_SWAP OP_2 OP_PICK OP_SUB OP_OVER OP_0 OP_GREATERTHAN OP_VERIFY OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_7 OP_PICK OP_1 OP_SPLIT OP_DROP OP_ROT OP_8 OP_NUM2BIN OP_CAT OP_SWAP OP_8 OP_NUM2BIN OP_CAT OP_6 OP_ROLL 11 OP_SPLIT OP_NIP OP_CAT OP_4 OP_ROLL OP_3 OP_PICK OP_SUB OP_4 OP_ROLL OP_3 OP_PICK OP_SUB OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_1 OP_OUTPUTTOKENCOMMITMENT OP_3 OP_ROLL OP_EQUALVERIFY OP_2 OP_OUTPUTTOKENAMOUNT OP_4 OP_ROLL OP_GREATERTHANOREQUAL OP_VERIFY OP_3 OP_OUTPUTTOKENAMOUNT OP_3 OP_ROLL OP_GREATERTHANOREQUAL OP_VERIFY OP_OVER OP_0 OP_GREATERTHAN OP_IF OP_OVER OP_8 OP_NUM2BIN OP_OVER OP_8 OP_NUM2BIN OP_CAT OP_3 OP_PICK OP_CAT OP_4 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_DROP OP_ENDIF OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_1 OP_ELSE OP_4 OP_ROLL OP_3 OP_NUMEQUALVERIFY OP_5 OP_PICK OP_HASH160 OP_EQUALVERIFY OP_3 OP_ROLL OP_4 OP_ROLL OP_CHECKSIGVERIFY OP_1 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_4 OP_LESSTHAN OP_VERIFY OP_DUP OP_1 OP_SPLIT OP_DROP OP_5 OP_1 OP_NUM2BIN OP_CAT OP_SWAP OP_1 OP_SPLIT OP_NIP OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_1 OP_OUTPUTTOKENCOMMITMENT OP_EQUAL OP_NIP OP_NIP OP_NIP OP_ENDIF OP_ENDIF OP_ENDIF",
+  "source": "/**\r\n * SportsBet.cash - Match Factory Contract\r\n *\r\n * Creates new prediction markets for sports matches.\r\n * Mints the initial outcome tokens (HOME_WIN and AWAY_WIN) and seeds the AMM pool.\r\n *\r\n * Process:\r\n * 1. Oracle calls createMatch with commitment and match parameters\r\n * 2. Factory mints HOME_WIN and AWAY_WIN fungible tokens\r\n * 3. Factory creates AMM pool with initial 50/50 liquidity\r\n * 4. Trading begins when start time is reached\r\n *\r\n * Token Minting:\r\n * - Uses CashTokens genesis (first input's outpoint becomes category)\r\n * - Mints equal amounts of both outcome tokens\r\n * - Tokens are deposited into the AMM pool\r\n */\r\npragma cashscript ^0.12.0;\r\n\r\ncontract MatchFactory(\r\n    bytes20 oraclePkh,           // Oracle authorized to create matches\r\n    bytes20 treasuryPkh,         // Protocol treasury\r\n    int initialLiquidity,        // Initial tokens per side (e.g., 1,000,000)\r\n    int creationFee              // Fee in satoshis to create a match\r\n) {\r\n    /**\r\n     * Create a new match and initialize AMM pool\r\n     *\r\n     * This function:\r\n     * 1. Verifies oracle authorization\r\n     * 2. Mints HOME_WIN and AWAY_WIN tokens (equal amounts)\r\n     * 3. Creates the AMM pool state NFT\r\n     * 4. Deposits liquidity into the pool\r\n     *\r\n     * @param oracleSig - Oracle's signature\r\n     * @param oraclePk - Oracle's public key\r\n     * @param commitment - hash256(secret || matchId) for VRF\r\n     * @param matchId - Unique match identifier\r\n     * @param matchType - Sport type (0=basketball, 1=football, 2=american_football)\r\n     * @param homeTeam - Home team identifier (for display)\r\n     * @param awayTeam - Away team identifier (for display)\r\n     * @param startTime - Trading start timestamp\r\n     * @param halftimeTime - Halftime reveal timestamp\r\n     * @param endTime - Final reveal timestamp\r\n     * @param ammPoolBytecode - Locking bytecode of the AMM pool contract\r\n     */\r\n    function createMatch(\r\n        sig oracleSig,\r\n        pubkey oraclePk,\r\n        bytes32 commitment,\r\n        bytes8 matchId,\r\n        int matchType,\r\n        bytes4 homeTeam,\r\n        bytes4 awayTeam,\r\n        int startTime,\r\n        int halftimeTime,\r\n        int endTime,\r\n        bytes ammPoolBytecode\r\n    ) {\r\n        require(this.activeInputIndex == 0);\r\n        require(hash160(oraclePk) == oraclePkh);\r\n        require(checkSig(oracleSig, oraclePk));\r\n\r\n        // Validate match type\r\n        require(matchType >= 0 && matchType <= 2);\r\n\r\n        // Validate timing\r\n        require(startTime < halftimeTime);\r\n        require(halftimeTime < endTime);\r\n        require(startTime > tx.locktime); // Must be in the future\r\n\r\n        // Genesis transaction creates new token category from input 0's outpoint\r\n        // This will be the category for match tokens\r\n        // Input 0 provides the genesis capability\r\n\r\n        // Construct AMM pool state commitment\r\n        // State: trading=0, reserves, oracle commitment, scores\r\n        bytes poolCommitment = bytes1(0) +                    // State = CREATED\r\n                               bytes8(initialLiquidity) +     // Reserve HOME\r\n                               bytes8(initialLiquidity) +     // Reserve AWAY\r\n                               commitment +                   // Oracle commitment (32 bytes)\r\n                               bytes1(matchType) +\r\n                               matchId +\r\n                               homeTeam +\r\n                               awayTeam +\r\n                               bytes4(startTime) +\r\n                               bytes4(halftimeTime) +\r\n                               bytes4(endTime) +\r\n                               bytes4(0);                     // Scores (0,0,0,0)\r\n\r\n        // Output 0: Factory contract continues (with reduced genesis capability)\r\n        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n\r\n        // Output 1: AMM Pool with state NFT (mutable)\r\n        // The pool receives the minting NFT to track state\r\n        require(tx.outputs[1].lockingBytecode == ammPoolBytecode);\r\n        require(tx.outputs[1].nftCommitment == poolCommitment);\r\n\r\n        // Output 2: HOME_WIN fungible tokens (to pool or for initial LP)\r\n        // These are minted via the genesis transaction\r\n        require(tx.outputs[2].tokenAmount == initialLiquidity);\r\n\r\n        // Output 3: AWAY_WIN fungible tokens\r\n        require(tx.outputs[3].tokenAmount == initialLiquidity);\r\n\r\n        // Output 4: Creation fee to treasury\r\n        bytes25 treasuryLock = new LockingBytecodeP2PKH(treasuryPkh);\r\n        require(tx.outputs[4].lockingBytecode == treasuryLock);\r\n        require(tx.outputs[4].value >= creationFee);\r\n    }\r\n\r\n    /**\r\n     * Add liquidity to existing pool\r\n     *\r\n     * Liquidity providers can add more tokens to increase pool depth.\r\n     * Must add equal value of both tokens to maintain price.\r\n     *\r\n     * @param lpSig - LP's signature\r\n     * @param lpPk - LP's public key\r\n     * @param homeAmount - HOME tokens to add\r\n     * @param awayAmount - AWAY tokens to add\r\n     */\r\n    function addLiquidity(\r\n        sig lpSig,\r\n        pubkey lpPk,\r\n        int homeAmount,\r\n        int awayAmount\r\n    ) {\r\n        require(checkSig(lpSig, lpPk));\r\n\r\n        // Input 0: Factory\r\n        // Input 1: Pool state NFT\r\n        // Input 2: LP's HOME tokens\r\n        // Input 3: LP's AWAY tokens\r\n\r\n        bytes poolState = tx.inputs[1].nftCommitment;\r\n        int state = int(poolState.split(1)[0]);\r\n\r\n        // Can only add liquidity during trading states\r\n        require(state == 0 || state == 1 || state == 3);\r\n\r\n        // Parse current reserves\r\n        int reserveHome = int(poolState.split(9)[0].split(1)[1]);\r\n        int reserveAway = int(poolState.split(17)[0].split(9)[1]);\r\n\r\n        // Verify LP is providing proportional amounts\r\n        // homeAmount / reserveHome should equal awayAmount / reserveAway\r\n        // Cross multiply to avoid division: homeAmount * reserveAway == awayAmount * reserveHome\r\n        // Allow 1% slippage\r\n        int product1 = homeAmount * reserveAway;\r\n        int product2 = awayAmount * reserveHome;\r\n        int diffRaw = product1 - product2;\r\n        // Absolute value: check both directions are within 1% slippage\r\n        require(diffRaw * 100 <= product1);\r\n        require(diffRaw * -100 <= product1);\r\n\r\n        // Update reserves\r\n        int newReserveHome = reserveHome + homeAmount;\r\n        int newReserveAway = reserveAway + awayAmount;\r\n\r\n        bytes newPoolState = poolState.split(1)[0] +\r\n                             bytes8(newReserveHome) +\r\n                             bytes8(newReserveAway) +\r\n                             poolState.split(17)[1];\r\n\r\n        // Output 0: Factory continues\r\n        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n\r\n        // Output 1: Updated pool\r\n        require(tx.outputs[1].nftCommitment == newPoolState);\r\n\r\n        // Output 2: LP token receipt (NFT representing LP position)\r\n        // LP receives an NFT tracking their share\r\n        bytes lpCommitment = bytes8(homeAmount) + bytes8(awayAmount) + bytes20(hash160(lpPk));\r\n        require(tx.outputs[2].nftCommitment == lpCommitment);\r\n    }\r\n\r\n    /**\r\n     * Remove liquidity from pool\r\n     *\r\n     * LP can withdraw their proportional share of the pool.\r\n     */\r\n    function removeLiquidity(\r\n        sig lpSig,\r\n        pubkey lpPk,\r\n        int sharePercent  // Percentage to remove (1-100)\r\n    ) {\r\n        require(checkSig(lpSig, lpPk));\r\n        require(sharePercent > 0 && sharePercent <= 100);\r\n\r\n        // Input 0: Factory\r\n        // Input 1: Pool state NFT\r\n        // Input 2: LP token NFT\r\n\r\n        bytes poolState = tx.inputs[1].nftCommitment;\r\n        bytes lpToken = tx.inputs[2].nftCommitment;\r\n\r\n        // Verify LP owns this position (LP token stores pkh at bytes 16-35)\r\n        bytes lpPkh = lpToken.split(36)[0].split(16)[1];\r\n        require(lpPkh == hash160(lpPk));\r\n\r\n        int lpHomeAmount = int(lpToken.split(8)[0]);\r\n        int lpAwayAmount = int(lpToken.split(16)[0].split(8)[1]);\r\n\r\n        // Calculate withdrawal amounts\r\n        int withdrawHome = (lpHomeAmount * sharePercent) / 100;\r\n        int withdrawAway = (lpAwayAmount * sharePercent) / 100;\r\n\r\n        // Update pool reserves\r\n        int reserveHome = int(poolState.split(9)[0].split(1)[1]);\r\n        int reserveAway = int(poolState.split(17)[0].split(9)[1]);\r\n\r\n        int newReserveHome = reserveHome - withdrawHome;\r\n        int newReserveAway = reserveAway - withdrawAway;\r\n\r\n        require(newReserveHome > 0);\r\n        require(newReserveAway > 0);\r\n\r\n        bytes newPoolState = poolState.split(1)[0] +\r\n                             bytes8(newReserveHome) +\r\n                             bytes8(newReserveAway) +\r\n                             poolState.split(17)[1];\r\n\r\n        // Update LP token or burn if fully withdrawn\r\n        int remainingHome = lpHomeAmount - withdrawHome;\r\n        int remainingAway = lpAwayAmount - withdrawAway;\r\n\r\n        // Output 0: Factory continues\r\n        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n\r\n        // Output 1: Updated pool\r\n        require(tx.outputs[1].nftCommitment == newPoolState);\r\n\r\n        // Output 2: Withdrawn HOME tokens to LP\r\n        require(tx.outputs[2].tokenAmount >= withdrawHome);\r\n\r\n        // Output 3: Withdrawn AWAY tokens to LP\r\n        require(tx.outputs[3].tokenAmount >= withdrawAway);\r\n\r\n        // Output 4: Updated LP token (if remaining > 0)\r\n        if (remainingHome > 0) {\r\n            bytes newLpToken = bytes8(remainingHome) + bytes8(remainingAway) + lpPkh;\r\n            require(tx.outputs[4].nftCommitment == newLpToken);\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Emergency shutdown - Oracle can close a match early\r\n     *\r\n     * Used for exceptional circumstances. Refunds all bettors proportionally.\r\n     */\r\n    function emergencyShutdown(sig oracleSig, pubkey oraclePk) {\r\n        require(hash160(oraclePk) == oraclePkh);\r\n        require(checkSig(oracleSig, oraclePk));\r\n\r\n        bytes poolState = tx.inputs[1].nftCommitment;\r\n        int state = int(poolState.split(1)[0]);\r\n\r\n        // Cannot shutdown already settled matches\r\n        require(state < 4);\r\n\r\n        // Set state to CANCELLED (5)\r\n        bytes newPoolState = poolState.split(1)[0].split(0)[1] +\r\n                             bytes1(5) +\r\n                             poolState.split(1)[1];\r\n\r\n        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n        require(tx.outputs[1].nftCommitment == newPoolState);\r\n    }\r\n}\r\n",
+  "debug": {
+    "bytecode": "5479009c63c0009d5679a988717cad567900a2577952a19a6959795b799f695a795c799f695979c5a069005180527958807e527958807e557a7e567a51807e557a7e557a7e557a7e557a54807e557a54807e557a54807e0054807e00cd00c78851cd567a8851d28852d352799d53d37b9d0376a9147c7e0288ac7e54cd8854cca177675479519c63557a5679ad51cf76517f758176009c78519c9b7c539c9b6976597f75517f77817801117f75597f7781597978955b79537995787c94760164955279a16901e495a2697c5979937c5a79935279517f757b58807e7c58807e7c01117f777e00cd00c78851d288567a5880577a58807e567aa97e52d2886d6d7551675479529c63557a5679ad567900a057790164a19a6951cf52cf7601247f75607f7776597aa98878587f75817b607f75587f7781785a7995016496785b7a950164965579597f75517f7781567901117f75597f77817c5379947c5279947800a0697600a0695779517f757b58807e7c58807e567a01117f777e547a537994547a53799400cd00c78851d2537a8852d3547aa26953d3537aa2697800a0637858807858807e53797e54d2788875686d6d6d6d5167547a539d5579a988537a547aad51cf76517f7581549f6976517f755551807e7c517f777e00cd00c78851d287777777686868",
+    "sourceMap": "47:4:110:5;;;;;60:16:60:37;:41::42;:8::44:1;61:24:61:32:0;;:16::33:1;:8::48;62:25:62:44:0;;:8::47:1;65:16:65:25:0;;:29::30;:16:::1;:34::43:0;;:47::48;:34:::1;:16;:8::50;68:16:68:25:0;;:28::40;;:16:::1;:8::42;69:16:69:28:0;;:31::38;;:16:::1;:8::40;70:16:70:25:0;;:28::39;:16:::1;:8::41;78:38:78:39:0;:31::40:1;;79:38:79:54:0;;:31::55:1;;78;80:38:80:54:0;;:31::55:1;;78;81::81:41:0;;78::::1;82:38:82:47:0;;:31::48:1;;78;83::83:38:0;;78::::1;84::84:39:0;;78::::1;85::85::0;;78::::1;86:38:86:47:0;;:31::48:1;;78;87:38:87:50:0;;:31::51:1;;78;88:38:88:45:0;;:31::46:1;;78;89:38:89:39:0;:31::40:1;;78;92:27:92:28:0;:16::45:1;:59::60:0;:49::77:1;:8::79;96:27:96:28:0;:16::45:1;:49::64:0;;:8::66:1;97:27:97:28:0;:16::43:1;:8::63;101:27:101:28:0;:16::41:1;:45::61:0;;:8::63:1;104:27:104:28:0;:16::41:1;:45::61:0;:8::63:1;107:31:107:68:0;:56::67;:31::68:1;;;108:27:108:28:0;:16::45:1;:8::63;109:27:109:28:0;:16::35:1;:8::52;47:4:110:5;;123::176::0;;;;;129:25:129:30;;:32::36;;:8::39:1;136:36:136:37:0;:26::52:1;137:24:137:33:0;:40::41;:24::42:1;:::45;:20::46;140:16:140:21:0;:25::26;:16:::1;:30::35:0;:39::40;:30:::1;:16;:44::49:0;:53::54;:44:::1;:16;:8::56;143:30:143:39:0;:46::47;:30::48:1;:::51;:58::59:0;:30::60:1;:::63;:26::64;144:30:144:39:0;:46::48;:30::49:1;:::52;:59::60:0;:30::61:1;:::64;:26::65;150:23:150:33:0;;:36::47;:23:::1;151::151:33:0;;:36::47;;:23:::1;152:22:152:30:0;:33::41;:22:::1;154:16:154:23:0;:26::29;:16:::1;:33::41:0;;:16:::1;:8::43;155:26:155:30:0;:16:::1;:::42;:8::44;158:29:158:40:0;:43::53;;:29:::1;159::159:40:0;:43::53;;:29:::1;161::161:38:0;;:45::46;:29::47:1;:::50;162:36:162::0;:29::51:1;;161;163:36:163:50:0;:29::51:1;;161;164::164:38:0;:45::47;:29::48:1;:::51;161;167:27:167:28:0;:16::45:1;:59::60:0;:49::77:1;:8::79;170:27:170:28:0;:16::43:1;:8::61;174:36:174:46:0;;:29::47:1;;:57::67:0;;:50::68:1;;:29;:87::91:0;;:79::92:1;:29::93;175:27:175:28:0;:16::43:1;:8::61;123:4:176:5;;;;;183::245::0;;;;;188:25:188:30;;:32::36;;:8::39:1;189:16:189:28:0;;:31::32;:16:::1;:36::48:0;;:52::55;:36:::1;:16;:8::57;195:36:195:37:0;:26::52:1;196:34:196:35:0;:24::50:1;199:22:199:29:0;:36::38;:22::39:1;:::42;:49::51:0;:22::52:1;:::55;200:16:200:21:0;:33::37;;:25::38:1;:8::40;202:31:202:38:0;:45::46;:31::47:1;:::50;:27::51;203:31:203:38:0;:45::47;:31::48:1;:::51;:58::59:0;:31::60:1;:::63;:27::64;206:28:206:40:0;:43::55;;:28:::1;:59::62:0;:27:::1;207:28:207:40:0;:43::55;;:28:::1;:59::62:0;:27:::1;210:30:210:39:0;;:46::47;:30::48:1;:::51;:58::59:0;:30::60:1;:::63;:26::64;211:30:211:39:0;;:46::48;:30::49:1;:::52;:59::60:0;:30::61:1;:::64;:26::65;213:29:213:40:0;:43::55;;:29:::1;214::214:40:0;:43::55;;:29:::1;216:16:216:30:0;:33::34;:16:::1;:8::36;217:16:217:30:0;:33::34;:16:::1;:8::36;219:29:219:38:0;;:45::46;:29::47:1;:::50;220:36:220::0;:29::51:1;;219;221:36:221:50:0;:29::51:1;;219;222::222:38:0;;:45::47;:29::48:1;:::51;219;225:28:225:40:0;;:43::55;;:28:::1;226::226:40:0;;:43::55;;:28:::1;229:27:229:28:0;:16::45:1;:59::60:0;:49::77:1;:8::79;232:27:232:28:0;:16::43:1;:47::59:0;;:8::61:1;235:27:235:28:0;:16::41:1;:45::57:0;;:16:::1;:8::59;238:27:238:28:0;:16::41:1;:45::57:0;;:16:::1;:8::59;241:12:241:25:0;:28::29;:12:::1;:31:244:9:0;242:38:242:51;:31::52:1;;:62::75:0;:55::76:1;;:31;:79::84:0;;:31:::1;243::243:32:0;:20::47:1;:51::61:0;:12::63:1;241:31:244:9;;183:4:245:5;;;;;;252::269::0;;;;253:24:253:32;;:16::33:1;:8::48;254:25:254:34:0;;:36::44;;:8::47:1;256:36:256:37:0;:26::52:1;257:24:257:33:0;:40::41;:24::42:1;:::45;:20::46;260:24:260:25:0;:16:::1;:8::27;263:29:263:38:0;:45::46;:29::47:1;:::50;264:36:264:37:0;:29::38:1;;263;265::265::0;:45::46;:29::47:1;:::50;263;267:27:267:28:0;:16::45:1;:59::60:0;:49::77:1;:8::79;268:27:268:28:0;:16::43:1;:8::61;252:4:269:5;;;20:0:270:1;;",
+    "logs": [],
+    "requires": [
+      {
+        "ip": 11,
+        "line": 60
+      },
+      {
+        "ip": 15,
+        "line": 61
+      },
+      {
+        "ip": 18,
+        "line": 62
+      },
+      {
+        "ip": 28,
+        "line": 65
+      },
+      {
+        "ip": 34,
+        "line": 68
+      },
+      {
+        "ip": 40,
+        "line": 69
+      },
+      {
+        "ip": 45,
+        "line": 70
+      },
+      {
+        "ip": 99,
+        "line": 92
+      },
+      {
+        "ip": 104,
+        "line": 96
+      },
+      {
+        "ip": 107,
+        "line": 97
+      },
+      {
+        "ip": 112,
+        "line": 101
+      },
+      {
+        "ip": 116,
+        "line": 104
+      },
+      {
+        "ip": 124,
+        "line": 108
+      },
+      {
+        "ip": 128,
+        "line": 109
+      },
+      {
+        "ip": 139,
+        "line": 129
+      },
+      {
+        "ip": 158,
+        "line": 140
+      },
+      {
+        "ip": 193,
+        "line": 154
+      },
+      {
+        "ip": 197,
+        "line": 155
+      },
+      {
+        "ip": 228,
+        "line": 167
+      },
+      {
+        "ip": 231,
+        "line": 170
+      },
+      {
+        "ip": 247,
+        "line": 175
+      },
+      {
+        "ip": 262,
+        "line": 188
+      },
+      {
+        "ip": 272,
+        "line": 189
+      },
+      {
+        "ip": 288,
+        "line": 200
+      },
+      {
+        "ip": 343,
+        "line": 216
+      },
+      {
+        "ip": 347,
+        "line": 217
+      },
+      {
+        "ip": 381,
+        "line": 229
+      },
+      {
+        "ip": 386,
+        "line": 232
+      },
+      {
+        "ip": 392,
+        "line": 235
+      },
+      {
+        "ip": 398,
+        "line": 238
+      },
+      {
+        "ip": 416,
+        "line": 243
+      },
+      {
+        "ip": 432,
+        "line": 253
+      },
+      {
+        "ip": 437,
+        "line": 254
+      },
+      {
+        "ip": 447,
+        "line": 260
+      },
+      {
+        "ip": 465,
+        "line": 267
+      },
+      {
+        "ip": 469,
+        "line": 268
+      }
+    ]
+  },
+  "compiler": {
+    "name": "cashc",
+    "version": "0.12.1"
+  },
+  "updatedAt": "2026-02-24T21:07:52.871Z"
+}

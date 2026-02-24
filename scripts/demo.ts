@@ -29,9 +29,8 @@ import { SportType, MatchState } from '../src/types.js';
 // DEMO CONFIGURATION
 // =============================================================================
 
-const INITIAL_LIQUIDITY = 100_000n; // 100,000 tokens per side
-const PRICE_PER_UNIT = 10_000n;     // 10,000 sats per token unit
-const FEE_BPS = 30n;                // 0.3% fee
+const INITIAL_LIQUIDITY = 1_000_000_000n; // 10 BCH per side in satoshis (sats-denominated CPMM)
+const PRICE_PER_UNIT = 10_000n;           // 10,000 sats per token unit (0.0001 BCH)
 
 // =============================================================================
 // HELPER FUNCTIONS
@@ -117,9 +116,9 @@ async function runDemo() {
 
   let prices = calculatePrices(reserveHome, reserveAway);
 
-  console.log('Initial Pool State:');
-  console.log(`  HOME_WIN tokens: ${reserveHome.toLocaleString()}`);
-  console.log(`  AWAY_WIN tokens: ${reserveAway.toLocaleString()}`);
+  console.log('Initial Pool State (reserves in satoshis):');
+  console.log(`  HOME_WIN reserve: ${formatSats(reserveHome)}`);
+  console.log(`  AWAY_WIN reserve: ${formatSats(reserveAway)}`);
   console.log(`  Price HOME_WIN: ${formatPercent(prices.priceHome)} (implied probability)`);
   console.log(`  Price AWAY_WIN: ${formatPercent(prices.priceAway)} (implied probability)`);
   console.log('');
@@ -147,16 +146,18 @@ async function runDemo() {
     const reserveToken = isHome ? reserveHome : reserveAway;
     const reserveOther = isHome ? reserveAway : reserveHome;
 
-    const tokensOut = calculateTokensOut(trade.bch, reserveToken, reserveOther);
+    // Sats-denominated CPMM: satsBought drains from reserveToken, bchIn adds to reserveOther
+    const effectiveIn = (trade.bch * 9970n) / 10000n; // 0.3% fee
+    const satsBought = (reserveToken * effectiveIn) / (reserveOther + effectiveIn);
+    const tokensOut = satsBought / PRICE_PER_UNIT;
     const priceImpact = calculatePriceImpact(trade.bch, reserveToken, reserveOther, true);
 
-    // Update reserves
     if (isHome) {
-      reserveHome -= tokensOut;
-      reserveAway += trade.bch / PRICE_PER_UNIT; // Simplified: BCH adds to other side
+      reserveHome -= satsBought;
+      reserveAway += trade.bch;
     } else {
-      reserveAway -= tokensOut;
-      reserveHome += trade.bch / PRICE_PER_UNIT;
+      reserveAway -= satsBought;
+      reserveHome += trade.bch;
     }
 
     prices = calculatePrices(reserveHome, reserveAway);
@@ -169,8 +170,8 @@ async function runDemo() {
   }
 
   console.log('\nPool after Trading Phase 1:');
-  console.log(`  HOME_WIN reserve: ${reserveHome.toLocaleString()}`);
-  console.log(`  AWAY_WIN reserve: ${reserveAway.toLocaleString()}`);
+  console.log(`  HOME_WIN reserve: ${formatSats(reserveHome)}`);
+  console.log(`  AWAY_WIN reserve: ${formatSats(reserveAway)}`);
   console.log(`  Lakers implied probability: ${formatPercent(prices.priceHome)}`);
   console.log(`  Warriors implied probability: ${formatPercent(prices.priceAway)}`);
 
@@ -213,19 +214,19 @@ async function runDemo() {
   console.log('');
   console.log('Market reacts to halftime score...');
 
-  // Simulate market reaction
+  // Simulate market reaction (sats-denominated: satsBought drains from winning side's reserve)
+  const reactTrade = 150_000_000n;
+  const reactEffective = (reactTrade * 9970n) / 10000n;
   if (lakersLeading) {
-    // More people buy Lakers
-    const reactTrade = 150_000_000n;
-    const tokensOut = calculateTokensOut(reactTrade, reserveHome, reserveAway);
-    reserveHome -= tokensOut;
-    reserveAway += reactTrade / PRICE_PER_UNIT;
+    // More people buy Lakers: drain HOME reserve, add to AWAY reserve
+    const satsBought = (reserveHome * reactEffective) / (reserveAway + reactEffective);
+    reserveHome -= satsBought;
+    reserveAway += reactTrade;
   } else {
-    // More people buy Warriors
-    const reactTrade = 150_000_000n;
-    const tokensOut = calculateTokensOut(reactTrade, reserveAway, reserveHome);
-    reserveAway -= tokensOut;
-    reserveHome += reactTrade / PRICE_PER_UNIT;
+    // More people buy Warriors: drain AWAY reserve, add to HOME reserve
+    const satsBought = (reserveAway * reactEffective) / (reserveHome + reactEffective);
+    reserveAway -= satsBought;
+    reserveHome += reactTrade;
   }
 
   prices = calculatePrices(reserveHome, reserveAway);

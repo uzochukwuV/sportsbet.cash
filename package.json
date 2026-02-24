@@ -5,14 +5,24 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "workspaces": [
+    "frontend"
+  ],
   "scripts": {
     "build": "tsc",
-    "compile:contracts": "cashc contracts/*.cash --output contracts/",
+    "compile:mint": "cashc contract/mint.cash --output contracts/mint.json",
+    "compile:amm": "cashc contracts/amm-pool-v2.cash --output contracts/amm-pool.json",
+    "compile:oracle": "cashc contracts/oracle.cash --output contracts/oracle.json",
+    "compile:settlement": "cashc contracts/settlement.cash --output contracts/settlement.json",
+    "compile:match-factory": "cashc contracts/match-factory.cash --output contracts/match-factory.json",
+    "compile:all": "yarn compile:contracts && yarn compile:oracle && yarn compile:settlement && yarn compile:match-factory",
     "generate": "tsx generateContract.ts",
     "setup": "tsx minting-setup.ts",
     "payout": "tsx invoke-payout.ts",
     "demo": "tsx scripts/demo.ts",
     "demo:blockhash": "tsx scripts/demo-blockhash.ts",
+    "frontend:dev": "cd frontend && yarn dev",
+    "frontend:build": "cd frontend && yarn build",
     "create-match": "tsx scripts/create-match.ts",
     "trade": "tsx scripts/trade.ts",
     "settle": "tsx scripts/settle.ts",
@@ -53,5 +63,6 @@
   },
   "engines": {
     "node": ">=20.0.0"
-  }
+  },
+  "packageManager": "yarn@4.8.1+sha512.bc946f2a022d7a1a38adfc15b36a66a3807a67629789496c3714dd1703d2e6c6b1c69ff9ec3b43141ac7a1dd853b7685638eb0074300386a59c18df351ef8ff6"
 }

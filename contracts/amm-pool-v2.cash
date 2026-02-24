@@ -4,10 +4,15 @@
  * Uses future block hashes for randomness instead of oracle commit-reveal.
  * This provides better UX with automatic, trustless score generation.
  *
- * State NFT Commitment Format (66 bytes):
+ * CPMM with BCH-denominated reserves:
+ *   Both reserveHome and reserveAway are stored in satoshis.
+ *   k = reserveHomeSats * reserveAwaySats (preserved across trades).
+ *   tokensOut = satsBought / pricePerUnit
+ *
+ * State NFT Commitment Format (50 bytes):
  *   [0]: state (1 byte)
- *   [1-8]: reserveHome (8 bytes)
- *   [9-16]: reserveAway (8 bytes)
+ *   [1-8]: reserveHomeSats (8 bytes) - BCH sats committed to HOME side
+ *   [9-16]: reserveAwaySats (8 bytes) - BCH sats committed to AWAY side
  *   [17-20]: creationBlock (4 bytes)
  *   [21-24]: halftimeBlock (4 bytes) - block when halftime is revealed
  *   [25-28]: endBlock (4 bytes) - block when final is revealed
@@ -36,6 +41,9 @@ contract AmmPoolV2(
     /**
      * Buy outcome tokens with BCH
      *
+     * Reserves are in satoshis. k = reserveHomeSats * reserveAwaySats is preserved.
+     * tokensOut = satsBought / pricePerUnit
+     *
      * Anyone can trade during TRADING (0) or HALFTIME_TRADING (2) states.
      */
     function buyTokens(bool buyHome, int minTokensOut) {
@@ -47,59 +55,69 @@ contract AmmPoolV2(
         // Only allow trading in appropriate states
         require(state == 0 || state == 2);
 
-        // Parse reserves
-        int reserveHome = int(commitment.split(9)[0].split(1)[1]);
-        int reserveAway = int(commitment.split(17)[0].split(9)[1]);
+        // Parse reserves (both in satoshis)
+        int reserveHomeSats = int(commitment.split(9)[0].split(1)[1]);
+        int reserveAwaySats = int(commitment.split(17)[0].split(9)[1]);
 
-        // BCH input from user
+        // BCH input from user (satoshis, minus dust)
         int bchIn = tx.inputs[1].value - 546;
         require(bchIn > 0);
 
-        // Apply fee
+        // Apply fee to get effective satoshis in
         int effectiveIn = (bchIn * (feeDenominator - feeNumerator)) / feeDenominator;
 
-        // CPMM calculation
-        int tokensOut;
-        int newReserveHome;
-        int newReserveAway;
-
+        // CPMM: both reserves in sats, k is preserved
         if (buyHome) {
-            tokensOut = (reserveHome * effectiveIn) / (reserveAway + effectiveIn);
-            newReserveHome = reserveHome - tokensOut;
-            newReserveAway = reserveAway + effectiveIn;
-        } else {
-            tokensOut = (reserveAway * effectiveIn) / (reserveHome + effectiveIn);
-            newReserveHome = reserveHome + effectiveIn;
-            newReserveAway = reserveAway - tokensOut;
-        }
+            // satsBought comes out of HOME side
+            int satsBought = (reserveHomeSats * effectiveIn) / (reserveAwaySats + effectiveIn);
+            int tokensOut = satsBought / pricePerUnit;
+            int newReserveHomeSats = reserveHomeSats - satsBought;
+            int newReserveAwaySats = reserveAwaySats + effectiveIn;
 
-        require(tokensOut >= minTokensOut);
-        require(tokensOut > 0);
-        require(newReserveHome > 0);
-        require(newReserveAway > 0);
+            require(tokensOut >= minTokensOut);
+            require(tokensOut > 0);
+            require(newReserveHomeSats > 0);
+            require(newReserveAwaySats > 0);
 
-        // Encode new state (keep everything except reserves)
-        bytes newCommitment = bytes1(state) +
-                              bytes8(newReserveHome) +
-                              bytes8(newReserveAway) +
-                              commitment.split(17)[1];
+            bytes newCommitment = bytes1(state) +
+                                  bytes8(newReserveHomeSats) +
+                                  bytes8(newReserveAwaySats) +
+                                  commitment.split(17)[1];
 
-        // Output 0: Updated pool
-        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
-        require(tx.outputs[0].nftCommitment == newCommitment);
-        require(tx.outputs[0].value >= tx.inputs[0].value + bchIn - 1000);
-
-        // Output 1: User receives tokens
-        if (buyHome) {
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].nftCommitment == newCommitment);
+            require(tx.outputs[0].value >= tx.inputs[0].value + bchIn - 1000);
             require(tx.outputs[1].tokenCategory == homeTokenCategory);
+            require(tx.outputs[1].tokenAmount >= tokensOut);
         } else {
+            // satsBought comes out of AWAY side
+            int satsBought = (reserveAwaySats * effectiveIn) / (reserveHomeSats + effectiveIn);
+            int tokensOut = satsBought / pricePerUnit;
+            int newReserveHomeSats = reserveHomeSats + effectiveIn;
+            int newReserveAwaySats = reserveAwaySats - satsBought;
+
+            require(tokensOut >= minTokensOut);
+            require(tokensOut > 0);
+            require(newReserveHomeSats > 0);
+            require(newReserveAwaySats > 0);
+
+            bytes newCommitment = bytes1(state) +
+                                  bytes8(newReserveHomeSats) +
+                                  bytes8(newReserveAwaySats) +
+                                  commitment.split(17)[1];
+
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].nftCommitment == newCommitment);
+            require(tx.outputs[0].value >= tx.inputs[0].value + bchIn - 1000);
             require(tx.outputs[1].tokenCategory == awayTokenCategory);
+            require(tx.outputs[1].tokenAmount >= tokensOut);
         }
-        require(tx.outputs[1].tokenAmount >= tokensOut);
     }
 
     /**
      * Sell outcome tokens for BCH
+     *
+     * Tokens are converted to their sats equivalent, then CPMM gives satsOut.
      */
     function sellTokens(bool sellHome, int minBchOut) {
         require(this.activeInputIndex == 0);
@@ -108,57 +126,72 @@ contract AmmPoolV2(
         int state = int(commitment.split(1)[0]);
         require(state == 0 || state == 2);
 
-        int reserveHome = int(commitment.split(9)[0].split(1)[1]);
-        int reserveAway = int(commitment.split(17)[0].split(9)[1]);
+        int reserveHomeSats = int(commitment.split(9)[0].split(1)[1]);
+        int reserveAwaySats = int(commitment.split(17)[0].split(9)[1]);
 
-        // Get tokens being sold
-        int tokensIn;
         if (sellHome) {
             require(tx.inputs[1].tokenCategory == homeTokenCategory);
-            tokensIn = tx.inputs[1].tokenAmount;
+            int tokensIn = tx.inputs[1].tokenAmount;
+            require(tokensIn > 0);
+
+            // Convert tokens to sats equivalent, apply fee
+            int satsIn = tokensIn * pricePerUnit;
+            int effectiveSats = (satsIn * (feeDenominator - feeNumerator)) / feeDenominator;
+
+            // CPMM: satsOut from AWAY side
+            int satsOut = (reserveAwaySats * effectiveSats) / (reserveHomeSats + effectiveSats);
+            int newReserveHomeSats = reserveHomeSats + satsIn;
+            int newReserveAwaySats = reserveAwaySats - satsOut;
+
+            require(satsOut >= minBchOut);
+            require(satsOut > 0);
+            require(newReserveHomeSats > 0);
+            require(newReserveAwaySats > 0);
+
+            bytes newCommitment = bytes1(state) +
+                                  bytes8(newReserveHomeSats) +
+                                  bytes8(newReserveAwaySats) +
+                                  commitment.split(17)[1];
+
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].nftCommitment == newCommitment);
+            require(tx.outputs[0].value >= tx.inputs[0].value - satsOut - 1000);
+            require(tx.outputs[1].value >= satsOut);
         } else {
             require(tx.inputs[1].tokenCategory == awayTokenCategory);
-            tokensIn = tx.inputs[1].tokenAmount;
+            int tokensIn = tx.inputs[1].tokenAmount;
+            require(tokensIn > 0);
+
+            // Convert tokens to sats equivalent, apply fee
+            int satsIn = tokensIn * pricePerUnit;
+            int effectiveSats = (satsIn * (feeDenominator - feeNumerator)) / feeDenominator;
+
+            // CPMM: satsOut from HOME side
+            int satsOut = (reserveHomeSats * effectiveSats) / (reserveAwaySats + effectiveSats);
+            int newReserveHomeSats = reserveHomeSats - satsOut;
+            int newReserveAwaySats = reserveAwaySats + satsIn;
+
+            require(satsOut >= minBchOut);
+            require(satsOut > 0);
+            require(newReserveHomeSats > 0);
+            require(newReserveAwaySats > 0);
+
+            bytes newCommitment = bytes1(state) +
+                                  bytes8(newReserveHomeSats) +
+                                  bytes8(newReserveAwaySats) +
+                                  commitment.split(17)[1];
+
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].nftCommitment == newCommitment);
+            require(tx.outputs[0].value >= tx.inputs[0].value - satsOut - 1000);
+            require(tx.outputs[1].value >= satsOut);
         }
-        require(tokensIn > 0);
-
-        int effectiveIn = (tokensIn * (feeDenominator - feeNumerator)) / feeDenominator;
-
-        int bchOut;
-        int newReserveHome;
-        int newReserveAway;
-
-        if (sellHome) {
-            bchOut = (reserveAway * effectiveIn) / (reserveHome + effectiveIn);
-            newReserveHome = reserveHome + tokensIn;
-            newReserveAway = reserveAway - bchOut;
-        } else {
-            bchOut = (reserveHome * effectiveIn) / (reserveAway + effectiveIn);
-            newReserveHome = reserveHome - bchOut;
-            newReserveAway = reserveAway + tokensIn;
-        }
-
-        require(bchOut >= minBchOut);
-        require(bchOut > 0);
-        require(newReserveHome > 0);
-        require(newReserveAway > 0);
-
-        bytes newCommitment = bytes1(state) +
-                              bytes8(newReserveHome) +
-                              bytes8(newReserveAway) +
-                              commitment.split(17)[1];
-
-        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
-        require(tx.outputs[0].nftCommitment == newCommitment);
-        require(tx.outputs[0].value >= tx.inputs[0].value - bchOut - 1000);
-        require(tx.outputs[1].value >= bchOut);
     }
 
     /**
      * Transition to halftime pending state
      *
      * Anyone can call this after trading period ends.
-     * No oracle needed - just checks block height.
      */
     function endTradingPhase1() {
         require(this.activeInputIndex == 0);
@@ -166,14 +199,11 @@ contract AmmPoolV2(
         bytes commitment = tx.inputs[0].nftCommitment;
         int state = int(commitment.split(1)[0]);
 
-        // Must be in TRADING state
         require(state == 0);
 
-        // Check if we've reached halftime block
         int halftimeBlock = int(commitment.split(25)[0].split(21)[1]);
         require(tx.locktime >= halftimeBlock);
 
-        // Transition to HALFTIME_PENDING
         bytes newCommitment = bytes1(1) + commitment.split(1)[1];
 
         require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
@@ -200,48 +230,48 @@ contract AmmPoolV2(
         bytes commitment = tx.inputs[0].nftCommitment;
         int state = int(commitment.split(1)[0]);
 
-        // Must be in HALFTIME_PENDING
         require(state == 1);
 
-        // Get match parameters
         int sportType = int(commitment.split(30)[0].split(29)[1]);
         bytes8 matchId = bytes8(commitment.split(38)[0].split(30)[1]);
 
-        // Generate seed from block hashes + matchId
-        // seed = hash256(blockHash1 || blockHash2 || blockHash3 || matchId)
         bytes32 seed = hash256(blockHash1 + blockHash2 + blockHash3 + matchId);
-
-        // Generate scores from seed
-        // scoreHash = hash256(seed || 'H')
-        bytes32 scoreHash = hash256(seed + bytes1(0x48));
-
-        // Extract scores based on sport type
-        int homeScore1H;
-        int awayScore1H;
+        bytes32 scoreHash = hash256(seed + bytes1(0x48)); // 'H' for halftime
 
         if (sportType == 0) {
             // Basketball: 30-75
-            homeScore1H = 30 + (int(scoreHash.split(2)[0]) % 46);
-            awayScore1H = 30 + (int(scoreHash.split(4)[0].split(2)[1]) % 46);
+            int homeScore1H = 30 + (int(scoreHash.split(2)[0]) % 46);
+            int awayScore1H = 30 + (int(scoreHash.split(4)[0].split(2)[1]) % 46);
+            bytes newCommitment = bytes1(2) +
+                                  commitment.split(46)[0].split(1)[1] +
+                                  bytes1(homeScore1H) +
+                                  bytes1(awayScore1H) +
+                                  bytes2(0);
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].nftCommitment == newCommitment);
         } else if (sportType == 1) {
-            // Football: 0-4
-            homeScore1H = int(scoreHash.split(1)[0]) % 5;
-            awayScore1H = int(scoreHash.split(2)[0].split(1)[1]) % 5;
+            // Football/Soccer: 0-4
+            int homeScore1H = int(scoreHash.split(1)[0]) % 5;
+            int awayScore1H = int(scoreHash.split(2)[0].split(1)[1]) % 5;
+            bytes newCommitment = bytes1(2) +
+                                  commitment.split(46)[0].split(1)[1] +
+                                  bytes1(homeScore1H) +
+                                  bytes1(awayScore1H) +
+                                  bytes2(0);
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].nftCommitment == newCommitment);
         } else {
             // American football: 0-28
-            homeScore1H = int(scoreHash.split(2)[0]) % 29;
-            awayScore1H = int(scoreHash.split(4)[0].split(2)[1]) % 29;
+            int homeScore1H = int(scoreHash.split(2)[0]) % 29;
+            int awayScore1H = int(scoreHash.split(4)[0].split(2)[1]) % 29;
+            bytes newCommitment = bytes1(2) +
+                                  commitment.split(46)[0].split(1)[1] +
+                                  bytes1(homeScore1H) +
+                                  bytes1(awayScore1H) +
+                                  bytes2(0);
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].nftCommitment == newCommitment);
         }
-
-        // Update state to HALFTIME_TRADING with scores
-        bytes newCommitment = bytes1(2) +
-                              commitment.split(46)[0].split(1)[1] +
-                              bytes1(homeScore1H) +
-                              bytes1(awayScore1H) +
-                              bytes2(0); // Final scores TBD
-
-        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
-        require(tx.outputs[0].nftCommitment == newCommitment);
     }
 
     /**
@@ -282,47 +312,62 @@ contract AmmPoolV2(
         int sportType = int(commitment.split(30)[0].split(29)[1]);
         bytes8 matchId = bytes8(commitment.split(38)[0].split(30)[1]);
 
-        // Get halftime scores
         int homeScore1H = int(commitment.split(47)[0].split(46)[1]);
         int awayScore1H = int(commitment.split(48)[0].split(47)[1]);
 
-        // Generate second half scores
         bytes32 seed = hash256(blockHash1 + blockHash2 + blockHash3 + matchId);
         bytes32 scoreHash = hash256(seed + bytes1(0x46)); // 'F' for final
 
-        int homeScore2H;
-        int awayScore2H;
-
         if (sportType == 0) {
-            homeScore2H = 30 + (int(scoreHash.split(2)[0]) % 46);
-            awayScore2H = 30 + (int(scoreHash.split(4)[0].split(2)[1]) % 46);
+            // Basketball: 30-75
+            int homeScore2H = 30 + (int(scoreHash.split(2)[0]) % 46);
+            int awayScore2H = 30 + (int(scoreHash.split(4)[0].split(2)[1]) % 46);
+            int homeScoreFinal = homeScore1H + homeScore2H;
+            int awayScoreFinal = awayScore1H + awayScore2H;
+            bytes newCommitment = bytes1(4) +
+                                  commitment.split(46)[0].split(1)[1] +
+                                  bytes1(homeScore1H) +
+                                  bytes1(awayScore1H) +
+                                  bytes1(homeScoreFinal) +
+                                  bytes1(awayScoreFinal);
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].nftCommitment == newCommitment);
         } else if (sportType == 1) {
-            homeScore2H = int(scoreHash.split(1)[0]) % 5;
-            awayScore2H = int(scoreHash.split(2)[0].split(1)[1]) % 5;
+            // Football/Soccer: 0-4
+            int homeScore2H = int(scoreHash.split(1)[0]) % 5;
+            int awayScore2H = int(scoreHash.split(2)[0].split(1)[1]) % 5;
+            int homeScoreFinal = homeScore1H + homeScore2H;
+            int awayScoreFinal = awayScore1H + awayScore2H;
+            bytes newCommitment = bytes1(4) +
+                                  commitment.split(46)[0].split(1)[1] +
+                                  bytes1(homeScore1H) +
+                                  bytes1(awayScore1H) +
+                                  bytes1(homeScoreFinal) +
+                                  bytes1(awayScoreFinal);
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].nftCommitment == newCommitment);
         } else {
-            homeScore2H = int(scoreHash.split(2)[0]) % 29;
-            awayScore2H = int(scoreHash.split(4)[0].split(2)[1]) % 29;
+            // American football: 0-28
+            int homeScore2H = int(scoreHash.split(2)[0]) % 29;
+            int awayScore2H = int(scoreHash.split(4)[0].split(2)[1]) % 29;
+            int homeScoreFinal = homeScore1H + homeScore2H;
+            int awayScoreFinal = awayScore1H + awayScore2H;
+            bytes newCommitment = bytes1(4) +
+                                  commitment.split(46)[0].split(1)[1] +
+                                  bytes1(homeScore1H) +
+                                  bytes1(awayScore1H) +
+                                  bytes1(homeScoreFinal) +
+                                  bytes1(awayScoreFinal);
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].nftCommitment == newCommitment);
         }
-
-        int homeScoreFinal = homeScore1H + homeScore2H;
-        int awayScoreFinal = awayScore1H + awayScore2H;
-
-        // State = SETTLED with final scores
-        bytes newCommitment = bytes1(4) +
-                              commitment.split(46)[0].split(1)[1] +
-                              bytes1(homeScore1H) +
-                              bytes1(awayScore1H) +
-                              bytes1(homeScoreFinal) +
-                              bytes1(awayScoreFinal);
-
-        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
-        require(tx.outputs[0].nftCommitment == newCommitment);
     }
 
     /**
      * Redeem winning tokens for BCH
      *
-     * After settlement, holders of winning tokens can redeem.
+     * Fixed-price redemption: each winning token redeems for pricePerUnit sats.
+     * Losing tokens get nothing. Draw splits 50/50.
      */
     function redeem() {
         require(this.activeInputIndex == 0);
@@ -332,40 +377,37 @@ contract AmmPoolV2(
 
         require(state == 4); // Must be SETTLED
 
-        // Get final scores
         int homeScoreFinal = int(commitment.split(49)[0].split(48)[1]);
         int awayScoreFinal = int(commitment.split(50)[0].split(49)[1]);
 
-        // Determine outcome
-        bool homeWins = homeScoreFinal > awayScoreFinal;
-        bool isDraw = homeScoreFinal == awayScoreFinal;
-
-        // Get user's tokens
         int tokenAmount = tx.inputs[1].tokenAmount;
         require(tokenAmount > 0);
 
-        // Calculate payout
-        int payoutMultiplier;
-
-        if (isDraw) {
+        if (homeScoreFinal == awayScoreFinal) {
             // Draw: both token types pay 50%
-            payoutMultiplier = 5000;
-        } else if (homeWins) {
+            require(tx.inputs[1].tokenCategory == homeTokenCategory ||
+                    tx.inputs[1].tokenCategory == awayTokenCategory);
+            int payout = (tokenAmount * pricePerUnit) / 2;
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].nftCommitment == commitment);
+            require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);
+            require(tx.outputs[1].value >= payout);
+        } else if (homeScoreFinal > awayScoreFinal) {
+            // Home win: HOME tokens pay pricePerUnit each
             require(tx.inputs[1].tokenCategory == homeTokenCategory);
-            payoutMultiplier = 10000;
+            int payout = tokenAmount * pricePerUnit;
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].nftCommitment == commitment);
+            require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);
+            require(tx.outputs[1].value >= payout);
         } else {
+            // Away win: AWAY tokens pay pricePerUnit each
             require(tx.inputs[1].tokenCategory == awayTokenCategory);
-            payoutMultiplier = 10000;
+            int payout = tokenAmount * pricePerUnit;
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].nftCommitment == commitment);
+            require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);
+            require(tx.outputs[1].value >= payout);
         }
-
-        int payout = (tokenAmount * payoutMultiplier * pricePerUnit) / 10000;
-
-        // Pool continues with reduced balance
-        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
-        require(tx.outputs[0].nftCommitment == commitment);
-        require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);
-
-        // User receives payout
-        require(tx.outputs[1].value >= payout);
     }
 }

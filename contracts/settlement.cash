@@ -55,55 +55,48 @@ contract Settlement(
         int matchLen = 82; // Total expected length
         bytes scores = matchState.split(matchLen)[0].split(matchLen - 4)[1];
 
-        int homeScore1H = int(scores.split(1)[0]);
-        int awayScore1H = int(scores.split(2)[0].split(1)[1]);
         int homeScoreFinal = int(scores.split(3)[0].split(2)[1]);
         int awayScoreFinal = int(scores.split(4)[0].split(3)[1]);
 
         // Determine outcome
         bool homeWins = homeScoreFinal > awayScoreFinal;
-        bool awayWins = awayScoreFinal > homeScoreFinal;
         bool isDraw = homeScoreFinal == awayScoreFinal;
 
         // Get user's tokens from input 2
-        bytes32 tokenCategory = tx.inputs[2].tokenCategory;
+        bytes tokenCategory = tx.inputs[2].tokenCategory;
         int tokenAmount = tx.inputs[2].tokenAmount;
 
         require(tokenAmount > 0);
 
-        // Validate token category and determine payout multiplier
-        int payoutMultiplier; // In basis points (10000 = 100%)
-
+        // Validate token category and calculate payout
         if (isDraw) {
             // Draw: both token types pay 50%
-            // Must be a valid outcome token (home or away), not an arbitrary token
             require(tokenCategory == homeTokenCategory || tokenCategory == awayTokenCategory);
-            payoutMultiplier = 5000;
+            int payout = (tokenAmount * 5000 * pricePerUnit) / 10000;
+            require(tx.inputs[0].value >= payout + 1000);
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);
+            require(tx.outputs[1].nftCommitment == matchState);
+            require(tx.outputs[2].value >= payout);
         } else if (homeWins) {
             // Only HOME_WIN tokens pay out in a home win
             require(tokenCategory == homeTokenCategory);
-            payoutMultiplier = 10000;
+            int payout = (tokenAmount * 10000 * pricePerUnit) / 10000;
+            require(tx.inputs[0].value >= payout + 1000);
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);
+            require(tx.outputs[1].nftCommitment == matchState);
+            require(tx.outputs[2].value >= payout);
         } else {
             // Only AWAY_WIN tokens pay out in an away win
             require(tokenCategory == awayTokenCategory);
-            payoutMultiplier = 10000;
+            int payout = (tokenAmount * 10000 * pricePerUnit) / 10000;
+            require(tx.inputs[0].value >= payout + 1000);
+            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
+            require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);
+            require(tx.outputs[1].nftCommitment == matchState);
+            require(tx.outputs[2].value >= payout);
         }
-
-        // Calculate payout
-        int payout = (tokenAmount * payoutMultiplier * pricePerUnit) / 10000;
-
-        // Settlement contract must have enough funds
-        require(tx.inputs[0].value >= payout + 1000);
-
-        // Output 0: Settlement contract continues with reduced balance
-        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);
-        require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);
-
-        // Output 1: Match state NFT returns (unchanged)
-        require(tx.outputs[1].nftCommitment == matchState);
-
-        // Output 2: User receives BCH payout
-        require(tx.outputs[2].value >= payout);
 
         // Tokens are burned (not forwarded)
     }
