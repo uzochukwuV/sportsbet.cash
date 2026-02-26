@@ -90,56 +90,54 @@ describe('Token Out Calculation (Buying)', () => {
 
 describe('BCH Out Calculation (Selling)', () => {
   it('should calculate BCH out when selling tokens', () => {
-    // reserveToken = 10000, reserveOther = 10000
-    // tokensIn = 1000
-    // bchOut = (10000 * 1000) / (10000 + 1000) = 909
-    const bchOut = calculateBchOut(1000n, 10000n, 10000n, 0n, 10000n);
+    // pricePerUnit=1n: raw formula test, reserves and tokens in same unit
+    // satsIn = 1000*1=1000; bchOut = (10000*1000)/(10000+1000) = 909
+    const bchOut = calculateBchOut(1000n, 10000n, 10000n, 0n, 10000n, 1n);
 
     assert.strictEqual(bchOut, 909n, 'Should get ~909 BCH');
   });
 
   it('should be symmetric with buying (minus fees)', () => {
+    // pricePerUnit=1n: raw formula test
     const reserveToken = 10000n;
     const reserveOther = 10000n;
 
-    // Buy 500 tokens
-    const bchIn = 526n; // Amount that gives ~500 tokens
-    const tokensBought = calculateTokensOut(bchIn, reserveToken, reserveOther, 0n, 10000n);
+    const bchIn = 526n;
+    const tokensBought = calculateTokensOut(bchIn, reserveToken, reserveOther, 0n, 10000n, 1n);
 
-    // New reserves after buy
+    // With pricePerUnit=1, satsBought = tokensBought, so reserve update is consistent
     const newReserveToken = reserveToken - tokensBought;
     const newReserveOther = reserveOther + bchIn;
 
-    // Sell those tokens back
-    const bchBack = calculateBchOut(tokensBought, newReserveToken, newReserveOther, 0n, 10000n);
+    const bchBack = calculateBchOut(tokensBought, newReserveToken, newReserveOther, 0n, 10000n, 1n);
 
-    // Should get back slightly less due to price impact
     assert.ok(bchBack <= bchIn, 'Should get back less or equal BCH');
   });
 });
 
 describe('BCH Required Calculation', () => {
   it('should calculate BCH required for exact token amount', () => {
+    // pricePerUnit=1n: raw formula test
     const tokensWanted = 500n;
-    const bchRequired = calculateBchRequired(tokensWanted, 10000n, 10000n, 0n, 10000n);
+    const bchRequired = calculateBchRequired(tokensWanted, 10000n, 10000n, 0n, 10000n, 1n);
 
-    // Verify: using this BCH should give us the tokens we want
-    const actualTokens = calculateTokensOut(bchRequired, 10000n, 10000n, 0n, 10000n);
+    const actualTokens = calculateTokensOut(bchRequired, 10000n, 10000n, 0n, 10000n, 1n);
 
     assert.ok(actualTokens >= tokensWanted, 'Should get at least the tokens wanted');
   });
 
   it('should throw for impossible amounts', () => {
+    // satsBought = 10001 * 1 = 10001 >= reserveSats=10000, so throws
     assert.throws(
-      () => calculateBchRequired(10001n, 10000n, 10000n, 0n, 10000n),
+      () => calculateBchRequired(10001n, 10000n, 10000n, 0n, 10000n, 1n),
       /Cannot buy more tokens than in reserve/
     );
   });
 
   it('should account for fees', () => {
     const tokensWanted = 500n;
-    const bchNoFee = calculateBchRequired(tokensWanted, 10000n, 10000n, 0n, 10000n);
-    const bchWithFee = calculateBchRequired(tokensWanted, 10000n, 10000n, 30n, 10000n);
+    const bchNoFee = calculateBchRequired(tokensWanted, 10000n, 10000n, 0n, 10000n, 1n);
+    const bchWithFee = calculateBchRequired(tokensWanted, 10000n, 10000n, 30n, 10000n, 1n);
 
     assert.ok(bchWithFee > bchNoFee, 'Should need more BCH with fees');
   });
@@ -199,19 +197,20 @@ describe('Slippage Protection', () => {
 
 describe('Constant Product Invariant', () => {
   it('should maintain k after trade (approximately)', () => {
+    // pricePerUnit=1n: satsBought = tokensOut, so reserve update is in consistent units
     const reserveHome = 10000n;
     const reserveAway = 10000n;
     const k = reserveHome * reserveAway;
 
-    // Simulate a buy of HOME tokens
     const bchIn = 2000n;
-    const tokensOut = calculateTokensOut(bchIn, reserveHome, reserveAway, 0n, 10000n);
+    // With pricePerUnit=1n, satsBought == tokensOut (same unit)
+    const satsBought = calculateTokensOut(bchIn, reserveHome, reserveAway, 0n, 10000n, 1n);
 
-    const newReserveHome = reserveHome - tokensOut;
+    const newReserveHome = reserveHome - satsBought;
     const newReserveAway = reserveAway + bchIn;
     const newK = newReserveHome * newReserveAway;
 
-    // k should be preserved (with fees, k actually increases slightly)
+    // k should be preserved (with no fee here; with fee k increases)
     assert.ok(
       newK >= k,
       'k should be maintained or increased with fees'
@@ -305,8 +304,9 @@ describe('Fee Calculation Accuracy', () => {
   });
 
   it('should give fewer tokens with standard 0.3% fee', () => {
-    const bchIn = 10000n;
-    const reserve = 100000n;
+    // Use sats-scale reserves so satsBought/pricePerUnit gives meaningful token counts
+    const bchIn = 100_000_000n; // 1 BCH
+    const reserve = 1_000_000_000n; // 10 BCH per side
 
     const tokensNoFee = calculateTokensOut(bchIn, reserve, reserve, 0n, 10000n);
     const tokensWith03Fee = calculateTokensOut(bchIn, reserve, reserve, 30n, 10000n);

@@ -23,6 +23,7 @@
     "demo:blockhash": "tsx scripts/demo-blockhash.ts",
     "frontend:dev": "cd frontend && yarn dev",
     "frontend:build": "cd frontend && yarn build",
+    "deploy": "tsx scripts/deploy.ts",
     "create-match": "tsx scripts/create-match.ts",
     "trade": "tsx scripts/trade.ts",
     "settle": "tsx scripts/settle.ts",

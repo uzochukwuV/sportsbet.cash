@@ -96,360 +96,360 @@
       "inputs": []
     }
   ],
-  "bytecode": "OP_5 OP_PICK OP_0 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_DUP OP_0 OP_NUMEQUAL OP_OVER OP_2 OP_NUMEQUAL OP_BOOLOR OP_VERIFY OP_OVER OP_9 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_BIN2NUM OP_2 OP_PICK 11 OP_SPLIT OP_DROP OP_9 OP_SPLIT OP_NIP OP_BIN2NUM OP_1 OP_UTXOVALUE 2202 OP_SUB OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_DUP OP_9 OP_PICK OP_9 OP_ROLL OP_SUB OP_MUL OP_8 OP_ROLL OP_DIV OP_10 OP_ROLL OP_IF OP_3 OP_PICK OP_OVER OP_MUL OP_3 OP_PICK OP_2 OP_PICK OP_ADD OP_DIV OP_4 OP_PICK OP_OVER OP_SUB OP_4 OP_PICK OP_3 OP_PICK OP_ADD OP_2 OP_PICK OP_14 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2 OP_PICK OP_0 OP_GREATERTHAN OP_VERIFY OP_OVER OP_0 OP_GREATERTHAN OP_VERIFY OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_7 OP_PICK OP_1 OP_NUM2BIN OP_2 OP_PICK OP_8 OP_NUM2BIN OP_CAT OP_OVER OP_8 OP_NUM2BIN OP_CAT OP_9 OP_PICK 11 OP_SPLIT OP_NIP OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_7 OP_PICK OP_ADD e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTTOKENCATEGORY OP_11 OP_PICK OP_EQUALVERIFY OP_1 OP_OUTPUTTOKENAMOUNT OP_4 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2DROP OP_2DROP OP_ELSE OP_2 OP_PICK OP_OVER OP_MUL OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_DIV OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_4 OP_PICK OP_2 OP_PICK OP_SUB OP_2 OP_PICK OP_14 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2 OP_PICK OP_0 OP_GREATERTHAN OP_VERIFY OP_OVER OP_0 OP_GREATERTHAN OP_VERIFY OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_7 OP_PICK OP_1 OP_NUM2BIN OP_2 OP_PICK OP_8 OP_NUM2BIN OP_CAT OP_OVER OP_8 OP_NUM2BIN OP_CAT OP_9 OP_PICK 11 OP_SPLIT OP_NIP OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_7 OP_PICK OP_ADD e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTTOKENCATEGORY OP_12 OP_PICK OP_EQUALVERIFY OP_1 OP_OUTPUTTOKENAMOUNT OP_4 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2DROP OP_2DROP OP_ENDIF OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_DROP OP_1 OP_ELSE OP_5 OP_PICK OP_1 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_DUP OP_0 OP_NUMEQUAL OP_OVER OP_2 OP_NUMEQUAL OP_BOOLOR OP_VERIFY OP_OVER OP_9 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_BIN2NUM OP_2 OP_PICK 11 OP_SPLIT OP_DROP OP_9 OP_SPLIT OP_NIP OP_BIN2NUM OP_1 OP_UTXOTOKENAMOUNT OP_8 OP_PICK OP_8 OP_ROLL OP_SUB OP_MUL OP_7 OP_ROLL OP_DIV OP_9 OP_ROLL OP_IF OP_1 OP_UTXOTOKENCATEGORY OP_6 OP_PICK OP_EQUALVERIFY OP_1 OP_UTXOTOKENAMOUNT OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_2 OP_PICK OP_2 OP_PICK OP_MUL OP_4 OP_PICK OP_3 OP_PICK OP_ADD OP_DIV OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_4 OP_PICK OP_2 OP_PICK OP_SUB OP_2 OP_PICK OP_14 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2 OP_PICK OP_0 OP_GREATERTHAN OP_VERIFY OP_OVER OP_0 OP_GREATERTHAN OP_VERIFY OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_7 OP_PICK OP_1 OP_NUM2BIN OP_2 OP_PICK OP_8 OP_NUM2BIN OP_CAT OP_OVER OP_8 OP_NUM2BIN OP_CAT OP_9 OP_PICK 11 OP_SPLIT OP_NIP OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_5 OP_PICK OP_SUB e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTVALUE OP_4 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2DROP OP_2DROP OP_DROP OP_ELSE OP_1 OP_UTXOTOKENCATEGORY OP_7 OP_PICK OP_EQUALVERIFY OP_1 OP_UTXOTOKENAMOUNT OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_3 OP_PICK OP_2 OP_PICK OP_MUL OP_2OVER OP_ADD OP_DIV OP_4 OP_PICK OP_OVER OP_SUB OP_4 OP_PICK OP_3 OP_PICK OP_ADD OP_2 OP_PICK OP_14 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2 OP_PICK OP_0 OP_GREATERTHAN OP_VERIFY OP_OVER OP_0 OP_GREATERTHAN OP_VERIFY OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_7 OP_PICK OP_1 OP_NUM2BIN OP_2 OP_PICK OP_8 OP_NUM2BIN OP_CAT OP_OVER OP_8 OP_NUM2BIN OP_CAT OP_9 OP_PICK 11 OP_SPLIT OP_NIP OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_5 OP_PICK OP_SUB e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTVALUE OP_4 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2DROP OP_2DROP OP_DROP OP_ENDIF OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_1 OP_ELSE OP_5 OP_PICK OP_2 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_0 OP_NUMEQUALVERIFY OP_DUP 19 OP_SPLIT OP_DROP 15 OP_SPLIT OP_NIP OP_BIN2NUM OP_TXLOCKTIME OP_LESSTHANOREQUAL OP_VERIFY OP_1 OP_1 OP_NUM2BIN OP_SWAP OP_1 OP_SPLIT OP_NIP OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_EQUALVERIFY OP_2DROP OP_2DROP OP_2DROP OP_1 OP_ELSE OP_5 OP_PICK OP_3 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_1 OP_NUMEQUALVERIFY OP_DUP 1e OP_SPLIT OP_DROP 1d OP_SPLIT OP_NIP OP_BIN2NUM OP_OVER 26 OP_SPLIT OP_DROP 1e OP_SPLIT OP_NIP OP_9 OP_ROLL OP_10 OP_ROLL OP_CAT OP_10 OP_ROLL OP_CAT OP_SWAP OP_CAT OP_HASH256 48 OP_CAT OP_HASH256 OP_OVER OP_0 OP_NUMEQUAL OP_IF 1e OP_OVER OP_2 OP_SPLIT OP_DROP OP_BIN2NUM 2e OP_MOD OP_ADD 1e OP_2 OP_PICK OP_4 OP_SPLIT OP_DROP OP_2 OP_SPLIT OP_NIP OP_BIN2NUM 2e OP_MOD OP_ADD OP_2 OP_1 OP_NUM2BIN OP_5 OP_PICK 2e OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_CAT OP_2 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_OVER OP_1 OP_NUM2BIN OP_CAT OP_0 OP_2 OP_NUM2BIN OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_2DROP OP_DROP OP_ELSE OP_OVER OP_1 OP_NUMEQUAL OP_IF OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_5 OP_MOD OP_OVER OP_2 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_BIN2NUM OP_5 OP_MOD OP_2 OP_1 OP_NUM2BIN OP_5 OP_PICK 2e OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_CAT OP_2 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_OVER OP_1 OP_NUM2BIN OP_CAT OP_0 OP_2 OP_NUM2BIN OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_2DROP OP_DROP OP_ELSE OP_DUP OP_2 OP_SPLIT OP_DROP OP_BIN2NUM 1d OP_MOD OP_OVER OP_4 OP_SPLIT OP_DROP OP_2 OP_SPLIT OP_NIP OP_BIN2NUM 1d OP_MOD OP_2 OP_1 OP_NUM2BIN OP_5 OP_PICK 2e OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_CAT OP_2 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_OVER OP_1 OP_NUM2BIN OP_CAT OP_0 OP_2 OP_NUM2BIN OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_2DROP OP_DROP OP_ENDIF OP_ENDIF OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_DROP OP_1 OP_ELSE OP_5 OP_PICK OP_4 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_2 OP_NUMEQUALVERIFY OP_DUP 1d OP_SPLIT OP_DROP 19 OP_SPLIT OP_NIP OP_BIN2NUM OP_TXLOCKTIME OP_LESSTHANOREQUAL OP_VERIFY OP_3 OP_1 OP_NUM2BIN OP_SWAP OP_1 OP_SPLIT OP_NIP OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_EQUALVERIFY OP_2DROP OP_2DROP OP_2DROP OP_1 OP_ELSE OP_5 OP_PICK OP_5 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_3 OP_NUMEQUALVERIFY OP_DUP 1e OP_SPLIT OP_DROP 1d OP_SPLIT OP_NIP OP_BIN2NUM OP_OVER 26 OP_SPLIT OP_DROP 1e OP_SPLIT OP_NIP OP_2 OP_PICK 2f OP_SPLIT OP_DROP 2e OP_SPLIT OP_NIP OP_BIN2NUM OP_3 OP_PICK 30 OP_SPLIT OP_DROP 2f OP_SPLIT OP_NIP OP_BIN2NUM OP_11 OP_ROLL OP_12 OP_ROLL OP_CAT OP_12 OP_ROLL OP_CAT OP_3 OP_ROLL OP_CAT OP_HASH256 46 OP_CAT OP_HASH256 OP_3 OP_PICK OP_0 OP_NUMEQUAL OP_IF 1e OP_OVER OP_2 OP_SPLIT OP_DROP OP_BIN2NUM 2e OP_MOD OP_ADD 1e OP_2 OP_PICK OP_4 OP_SPLIT OP_DROP OP_2 OP_SPLIT OP_NIP OP_BIN2NUM 2e OP_MOD OP_ADD OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_4 OP_1 OP_NUM2BIN OP_9 OP_PICK 2e OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_CAT OP_7 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_6 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_2 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_OVER OP_1 OP_NUM2BIN OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_2DROP OP_2DROP OP_DROP OP_ELSE OP_3 OP_PICK OP_1 OP_NUMEQUAL OP_IF OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_5 OP_MOD OP_OVER OP_2 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_BIN2NUM OP_5 OP_MOD OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_4 OP_1 OP_NUM2BIN OP_9 OP_PICK 2e OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_CAT OP_7 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_6 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_2 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_OVER OP_1 OP_NUM2BIN OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_2DROP OP_2DROP OP_DROP OP_ELSE OP_DUP OP_2 OP_SPLIT OP_DROP OP_BIN2NUM 1d OP_MOD OP_OVER OP_4 OP_SPLIT OP_DROP OP_2 OP_SPLIT OP_NIP OP_BIN2NUM 1d OP_MOD OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_4 OP_1 OP_NUM2BIN OP_9 OP_PICK 2e OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_CAT OP_7 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_6 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_2 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_OVER OP_1 OP_NUM2BIN OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_2DROP OP_2DROP OP_DROP OP_ENDIF OP_ENDIF OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_DROP OP_1 OP_ELSE OP_5 OP_ROLL OP_6 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_4 OP_NUMEQUALVERIFY OP_DUP 31 OP_SPLIT OP_DROP 30 OP_SPLIT OP_NIP OP_BIN2NUM OP_OVER 32 OP_SPLIT OP_DROP 31 OP_SPLIT OP_NIP OP_BIN2NUM OP_1 OP_UTXOTOKENAMOUNT OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_2 OP_PICK OP_2 OP_PICK OP_NUMEQUAL OP_IF OP_1 OP_UTXOTOKENCATEGORY OP_5 OP_PICK OP_EQUAL OP_1 OP_UTXOTOKENCATEGORY OP_7 OP_PICK OP_EQUAL OP_BOOLOR OP_VERIFY OP_DUP 8813 OP_MUL OP_9 OP_PICK OP_MUL 1027 OP_DIV OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_5 OP_PICK OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_2 OP_PICK OP_SUB e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTVALUE OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_DROP OP_ELSE OP_2 OP_PICK OP_2 OP_PICK OP_GREATERTHAN OP_IF OP_1 OP_UTXOTOKENCATEGORY OP_5 OP_PICK OP_EQUALVERIFY OP_DUP 1027 OP_MUL OP_9 OP_PICK OP_MUL 1027 OP_DIV OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_5 OP_PICK OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_2 OP_PICK OP_SUB e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTVALUE OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_DROP OP_ELSE OP_1 OP_UTXOTOKENCATEGORY OP_6 OP_PICK OP_EQUALVERIFY OP_DUP 1027 OP_MUL OP_9 OP_PICK OP_MUL 1027 OP_DIV OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_5 OP_PICK OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_2 OP_PICK OP_SUB e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTVALUE OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_DROP OP_ENDIF OP_ENDIF OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_DROP OP_1 OP_ENDIF OP_ENDIF OP_ENDIF OP_ENDIF OP_ENDIF OP_ENDIF",
-  "source": "/**\r\n * SportsBet.cash - AMM Pool Contract V2 (Block Hash VRF)\r\n *\r\n * Uses future block hashes for randomness instead of oracle commit-reveal.\r\n * This provides better UX with automatic, trustless score generation.\r\n *\r\n * State NFT Commitment Format (66 bytes):\r\n *   [0]: state (1 byte)\r\n *   [1-8]: reserveHome (8 bytes)\r\n *   [9-16]: reserveAway (8 bytes)\r\n *   [17-20]: creationBlock (4 bytes)\r\n *   [21-24]: halftimeBlock (4 bytes) - block when halftime is revealed\r\n *   [25-28]: endBlock (4 bytes) - block when final is revealed\r\n *   [29]: sportType (1 byte)\r\n *   [30-37]: matchId (8 bytes)\r\n *   [38-41]: homeTeam (4 bytes)\r\n *   [42-45]: awayTeam (4 bytes)\r\n *   [46-49]: scores (4 bytes) - home1H, away1H, homeFinal, awayFinal\r\n *\r\n * States:\r\n *   0 = TRADING (pre-match betting)\r\n *   1 = HALFTIME_PENDING (waiting for halftime blocks)\r\n *   2 = HALFTIME_TRADING (halftime betting)\r\n *   3 = FINAL_PENDING (waiting for final blocks)\r\n *   4 = SETTLED (scores finalized)\r\n */\r\npragma cashscript ^0.12.0;\r\n\r\ncontract AmmPoolV2(\r\n    bytes32 homeTokenCategory,   // Category ID of HOME_WIN tokens\r\n    bytes32 awayTokenCategory,   // Category ID of AWAY_WIN tokens\r\n    int feeNumerator,            // Fee in basis points (e.g., 30 = 0.3%)\r\n    int feeDenominator,          // Fee denominator (10000)\r\n    int pricePerUnit             // Satoshis per winning token\r\n) {\r\n    /**\r\n     * Buy outcome tokens with BCH\r\n     *\r\n     * Anyone can trade during TRADING (0) or HALFTIME_TRADING (2) states.\r\n     */\r\n    function buyTokens(bool buyHome, int minTokensOut) {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int state = int(commitment.split(1)[0]);\r\n\r\n        // Only allow trading in appropriate states\r\n        require(state == 0 || state == 2);\r\n\r\n        // Parse reserves\r\n        int reserveHome = int(commitment.split(9)[0].split(1)[1]);\r\n        int reserveAway = int(commitment.split(17)[0].split(9)[1]);\r\n\r\n        // BCH input from user\r\n        int bchIn = tx.inputs[1].value - 546;\r\n        require(bchIn > 0);\r\n\r\n        // Apply fee\r\n        int effectiveIn = (bchIn * (feeDenominator - feeNumerator)) / feeDenominator;\r\n\r\n        // CPMM calculation - split into branches to avoid reassignment\r\n        if (buyHome) {\r\n            int tokensOut = (reserveHome * effectiveIn) / (reserveAway + effectiveIn);\r\n            int newReserveHome = reserveHome - tokensOut;\r\n            int newReserveAway = reserveAway + effectiveIn;\r\n\r\n            require(tokensOut >= minTokensOut);\r\n            require(tokensOut > 0);\r\n            require(newReserveHome > 0);\r\n            require(newReserveAway > 0);\r\n\r\n            bytes newCommitment = bytes1(state) +\r\n                                  bytes8(newReserveHome) +\r\n                                  bytes8(newReserveAway) +\r\n                                  commitment.split(17)[1];\r\n\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value + bchIn - 1000);\r\n            require(tx.outputs[1].tokenCategory == homeTokenCategory);\r\n            require(tx.outputs[1].tokenAmount >= tokensOut);\r\n        } else {\r\n            int tokensOut = (reserveAway * effectiveIn) / (reserveHome + effectiveIn);\r\n            int newReserveHome = reserveHome + effectiveIn;\r\n            int newReserveAway = reserveAway - tokensOut;\r\n\r\n            require(tokensOut >= minTokensOut);\r\n            require(tokensOut > 0);\r\n            require(newReserveHome > 0);\r\n            require(newReserveAway > 0);\r\n\r\n            bytes newCommitment = bytes1(state) +\r\n                                  bytes8(newReserveHome) +\r\n                                  bytes8(newReserveAway) +\r\n                                  commitment.split(17)[1];\r\n\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value + bchIn - 1000);\r\n            require(tx.outputs[1].tokenCategory == awayTokenCategory);\r\n            require(tx.outputs[1].tokenAmount >= tokensOut);\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Sell outcome tokens for BCH\r\n     */\r\n    function sellTokens(bool sellHome, int minBchOut) {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int state = int(commitment.split(1)[0]);\r\n        require(state == 0 || state == 2);\r\n\r\n        int reserveHome = int(commitment.split(9)[0].split(1)[1]);\r\n        int reserveAway = int(commitment.split(17)[0].split(9)[1]);\r\n\r\n        int effectiveIn = (tx.inputs[1].tokenAmount * (feeDenominator - feeNumerator)) / feeDenominator;\r\n\r\n        if (sellHome) {\r\n            require(tx.inputs[1].tokenCategory == homeTokenCategory);\r\n            int tokensIn = tx.inputs[1].tokenAmount;\r\n            require(tokensIn > 0);\r\n\r\n            int bchOut = (reserveAway * effectiveIn) / (reserveHome + effectiveIn);\r\n            int newReserveHome = reserveHome + tokensIn;\r\n            int newReserveAway = reserveAway - bchOut;\r\n\r\n            require(bchOut >= minBchOut);\r\n            require(bchOut > 0);\r\n            require(newReserveHome > 0);\r\n            require(newReserveAway > 0);\r\n\r\n            bytes newCommitment = bytes1(state) +\r\n                                  bytes8(newReserveHome) +\r\n                                  bytes8(newReserveAway) +\r\n                                  commitment.split(17)[1];\r\n\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value - bchOut - 1000);\r\n            require(tx.outputs[1].value >= bchOut);\r\n        } else {\r\n            require(tx.inputs[1].tokenCategory == awayTokenCategory);\r\n            int tokensIn = tx.inputs[1].tokenAmount;\r\n            require(tokensIn > 0);\r\n\r\n            int bchOut = (reserveHome * effectiveIn) / (reserveAway + effectiveIn);\r\n            int newReserveHome = reserveHome - bchOut;\r\n            int newReserveAway = reserveAway + tokensIn;\r\n\r\n            require(bchOut >= minBchOut);\r\n            require(bchOut > 0);\r\n            require(newReserveHome > 0);\r\n            require(newReserveAway > 0);\r\n\r\n            bytes newCommitment = bytes1(state) +\r\n                                  bytes8(newReserveHome) +\r\n                                  bytes8(newReserveAway) +\r\n                                  commitment.split(17)[1];\r\n\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value - bchOut - 1000);\r\n            require(tx.outputs[1].value >= bchOut);\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Transition to halftime pending state\r\n     *\r\n     * Anyone can call this after trading period ends.\r\n     * No oracle needed - just checks block height.\r\n     */\r\n    function endTradingPhase1() {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int state = int(commitment.split(1)[0]);\r\n\r\n        // Must be in TRADING state\r\n        require(state == 0);\r\n\r\n        // Check if we've reached halftime block\r\n        int halftimeBlock = int(commitment.split(25)[0].split(21)[1]);\r\n        require(tx.locktime >= halftimeBlock);\r\n\r\n        // Transition to HALFTIME_PENDING\r\n        bytes newCommitment = bytes1(1) + commitment.split(1)[1];\r\n\r\n        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n        require(tx.outputs[0].nftCommitment == newCommitment);\r\n    }\r\n\r\n    /**\r\n     * Reveal halftime scores using block hashes\r\n     *\r\n     * ANYONE can call this - no oracle needed!\r\n     * Scores are derived from block hashes that are now public.\r\n     *\r\n     * @param blockHash1 - Block hash at halftimeBlock\r\n     * @param blockHash2 - Block hash at halftimeBlock + 1\r\n     * @param blockHash3 - Block hash at halftimeBlock + 2\r\n     */\r\n    function revealHalftime(\r\n        bytes32 blockHash1,\r\n        bytes32 blockHash2,\r\n        bytes32 blockHash3\r\n    ) {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int state = int(commitment.split(1)[0]);\r\n\r\n        // Must be in HALFTIME_PENDING\r\n        require(state == 1);\r\n\r\n        // Get match parameters\r\n        int sportType = int(commitment.split(30)[0].split(29)[1]);\r\n        bytes8 matchId = bytes8(commitment.split(38)[0].split(30)[1]);\r\n\r\n        // Generate seed from block hashes + matchId\r\n        bytes32 seed = hash256(blockHash1 + blockHash2 + blockHash3 + matchId);\r\n        bytes32 scoreHash = hash256(seed + bytes1(0x48)); // 'H' for halftime\r\n\r\n        // Extract scores based on sport type and update state\r\n        if (sportType == 0) {\r\n            // Basketball: 30-75\r\n            int homeScore1H = 30 + (int(scoreHash.split(2)[0]) % 46);\r\n            int awayScore1H = 30 + (int(scoreHash.split(4)[0].split(2)[1]) % 46);\r\n            bytes newCommitment = bytes1(2) +\r\n                                  commitment.split(46)[0].split(1)[1] +\r\n                                  bytes1(homeScore1H) +\r\n                                  bytes1(awayScore1H) +\r\n                                  bytes2(0);\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n        } else if (sportType == 1) {\r\n            // Football/Soccer: 0-4\r\n            int homeScore1H = int(scoreHash.split(1)[0]) % 5;\r\n            int awayScore1H = int(scoreHash.split(2)[0].split(1)[1]) % 5;\r\n            bytes newCommitment = bytes1(2) +\r\n                                  commitment.split(46)[0].split(1)[1] +\r\n                                  bytes1(homeScore1H) +\r\n                                  bytes1(awayScore1H) +\r\n                                  bytes2(0);\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n        } else {\r\n            // American football: 0-28\r\n            int homeScore1H = int(scoreHash.split(2)[0]) % 29;\r\n            int awayScore1H = int(scoreHash.split(4)[0].split(2)[1]) % 29;\r\n            bytes newCommitment = bytes1(2) +\r\n                                  commitment.split(46)[0].split(1)[1] +\r\n                                  bytes1(homeScore1H) +\r\n                                  bytes1(awayScore1H) +\r\n                                  bytes2(0);\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Transition to final pending state\r\n     */\r\n    function endHalftimeTrading() {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int state = int(commitment.split(1)[0]);\r\n\r\n        require(state == 2);\r\n\r\n        int endBlock = int(commitment.split(29)[0].split(25)[1]);\r\n        require(tx.locktime >= endBlock);\r\n\r\n        bytes newCommitment = bytes1(3) + commitment.split(1)[1];\r\n\r\n        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n        require(tx.outputs[0].nftCommitment == newCommitment);\r\n    }\r\n\r\n    /**\r\n     * Reveal final scores using block hashes\r\n     */\r\n    function revealFinal(\r\n        bytes32 blockHash1,\r\n        bytes32 blockHash2,\r\n        bytes32 blockHash3\r\n    ) {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int state = int(commitment.split(1)[0]);\r\n\r\n        require(state == 3);\r\n\r\n        int sportType = int(commitment.split(30)[0].split(29)[1]);\r\n        bytes8 matchId = bytes8(commitment.split(38)[0].split(30)[1]);\r\n\r\n        // Get halftime scores\r\n        int homeScore1H = int(commitment.split(47)[0].split(46)[1]);\r\n        int awayScore1H = int(commitment.split(48)[0].split(47)[1]);\r\n\r\n        // Generate second half scores\r\n        bytes32 seed = hash256(blockHash1 + blockHash2 + blockHash3 + matchId);\r\n        bytes32 scoreHash = hash256(seed + bytes1(0x46)); // 'F' for final\r\n\r\n        if (sportType == 0) {\r\n            // Basketball: 30-75\r\n            int homeScore2H = 30 + (int(scoreHash.split(2)[0]) % 46);\r\n            int awayScore2H = 30 + (int(scoreHash.split(4)[0].split(2)[1]) % 46);\r\n            int homeScoreFinal = homeScore1H + homeScore2H;\r\n            int awayScoreFinal = awayScore1H + awayScore2H;\r\n            bytes newCommitment = bytes1(4) +\r\n                                  commitment.split(46)[0].split(1)[1] +\r\n                                  bytes1(homeScore1H) +\r\n                                  bytes1(awayScore1H) +\r\n                                  bytes1(homeScoreFinal) +\r\n                                  bytes1(awayScoreFinal);\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n        } else if (sportType == 1) {\r\n            // Football/Soccer: 0-4\r\n            int homeScore2H = int(scoreHash.split(1)[0]) % 5;\r\n            int awayScore2H = int(scoreHash.split(2)[0].split(1)[1]) % 5;\r\n            int homeScoreFinal = homeScore1H + homeScore2H;\r\n            int awayScoreFinal = awayScore1H + awayScore2H;\r\n            bytes newCommitment = bytes1(4) +\r\n                                  commitment.split(46)[0].split(1)[1] +\r\n                                  bytes1(homeScore1H) +\r\n                                  bytes1(awayScore1H) +\r\n                                  bytes1(homeScoreFinal) +\r\n                                  bytes1(awayScoreFinal);\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n        } else {\r\n            // American football: 0-28\r\n            int homeScore2H = int(scoreHash.split(2)[0]) % 29;\r\n            int awayScore2H = int(scoreHash.split(4)[0].split(2)[1]) % 29;\r\n            int homeScoreFinal = homeScore1H + homeScore2H;\r\n            int awayScoreFinal = awayScore1H + awayScore2H;\r\n            bytes newCommitment = bytes1(4) +\r\n                                  commitment.split(46)[0].split(1)[1] +\r\n                                  bytes1(homeScore1H) +\r\n                                  bytes1(awayScore1H) +\r\n                                  bytes1(homeScoreFinal) +\r\n                                  bytes1(awayScoreFinal);\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Redeem winning tokens for BCH\r\n     *\r\n     * After settlement, holders of winning tokens can redeem.\r\n     */\r\n    function redeem() {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int state = int(commitment.split(1)[0]);\r\n\r\n        require(state == 4); // Must be SETTLED\r\n\r\n        // Get final scores\r\n        int homeScoreFinal = int(commitment.split(49)[0].split(48)[1]);\r\n        int awayScoreFinal = int(commitment.split(50)[0].split(49)[1]);\r\n\r\n        // Get user's tokens\r\n        int tokenAmount = tx.inputs[1].tokenAmount;\r\n        require(tokenAmount > 0);\r\n\r\n        // Calculate payout based on outcome\r\n        if (homeScoreFinal == awayScoreFinal) {\r\n            // Draw: both token types pay 50%\r\n            require(tx.inputs[1].tokenCategory == homeTokenCategory ||\r\n                    tx.inputs[1].tokenCategory == awayTokenCategory);\r\n            int payout = (tokenAmount * 5000 * pricePerUnit) / 10000;\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == commitment);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);\r\n            require(tx.outputs[1].value >= payout);\r\n        } else if (homeScoreFinal > awayScoreFinal) {\r\n            // Home win: only HOME_WIN tokens pay\r\n            require(tx.inputs[1].tokenCategory == homeTokenCategory);\r\n            int payout = (tokenAmount * 10000 * pricePerUnit) / 10000;\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == commitment);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);\r\n            require(tx.outputs[1].value >= payout);\r\n        } else {\r\n            // Away win: only AWAY_WIN tokens pay\r\n            require(tx.inputs[1].tokenCategory == awayTokenCategory);\r\n            int payout = (tokenAmount * 10000 * pricePerUnit) / 10000;\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == commitment);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);\r\n            require(tx.outputs[1].value >= payout);\r\n        }\r\n    }\r\n}\r\n",
+  "bytecode": "OP_5 OP_PICK OP_0 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_DUP OP_0 OP_NUMEQUAL OP_OVER OP_2 OP_NUMEQUAL OP_BOOLOR OP_VERIFY OP_OVER OP_9 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_BIN2NUM OP_2 OP_PICK 11 OP_SPLIT OP_DROP OP_9 OP_SPLIT OP_NIP OP_BIN2NUM OP_1 OP_UTXOVALUE 2202 OP_SUB OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_DUP OP_9 OP_PICK OP_9 OP_ROLL OP_SUB OP_MUL OP_8 OP_ROLL OP_DIV OP_10 OP_ROLL OP_IF OP_3 OP_PICK OP_OVER OP_MUL OP_3 OP_PICK OP_2 OP_PICK OP_ADD OP_DIV OP_DUP OP_10 OP_PICK OP_DIV OP_5 OP_PICK OP_2 OP_PICK OP_SUB OP_5 OP_PICK OP_4 OP_PICK OP_ADD OP_2 OP_PICK OP_15 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2 OP_PICK OP_0 OP_GREATERTHAN OP_VERIFY OP_OVER OP_0 OP_GREATERTHAN OP_VERIFY OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_8 OP_PICK OP_1 OP_NUM2BIN OP_2 OP_PICK OP_8 OP_NUM2BIN OP_CAT OP_OVER OP_8 OP_NUM2BIN OP_CAT OP_10 OP_PICK 11 OP_SPLIT OP_NIP OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_8 OP_PICK OP_ADD e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTTOKENCATEGORY OP_12 OP_PICK OP_EQUALVERIFY OP_1 OP_OUTPUTTOKENAMOUNT OP_4 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2DROP OP_2DROP OP_DROP OP_ELSE OP_2 OP_PICK OP_OVER OP_MUL OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_DIV OP_DUP OP_10 OP_PICK OP_DIV OP_5 OP_PICK OP_3 OP_PICK OP_ADD OP_5 OP_PICK OP_3 OP_PICK OP_SUB OP_2 OP_PICK OP_15 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2 OP_PICK OP_0 OP_GREATERTHAN OP_VERIFY OP_OVER OP_0 OP_GREATERTHAN OP_VERIFY OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_8 OP_PICK OP_1 OP_NUM2BIN OP_2 OP_PICK OP_8 OP_NUM2BIN OP_CAT OP_OVER OP_8 OP_NUM2BIN OP_CAT OP_10 OP_PICK 11 OP_SPLIT OP_NIP OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_8 OP_PICK OP_ADD e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTTOKENCATEGORY OP_13 OP_PICK OP_EQUALVERIFY OP_1 OP_OUTPUTTOKENAMOUNT OP_4 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2DROP OP_2DROP OP_DROP OP_ENDIF OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_DROP OP_1 OP_ELSE OP_5 OP_PICK OP_1 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_DUP OP_0 OP_NUMEQUAL OP_OVER OP_2 OP_NUMEQUAL OP_BOOLOR OP_VERIFY OP_OVER OP_9 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_BIN2NUM OP_2 OP_PICK 11 OP_SPLIT OP_DROP OP_9 OP_SPLIT OP_NIP OP_BIN2NUM OP_10 OP_ROLL OP_IF OP_1 OP_UTXOTOKENCATEGORY OP_5 OP_PICK OP_EQUALVERIFY OP_1 OP_UTXOTOKENAMOUNT OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_DUP OP_10 OP_PICK OP_MUL OP_DUP OP_10 OP_PICK OP_10 OP_PICK OP_SUB OP_MUL OP_10 OP_PICK OP_DIV OP_3 OP_PICK OP_OVER OP_MUL OP_5 OP_PICK OP_2 OP_PICK OP_ADD OP_DIV OP_5 OP_PICK OP_3 OP_PICK OP_ADD OP_5 OP_PICK OP_2 OP_PICK OP_SUB OP_2 OP_PICK 11 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2 OP_PICK OP_0 OP_GREATERTHAN OP_VERIFY OP_OVER OP_0 OP_GREATERTHAN OP_VERIFY OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_8 OP_PICK OP_1 OP_NUM2BIN OP_2 OP_PICK OP_8 OP_NUM2BIN OP_CAT OP_OVER OP_8 OP_NUM2BIN OP_CAT OP_10 OP_PICK 11 OP_SPLIT OP_NIP OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_5 OP_PICK OP_SUB e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTVALUE OP_4 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2DROP OP_2DROP OP_2DROP OP_DROP OP_ELSE OP_1 OP_UTXOTOKENCATEGORY OP_6 OP_PICK OP_EQUALVERIFY OP_1 OP_UTXOTOKENAMOUNT OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_DUP OP_10 OP_PICK OP_MUL OP_DUP OP_10 OP_PICK OP_10 OP_PICK OP_SUB OP_MUL OP_10 OP_PICK OP_DIV OP_4 OP_PICK OP_OVER OP_MUL OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_DIV OP_5 OP_PICK OP_OVER OP_SUB OP_5 OP_PICK OP_4 OP_PICK OP_ADD OP_2 OP_PICK 11 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2 OP_PICK OP_0 OP_GREATERTHAN OP_VERIFY OP_OVER OP_0 OP_GREATERTHAN OP_VERIFY OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_8 OP_PICK OP_1 OP_NUM2BIN OP_2 OP_PICK OP_8 OP_NUM2BIN OP_CAT OP_OVER OP_8 OP_NUM2BIN OP_CAT OP_10 OP_PICK 11 OP_SPLIT OP_NIP OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_5 OP_PICK OP_SUB e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTVALUE OP_4 OP_PICK OP_GREATERTHANOREQUAL OP_VERIFY OP_2DROP OP_2DROP OP_2DROP OP_DROP OP_ENDIF OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_DROP OP_1 OP_ELSE OP_5 OP_PICK OP_2 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_0 OP_NUMEQUALVERIFY OP_DUP 15 OP_SPLIT OP_DROP 11 OP_SPLIT OP_NIP OP_BIN2NUM OP_TXLOCKTIME OP_LESSTHANOREQUAL OP_VERIFY OP_1 OP_1 OP_NUM2BIN OP_SWAP OP_1 OP_SPLIT OP_NIP OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_EQUALVERIFY OP_2DROP OP_2DROP OP_2DROP OP_1 OP_ELSE OP_5 OP_PICK OP_3 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_1 OP_NUMEQUALVERIFY OP_DUP 1a OP_SPLIT OP_DROP 19 OP_SPLIT OP_NIP OP_BIN2NUM OP_OVER 22 OP_SPLIT OP_DROP 1a OP_SPLIT OP_NIP OP_9 OP_ROLL OP_10 OP_ROLL OP_CAT OP_10 OP_ROLL OP_CAT OP_SWAP OP_CAT OP_HASH256 48 OP_CAT OP_HASH256 OP_OVER OP_0 OP_NUMEQUAL OP_IF 1e OP_OVER OP_2 OP_SPLIT OP_DROP OP_BIN2NUM 2e OP_MOD OP_ADD 1e OP_2 OP_PICK OP_4 OP_SPLIT OP_DROP OP_2 OP_SPLIT OP_NIP OP_BIN2NUM 2e OP_MOD OP_ADD OP_2 OP_1 OP_NUM2BIN OP_5 OP_PICK 22 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_CAT OP_2 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_OVER OP_1 OP_NUM2BIN OP_CAT OP_0 OP_2 OP_NUM2BIN OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_2DROP OP_DROP OP_ELSE OP_OVER OP_1 OP_NUMEQUAL OP_IF OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_5 OP_MOD OP_OVER OP_2 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_BIN2NUM OP_5 OP_MOD OP_2 OP_1 OP_NUM2BIN OP_5 OP_PICK 22 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_CAT OP_2 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_OVER OP_1 OP_NUM2BIN OP_CAT OP_0 OP_2 OP_NUM2BIN OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_2DROP OP_DROP OP_ELSE OP_DUP OP_2 OP_SPLIT OP_DROP OP_BIN2NUM 1d OP_MOD OP_OVER OP_4 OP_SPLIT OP_DROP OP_2 OP_SPLIT OP_NIP OP_BIN2NUM 1d OP_MOD OP_2 OP_1 OP_NUM2BIN OP_5 OP_PICK 22 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_CAT OP_2 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_OVER OP_1 OP_NUM2BIN OP_CAT OP_0 OP_2 OP_NUM2BIN OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_2DROP OP_DROP OP_ENDIF OP_ENDIF OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_DROP OP_1 OP_ELSE OP_5 OP_PICK OP_4 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_2 OP_NUMEQUALVERIFY OP_DUP 19 OP_SPLIT OP_DROP 15 OP_SPLIT OP_NIP OP_BIN2NUM OP_TXLOCKTIME OP_LESSTHANOREQUAL OP_VERIFY OP_3 OP_1 OP_NUM2BIN OP_SWAP OP_1 OP_SPLIT OP_NIP OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_EQUALVERIFY OP_2DROP OP_2DROP OP_2DROP OP_1 OP_ELSE OP_5 OP_PICK OP_5 OP_NUMEQUAL OP_IF OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_3 OP_NUMEQUALVERIFY OP_DUP 1a OP_SPLIT OP_DROP 19 OP_SPLIT OP_NIP OP_BIN2NUM OP_OVER 22 OP_SPLIT OP_DROP 1a OP_SPLIT OP_NIP OP_2 OP_PICK 23 OP_SPLIT OP_DROP 22 OP_SPLIT OP_NIP OP_BIN2NUM OP_3 OP_PICK 24 OP_SPLIT OP_DROP 23 OP_SPLIT OP_NIP OP_BIN2NUM OP_11 OP_ROLL OP_12 OP_ROLL OP_CAT OP_12 OP_ROLL OP_CAT OP_3 OP_ROLL OP_CAT OP_HASH256 46 OP_CAT OP_HASH256 OP_3 OP_PICK OP_0 OP_NUMEQUAL OP_IF 1e OP_OVER OP_2 OP_SPLIT OP_DROP OP_BIN2NUM 2e OP_MOD OP_ADD 1e OP_2 OP_PICK OP_4 OP_SPLIT OP_DROP OP_2 OP_SPLIT OP_NIP OP_BIN2NUM 2e OP_MOD OP_ADD OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_4 OP_1 OP_NUM2BIN OP_9 OP_PICK 22 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_CAT OP_7 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_6 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_2 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_OVER OP_1 OP_NUM2BIN OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_2DROP OP_2DROP OP_DROP OP_ELSE OP_3 OP_PICK OP_1 OP_NUMEQUAL OP_IF OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_5 OP_MOD OP_OVER OP_2 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_BIN2NUM OP_5 OP_MOD OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_4 OP_1 OP_NUM2BIN OP_9 OP_PICK 22 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_CAT OP_7 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_6 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_2 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_OVER OP_1 OP_NUM2BIN OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_2DROP OP_2DROP OP_DROP OP_ELSE OP_DUP OP_2 OP_SPLIT OP_DROP OP_BIN2NUM 1d OP_MOD OP_OVER OP_4 OP_SPLIT OP_DROP OP_2 OP_SPLIT OP_NIP OP_BIN2NUM 1d OP_MOD OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_4 OP_PICK OP_2 OP_PICK OP_ADD OP_4 OP_1 OP_NUM2BIN OP_9 OP_PICK 22 OP_SPLIT OP_DROP OP_1 OP_SPLIT OP_NIP OP_CAT OP_7 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_6 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_2 OP_PICK OP_1 OP_NUM2BIN OP_CAT OP_OVER OP_1 OP_NUM2BIN OP_CAT OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_OVER OP_EQUALVERIFY OP_2DROP OP_2DROP OP_DROP OP_ENDIF OP_ENDIF OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_DROP OP_1 OP_ELSE OP_5 OP_ROLL OP_6 OP_NUMEQUALVERIFY OP_INPUTINDEX OP_0 OP_NUMEQUALVERIFY OP_0 OP_UTXOTOKENCOMMITMENT OP_DUP OP_1 OP_SPLIT OP_DROP OP_BIN2NUM OP_4 OP_NUMEQUALVERIFY OP_DUP 25 OP_SPLIT OP_DROP 24 OP_SPLIT OP_NIP OP_BIN2NUM OP_OVER 26 OP_SPLIT OP_DROP 25 OP_SPLIT OP_NIP OP_BIN2NUM OP_1 OP_UTXOTOKENAMOUNT OP_DUP OP_0 OP_GREATERTHAN OP_VERIFY OP_2 OP_PICK OP_2 OP_PICK OP_NUMEQUAL OP_IF OP_1 OP_UTXOTOKENCATEGORY OP_5 OP_PICK OP_EQUAL OP_1 OP_UTXOTOKENCATEGORY OP_7 OP_PICK OP_EQUAL OP_BOOLOR OP_VERIFY OP_DUP OP_9 OP_PICK OP_MUL OP_2 OP_DIV OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_5 OP_PICK OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_2 OP_PICK OP_SUB e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTVALUE OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_DROP OP_ELSE OP_2 OP_PICK OP_2 OP_PICK OP_GREATERTHAN OP_IF OP_1 OP_UTXOTOKENCATEGORY OP_5 OP_PICK OP_EQUALVERIFY OP_DUP OP_9 OP_PICK OP_MUL OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_5 OP_PICK OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_2 OP_PICK OP_SUB e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTVALUE OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_DROP OP_ELSE OP_1 OP_UTXOTOKENCATEGORY OP_6 OP_PICK OP_EQUALVERIFY OP_DUP OP_9 OP_PICK OP_MUL OP_0 OP_OUTPUTBYTECODE OP_0 OP_UTXOBYTECODE OP_EQUALVERIFY OP_0 OP_OUTPUTTOKENCOMMITMENT OP_5 OP_PICK OP_EQUALVERIFY OP_0 OP_OUTPUTVALUE OP_0 OP_UTXOVALUE OP_2 OP_PICK OP_SUB e803 OP_SUB OP_GREATERTHANOREQUAL OP_VERIFY OP_1 OP_OUTPUTVALUE OP_OVER OP_GREATERTHANOREQUAL OP_VERIFY OP_DROP OP_ENDIF OP_ENDIF OP_2DROP OP_2DROP OP_2DROP OP_2DROP OP_DROP OP_1 OP_ENDIF OP_ENDIF OP_ENDIF OP_ENDIF OP_ENDIF OP_ENDIF",
+  "source": "/**\r\n * SportsBet.cash - AMM Pool Contract V2 (Block Hash VRF)\r\n *\r\n * Uses future block hashes for randomness instead of oracle commit-reveal.\r\n * This provides better UX with automatic, trustless score generation.\r\n *\r\n * CPMM with BCH-denominated reserves:\r\n *   Both reserveHome and reserveAway are stored in satoshis.\r\n *   k = reserveHomeSats * reserveAwaySats (preserved across trades).\r\n *   tokensOut = satsBought / pricePerUnit\r\n *\r\n * State NFT Commitment Format (38 bytes, within 40-byte consensus limit):\r\n *   [0]:     state (1 byte)\r\n *   [1-8]:   reserveHomeSats (8 bytes) - BCH sats committed to HOME side\r\n *   [9-16]:  reserveAwaySats (8 bytes) - BCH sats committed to AWAY side\r\n *   [17-20]: halftimeBlock (4 bytes) - block when halftime is revealed\r\n *   [21-24]: endBlock (4 bytes) - block when final is revealed\r\n *   [25]:    sportType (1 byte)\r\n *   [26-33]: matchId (8 bytes)\r\n *   [34-37]: scores (4 bytes) - home1H, away1H, homeFinal, awayFinal\r\n *\r\n * States:\r\n *   0 = TRADING (pre-match betting)\r\n *   1 = HALFTIME_PENDING (waiting for halftime blocks)\r\n *   2 = HALFTIME_TRADING (halftime betting)\r\n *   3 = FINAL_PENDING (waiting for final blocks)\r\n *   4 = SETTLED (scores finalized)\r\n */\r\npragma cashscript ^0.12.0;\r\n\r\ncontract AmmPoolV2(\r\n    bytes32 homeTokenCategory,   // Category ID of HOME_WIN tokens\r\n    bytes32 awayTokenCategory,   // Category ID of AWAY_WIN tokens\r\n    int feeNumerator,            // Fee in basis points (e.g., 30 = 0.3%)\r\n    int feeDenominator,          // Fee denominator (10000)\r\n    int pricePerUnit             // Satoshis per winning token\r\n) {\r\n    /**\r\n     * Buy outcome tokens with BCH\r\n     *\r\n     * Reserves are in satoshis. k = reserveHomeSats * reserveAwaySats is preserved.\r\n     * tokensOut = satsBought / pricePerUnit\r\n     *\r\n     * Anyone can trade during TRADING (0) or HALFTIME_TRADING (2) states.\r\n     */\r\n    function buyTokens(bool buyHome, int minTokensOut) {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int state = int(commitment.split(1)[0]);\r\n\r\n        // Only allow trading in appropriate states\r\n        require(state == 0 || state == 2);\r\n\r\n        // Parse reserves (both in satoshis)\r\n        int reserveHomeSats = int(commitment.split(9)[0].split(1)[1]);\r\n        int reserveAwaySats = int(commitment.split(17)[0].split(9)[1]);\r\n\r\n        // BCH input from user (satoshis, minus dust)\r\n        int bchIn = tx.inputs[1].value - 546;\r\n        require(bchIn > 0);\r\n\r\n        // Apply fee to get effective satoshis in\r\n        int effectiveIn = (bchIn * (feeDenominator - feeNumerator)) / feeDenominator;\r\n\r\n        // CPMM: both reserves in sats, k is preserved\r\n        if (buyHome) {\r\n            // satsBought comes out of HOME side\r\n            int satsBought = (reserveHomeSats * effectiveIn) / (reserveAwaySats + effectiveIn);\r\n            int tokensOut = satsBought / pricePerUnit;\r\n            int newReserveHomeSats = reserveHomeSats - satsBought;\r\n            int newReserveAwaySats = reserveAwaySats + effectiveIn;\r\n\r\n            require(tokensOut >= minTokensOut);\r\n            require(tokensOut > 0);\r\n            require(newReserveHomeSats > 0);\r\n            require(newReserveAwaySats > 0);\r\n\r\n            bytes newCommitment = bytes1(state) +\r\n                                  bytes8(newReserveHomeSats) +\r\n                                  bytes8(newReserveAwaySats) +\r\n                                  commitment.split(17)[1];\r\n\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value + bchIn - 1000);\r\n            require(tx.outputs[1].tokenCategory == homeTokenCategory);\r\n            require(tx.outputs[1].tokenAmount >= tokensOut);\r\n        } else {\r\n            // satsBought comes out of AWAY side\r\n            int satsBought = (reserveAwaySats * effectiveIn) / (reserveHomeSats + effectiveIn);\r\n            int tokensOut = satsBought / pricePerUnit;\r\n            int newReserveHomeSats = reserveHomeSats + effectiveIn;\r\n            int newReserveAwaySats = reserveAwaySats - satsBought;\r\n\r\n            require(tokensOut >= minTokensOut);\r\n            require(tokensOut > 0);\r\n            require(newReserveHomeSats > 0);\r\n            require(newReserveAwaySats > 0);\r\n\r\n            bytes newCommitment = bytes1(state) +\r\n                                  bytes8(newReserveHomeSats) +\r\n                                  bytes8(newReserveAwaySats) +\r\n                                  commitment.split(17)[1];\r\n\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value + bchIn - 1000);\r\n            require(tx.outputs[1].tokenCategory == awayTokenCategory);\r\n            require(tx.outputs[1].tokenAmount >= tokensOut);\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Sell outcome tokens for BCH\r\n     *\r\n     * Tokens are converted to their sats equivalent, then CPMM gives satsOut.\r\n     */\r\n    function sellTokens(bool sellHome, int minBchOut) {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int state = int(commitment.split(1)[0]);\r\n        require(state == 0 || state == 2);\r\n\r\n        int reserveHomeSats = int(commitment.split(9)[0].split(1)[1]);\r\n        int reserveAwaySats = int(commitment.split(17)[0].split(9)[1]);\r\n\r\n        if (sellHome) {\r\n            require(tx.inputs[1].tokenCategory == homeTokenCategory);\r\n            int tokensIn = tx.inputs[1].tokenAmount;\r\n            require(tokensIn > 0);\r\n\r\n            // Convert tokens to sats equivalent, apply fee\r\n            int satsIn = tokensIn * pricePerUnit;\r\n            int effectiveSats = (satsIn * (feeDenominator - feeNumerator)) / feeDenominator;\r\n\r\n            // CPMM: satsOut from AWAY side\r\n            int satsOut = (reserveAwaySats * effectiveSats) / (reserveHomeSats + effectiveSats);\r\n            int newReserveHomeSats = reserveHomeSats + satsIn;\r\n            int newReserveAwaySats = reserveAwaySats - satsOut;\r\n\r\n            require(satsOut >= minBchOut);\r\n            require(satsOut > 0);\r\n            require(newReserveHomeSats > 0);\r\n            require(newReserveAwaySats > 0);\r\n\r\n            bytes newCommitment = bytes1(state) +\r\n                                  bytes8(newReserveHomeSats) +\r\n                                  bytes8(newReserveAwaySats) +\r\n                                  commitment.split(17)[1];\r\n\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value - satsOut - 1000);\r\n            require(tx.outputs[1].value >= satsOut);\r\n        } else {\r\n            require(tx.inputs[1].tokenCategory == awayTokenCategory);\r\n            int tokensIn = tx.inputs[1].tokenAmount;\r\n            require(tokensIn > 0);\r\n\r\n            // Convert tokens to sats equivalent, apply fee\r\n            int satsIn = tokensIn * pricePerUnit;\r\n            int effectiveSats = (satsIn * (feeDenominator - feeNumerator)) / feeDenominator;\r\n\r\n            // CPMM: satsOut from HOME side\r\n            int satsOut = (reserveHomeSats * effectiveSats) / (reserveAwaySats + effectiveSats);\r\n            int newReserveHomeSats = reserveHomeSats - satsOut;\r\n            int newReserveAwaySats = reserveAwaySats + satsIn;\r\n\r\n            require(satsOut >= minBchOut);\r\n            require(satsOut > 0);\r\n            require(newReserveHomeSats > 0);\r\n            require(newReserveAwaySats > 0);\r\n\r\n            bytes newCommitment = bytes1(state) +\r\n                                  bytes8(newReserveHomeSats) +\r\n                                  bytes8(newReserveAwaySats) +\r\n                                  commitment.split(17)[1];\r\n\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value - satsOut - 1000);\r\n            require(tx.outputs[1].value >= satsOut);\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Transition to halftime pending state\r\n     *\r\n     * Anyone can call this after trading period ends.\r\n     */\r\n    function endTradingPhase1() {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int state = int(commitment.split(1)[0]);\r\n\r\n        require(state == 0);\r\n\r\n        int halftimeBlock = int(commitment.split(21)[0].split(17)[1]);\r\n        require(tx.locktime >= halftimeBlock);\r\n\r\n        bytes newCommitment = bytes1(1) + commitment.split(1)[1];\r\n\r\n        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n        require(tx.outputs[0].nftCommitment == newCommitment);\r\n    }\r\n\r\n    /**\r\n     * Reveal halftime scores using block hashes\r\n     *\r\n     * ANYONE can call this - no oracle needed!\r\n     * Scores are derived from block hashes that are now public.\r\n     *\r\n     * @param blockHash1 - Block hash at halftimeBlock\r\n     * @param blockHash2 - Block hash at halftimeBlock + 1\r\n     * @param blockHash3 - Block hash at halftimeBlock + 2\r\n     */\r\n    function revealHalftime(\r\n        bytes32 blockHash1,\r\n        bytes32 blockHash2,\r\n        bytes32 blockHash3\r\n    ) {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int state = int(commitment.split(1)[0]);\r\n\r\n        require(state == 1);\r\n\r\n        int sportType = int(commitment.split(26)[0].split(25)[1]);\r\n        bytes8 matchId = bytes8(commitment.split(34)[0].split(26)[1]);\r\n\r\n        bytes32 seed = hash256(blockHash1 + blockHash2 + blockHash3 + matchId);\r\n        bytes32 scoreHash = hash256(seed + bytes1(0x48)); // 'H' for halftime\r\n\r\n        if (sportType == 0) {\r\n            // Basketball: 30-75\r\n            int homeScore1H = 30 + (int(scoreHash.split(2)[0]) % 46);\r\n            int awayScore1H = 30 + (int(scoreHash.split(4)[0].split(2)[1]) % 46);\r\n            bytes newCommitment = bytes1(2) +\r\n                                  commitment.split(34)[0].split(1)[1] +\r\n                                  bytes1(homeScore1H) +\r\n                                  bytes1(awayScore1H) +\r\n                                  bytes2(0);\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n        } else if (sportType == 1) {\r\n            // Football/Soccer: 0-4\r\n            int homeScore1H = int(scoreHash.split(1)[0]) % 5;\r\n            int awayScore1H = int(scoreHash.split(2)[0].split(1)[1]) % 5;\r\n            bytes newCommitment = bytes1(2) +\r\n                                  commitment.split(34)[0].split(1)[1] +\r\n                                  bytes1(homeScore1H) +\r\n                                  bytes1(awayScore1H) +\r\n                                  bytes2(0);\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n        } else {\r\n            // American football: 0-28\r\n            int homeScore1H = int(scoreHash.split(2)[0]) % 29;\r\n            int awayScore1H = int(scoreHash.split(4)[0].split(2)[1]) % 29;\r\n            bytes newCommitment = bytes1(2) +\r\n                                  commitment.split(34)[0].split(1)[1] +\r\n                                  bytes1(homeScore1H) +\r\n                                  bytes1(awayScore1H) +\r\n                                  bytes2(0);\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Transition to final pending state\r\n     */\r\n    function endHalftimeTrading() {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int state = int(commitment.split(1)[0]);\r\n\r\n        require(state == 2);\r\n\r\n        int endBlock = int(commitment.split(25)[0].split(21)[1]);\r\n        require(tx.locktime >= endBlock);\r\n\r\n        bytes newCommitment = bytes1(3) + commitment.split(1)[1];\r\n\r\n        require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n        require(tx.outputs[0].nftCommitment == newCommitment);\r\n    }\r\n\r\n    /**\r\n     * Reveal final scores using block hashes\r\n     */\r\n    function revealFinal(\r\n        bytes32 blockHash1,\r\n        bytes32 blockHash2,\r\n        bytes32 blockHash3\r\n    ) {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int state = int(commitment.split(1)[0]);\r\n\r\n        require(state == 3);\r\n\r\n        int sportType = int(commitment.split(26)[0].split(25)[1]);\r\n        bytes8 matchId = bytes8(commitment.split(34)[0].split(26)[1]);\r\n\r\n        int homeScore1H = int(commitment.split(35)[0].split(34)[1]);\r\n        int awayScore1H = int(commitment.split(36)[0].split(35)[1]);\r\n\r\n        bytes32 seed = hash256(blockHash1 + blockHash2 + blockHash3 + matchId);\r\n        bytes32 scoreHash = hash256(seed + bytes1(0x46)); // 'F' for final\r\n\r\n        if (sportType == 0) {\r\n            // Basketball: 30-75\r\n            int homeScore2H = 30 + (int(scoreHash.split(2)[0]) % 46);\r\n            int awayScore2H = 30 + (int(scoreHash.split(4)[0].split(2)[1]) % 46);\r\n            int homeScoreFinal = homeScore1H + homeScore2H;\r\n            int awayScoreFinal = awayScore1H + awayScore2H;\r\n            bytes newCommitment = bytes1(4) +\r\n                                  commitment.split(34)[0].split(1)[1] +\r\n                                  bytes1(homeScore1H) +\r\n                                  bytes1(awayScore1H) +\r\n                                  bytes1(homeScoreFinal) +\r\n                                  bytes1(awayScoreFinal);\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n        } else if (sportType == 1) {\r\n            // Football/Soccer: 0-4\r\n            int homeScore2H = int(scoreHash.split(1)[0]) % 5;\r\n            int awayScore2H = int(scoreHash.split(2)[0].split(1)[1]) % 5;\r\n            int homeScoreFinal = homeScore1H + homeScore2H;\r\n            int awayScoreFinal = awayScore1H + awayScore2H;\r\n            bytes newCommitment = bytes1(4) +\r\n                                  commitment.split(34)[0].split(1)[1] +\r\n                                  bytes1(homeScore1H) +\r\n                                  bytes1(awayScore1H) +\r\n                                  bytes1(homeScoreFinal) +\r\n                                  bytes1(awayScoreFinal);\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n        } else {\r\n            // American football: 0-28\r\n            int homeScore2H = int(scoreHash.split(2)[0]) % 29;\r\n            int awayScore2H = int(scoreHash.split(4)[0].split(2)[1]) % 29;\r\n            int homeScoreFinal = homeScore1H + homeScore2H;\r\n            int awayScoreFinal = awayScore1H + awayScore2H;\r\n            bytes newCommitment = bytes1(4) +\r\n                                  commitment.split(34)[0].split(1)[1] +\r\n                                  bytes1(homeScore1H) +\r\n                                  bytes1(awayScore1H) +\r\n                                  bytes1(homeScoreFinal) +\r\n                                  bytes1(awayScoreFinal);\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == newCommitment);\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Redeem winning tokens for BCH\r\n     *\r\n     * Fixed-price redemption: each winning token redeems for pricePerUnit sats.\r\n     * Losing tokens get nothing. Draw splits 50/50.\r\n     */\r\n    function redeem() {\r\n        require(this.activeInputIndex == 0);\r\n\r\n        bytes commitment = tx.inputs[0].nftCommitment;\r\n        int state = int(commitment.split(1)[0]);\r\n\r\n        require(state == 4); // Must be SETTLED\r\n\r\n        int homeScoreFinal = int(commitment.split(37)[0].split(36)[1]);\r\n        int awayScoreFinal = int(commitment.split(38)[0].split(37)[1]);\r\n\r\n        int tokenAmount = tx.inputs[1].tokenAmount;\r\n        require(tokenAmount > 0);\r\n\r\n        if (homeScoreFinal == awayScoreFinal) {\r\n            // Draw: both token types pay 50%\r\n            require(tx.inputs[1].tokenCategory == homeTokenCategory ||\r\n                    tx.inputs[1].tokenCategory == awayTokenCategory);\r\n            int payout = (tokenAmount * pricePerUnit) / 2;\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == commitment);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);\r\n            require(tx.outputs[1].value >= payout);\r\n        } else if (homeScoreFinal > awayScoreFinal) {\r\n            // Home win: HOME tokens pay pricePerUnit each\r\n            require(tx.inputs[1].tokenCategory == homeTokenCategory);\r\n            int payout = tokenAmount * pricePerUnit;\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == commitment);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);\r\n            require(tx.outputs[1].value >= payout);\r\n        } else {\r\n            // Away win: AWAY tokens pay pricePerUnit each\r\n            require(tx.inputs[1].tokenCategory == awayTokenCategory);\r\n            int payout = tokenAmount * pricePerUnit;\r\n            require(tx.outputs[0].lockingBytecode == tx.inputs[0].lockingBytecode);\r\n            require(tx.outputs[0].nftCommitment == commitment);\r\n            require(tx.outputs[0].value >= tx.inputs[0].value - payout - 1000);\r\n            require(tx.outputs[1].value >= payout);\r\n        }\r\n    }\r\n}\r\n",
   "debug": {
-    "bytecode": "5579009c63c0009d00cf76517f758176009c78529c9b6978597f75517f7781527901117f75597f778151c6022202947600a069765979597a9495587a965a7a635379789553795279939654797894547953799352795e79a269527900a0697800a0697600a06957795180527958807e7858807e597901117f777e00cd00c78800d2788800cc00c657799302e80394a26951d15b798851d35479a2696d6d67527978955479527993965479527993547952799452795e79a269527900a0697800a0697600a06957795180527958807e7858807e597901117f777e00cd00c78800d2788800cc00c657799302e80394a26951d15c798851d35479a2696d6d686d6d6d6d6d7551675579519c63c0009d00cf76517f758176009c78529c9b6978597f75517f7781527901117f75597f778151d05879587a9495577a96597a6351ce56798851d07600a06952795279955479537993965479527993547952799452795e79a269527900a0697800a0697600a06957795180527958807e7858807e597901117f777e00cd00c78800d2788800cc00c655799402e80394a26951cc5479a2696d6d756751ce57798851d07600a069537952799570939654797894547953799352795e79a269527900a0697800a0697600a06957795180527958807e7858807e597901117f777e00cd00c78800d2788800cc00c655799402e80394a26951cc5479a2696d6d75686d6d6d6d6d51675579529c63c0009d00cf76517f7581009d7601197f7501157f7781c5a1695151807c517f777e00cd00c78800d2886d6d6d51675579539c63c0009d00cf76517f7581519d76011e7f75011d7f77817801267f75011e7f77597a5a7a7e5a7a7e7c7eaa01487eaa78009c63011e78527f7581012e9793011e5279547f75527f7781012e97935251805579012e7f75517f777e527951807e7851807e0052807e00cd00c78800d278886d756778519c6376517f7581559778527f75517f778155975251805579012e7f75517f777e527951807e7851807e0052807e00cd00c78800d278886d756776527f7581011d9778547f75527f7781011d975251805579012e7f75517f777e527951807e7851807e0052807e00cd00c78800d278886d7568686d6d6d6d7551675579549c63c0009d00cf76517f7581529d76011d7f7501197f7781c5a1695351807c517f777e00cd00c78800d2886d6d6d51675579559c63c0009d00cf76517f7581539d76011e7f75011d7f77817801267f75011e7f775279012f7f75012e7f7781537901307f75012f7f77815b7a5c7a7e5c7a7e537a7eaa01467eaa5379009c63011e78527f7581012e9793011e5279547f75527f7781012e9793547952799354795279935451805979012e7f75517f777e577951807e567951807e527951807e7851807e00cd00c78800d278886d6d75675379519c6376517f7581559778527f75517f77815597547952799354795279935451805979012e7f75517f777e577951807e567951807e527951807e7851807e00cd00c78800d278886d6d756776527f7581011d9778547f75527f7781011d97547952799354795279935451805979012e7f75517f777e577951807e567951807e527951807e7851807e00cd00c78800d278886d6d7568686d6d6d6d6d755167557a569dc0009d00cf76517f7581549d7601317f7501307f77817801327f7501317f778151d07600a069527952799c6351ce55798751ce5779879b6976028813955979950210279600cd00c78800d255798800cc00c652799402e80394a26951cc78a269756752795279a06351ce55798876021027955979950210279600cd00c78800d255798800cc00c652799402e80394a26951cc78a269756751ce56798876021027955979950210279600cd00c78800d255798800cc00c652799402e80394a26951cc78a2697568686d6d6d6d7551686868686868",
-    "sourceMap": "41:4:103:5;;;;;42:16:42:37;:41::42;:8::44:1;44:37:44:38:0;:27::53:1;45:24:45:34:0;:41::42;:24::43:1;:::46;:20::47;48:16:48:21:0;:25::26;:16:::1;:30::35:0;:39::40;:30:::1;:16;:8::42;51:30:51:40:0;:47::48;:30::49:1;:::52;:59::60:0;:30::61:1;:::64;:26::65;52:30:52:40:0;;:47::49;:30::50:1;:::53;:60::61:0;:30::62:1;:::65;:26::66;55:30:55:31:0;:20::38:1;:41::44:0;:20:::1;56:16:56:21:0;:24::25;:16:::1;:8::27;59:27:59:32:0;:36::50;;:53::65;;:36:::1;:27::66;:70::84:0;;:26:::1;62:12:62:19:0;;:21:82:9;63:29:63:40;;:43::54;:29:::1;:59::70:0;;:73::84;;:59:::1;:28::85;64:33:64:44:0;;:47::56;:33:::1;65::65:44:0;;:47::58;;:33:::1;67:20:67:29:0;;:33::45;;:20:::1;:12::47;68:20:68:29:0;;:32::33;:20:::1;:12::35;69:20:69:34:0;:37::38;:20:::1;:12::40;70:20:70:34:0;:37::38;:20:::1;:12::40;72:41:72:46:0;;:34::47:1;;73:41:73:55:0;;:34::56:1;;72;74:41:74:55:0;:34::56:1;;72;75::75:44:0;;:51::53;:34::54:1;:::57;72;77:31:77:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;78:31:78:32:0;:20::47:1;:51::64:0;:12::66:1;79:31:79:32:0;:20::39:1;:53::54:0;:43::61:1;:64::69:0;;:43:::1;:72::76:0;:43:::1;:20;:12::78;80:31:80:32:0;:20::47:1;:51::68:0;;:12::70:1;81:31:81:32:0;:20::45:1;:49::58:0;;:20:::1;:12::60;62:21:82:9;;82:15:102::0;83:29:83:40;;:43::54;:29:::1;:59::70:0;;:73::84;;:59:::1;:28::85;84:33:84:44:0;;:47::58;;:33:::1;85::85:44:0;;:47::56;;:33:::1;87:20:87:29:0;;:33::45;;:20:::1;:12::47;88:20:88:29:0;;:32::33;:20:::1;:12::35;89:20:89:34:0;:37::38;:20:::1;:12::40;90:20:90:34:0;:37::38;:20:::1;:12::40;92:41:92:46:0;;:34::47:1;;93:41:93:55:0;;:34::56:1;;92;94:41:94:55:0;:34::56:1;;92;95::95:44:0;;:51::53;:34::54:1;:::57;92;97:31:97:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;98:31:98:32:0;:20::47:1;:51::64:0;:12::66:1;99:31:99:32:0;:20::39:1;:53::54:0;:43::61:1;:64::69:0;;:43:::1;:72::76:0;:43:::1;:20;:12::78;100:31:100:32:0;:20::47:1;:51::68:0;;:12::70:1;101:31:101:32:0;:20::45:1;:49::58:0;;:20:::1;:12::60;82:15:102:9;;;41:4:103:5;;;;;;;;108::167::0;;;;;109:16:109:37;:41::42;:8::44:1;111:37:111:38:0;:27::53:1;112:24:112:34:0;:41::42;:24::43:1;:::46;:20::47;113:16:113:21:0;:25::26;:16:::1;:30::35:0;:39::40;:30:::1;:16;:8::42;115:30:115:40:0;:47::48;:30::49:1;:::52;:59::60:0;:30::61:1;:::64;:26::65;116:30:116:40:0;;:47::49;:30::50:1;:::53;:60::61:0;:30::62:1;:::65;:26::66;118:37:118:38:0;:27::51:1;:55::69:0;;:72::84;;:55:::1;:27::85;:89::103:0;;:26:::1;120:12:120:20:0;;:22:143:9;121:30:121:31;:20::46:1;:50::67:0;;:12::69:1;122:37:122:38:0;:27::51:1;123:20:123:28:0;:31::32;:20:::1;:12::34;125:26:125:37:0;;:40::51;;:26:::1;:56::67:0;;:70::81;;:56:::1;:25::82;126:33:126:44:0;;:47::55;;:33:::1;127::127:44:0;;:47::53;;:33:::1;129:20:129:26:0;;:30::39;;:20:::1;:12::41;130:20:130:26:0;;:29::30;:20:::1;:12::32;131:20:131:34:0;:37::38;:20:::1;:12::40;132:20:132:34:0;:37::38;:20:::1;:12::40;134:41:134:46:0;;:34::47:1;;135:41:135:55:0;;:34::56:1;;134;136:41:136:55:0;:34::56:1;;134;137::137:44:0;;:51::53;:34::54:1;:::57;134;139:31:139:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;140:31:140:32:0;:20::47:1;:51::64:0;:12::66:1;141:31:141:32:0;:20::39:1;:53::54:0;:43::61:1;:64::70:0;;:43:::1;:73::77:0;:43:::1;:20;:12::79;142:31:142:32:0;:20::39:1;:43::49:0;;:20:::1;:12::51;120:22:143:9;;;143:15:166::0;144:30:144:31;:20::46:1;:50::67:0;;:12::69:1;145:37:145:38:0;:27::51:1;146:20:146:28:0;:31::32;:20:::1;:12::34;148:26:148:37:0;;:40::51;;:26:::1;:56::81:0;::::1;:25::82;149:33:149:44:0;;:47::53;:33:::1;150::150:44:0;;:47::55;;:33:::1;152:20:152:26:0;;:30::39;;:20:::1;:12::41;153:20:153:26:0;;:29::30;:20:::1;:12::32;154:20:154:34:0;:37::38;:20:::1;:12::40;155:20:155:34:0;:37::38;:20:::1;:12::40;157:41:157:46:0;;:34::47:1;;158:41:158:55:0;;:34::56:1;;157;159:41:159:55:0;:34::56:1;;157;160::160:44:0;;:51::53;:34::54:1;:::57;157;162:31:162:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;163:31:163:32:0;:20::47:1;:51::64:0;:12::66:1;164:31:164:32:0;:20::39:1;:53::54:0;:43::61:1;:64::70:0;;:43:::1;:73::77:0;:43:::1;:20;:12::79;165:31:165:32:0;:20::39:1;:43::49:0;;:20:::1;:12::51;143:15:166:9;;;;108:4:167:5;;;;;;;175::193::0;;;;;176:16:176:37;:41::42;:8::44:1;178:37:178:38:0;:27::53:1;179:24:179:34:0;:41::42;:24::43:1;:::46;:20::47;182:25:182:26:0;:8::28:1;185:32:185:42:0;:49::51;:32::52:1;:::55;:62::64:0;:32::65:1;:::68;:28::69;186:16:186:27:0;:::44:1;:8::46;189:37:189:38:0;:30::39:1;;:42::52:0;:59::60;:42::61:1;:::64;:30;191:27:191:28:0;:16::45:1;:59::60:0;:49::77:1;:8::79;192:27:192:28:0;:16::43:1;:8::62;175:4:193:5;;;;;205::261::0;;;;;210:16:210:37;:41::42;:8::44:1;212:37:212:38:0;:27::53:1;213:24:213:34:0;:41::42;:24::43:1;:::46;:20::47;216:25:216:26:0;:8::28:1;219:28:219:38:0;:45::47;:28::48:1;:::51;:58::60:0;:28::61:1;:::64;:24::65;220:32:220:42:0;:49::51;:32::52:1;:::55;:62::64:0;:32::65:1;:::68;223:31:223:41:0;;:44::54;;:31:::1;:57::67:0;;:31:::1;:70::77:0;:31:::1;:23::78;224:50:224:54:0;:36::55:1;:28::56;227:12:227:21:0;:25::26;:12:::1;:28:238:9:0;229:30:229:32;:40::49;:56::57;:40::58:1;:::61;:36::62;:65::67:0;:36:::1;:30::68;230::230:32:0;:40::49;;:56::57;:40::58:1;:::61;:68::69:0;:40::70:1;:::73;:36::74;:77::79:0;:36:::1;:30::80;231:41:231:42:0;:34::43:1;;232::232:44:0;;:51::53;:34::54:1;:::57;:64::65:0;:34::66:1;:::69;231;233:41:233:52:0;;:34::53:1;;231;234:41:234:52:0;:34::53:1;;231;235:41:235:42:0;:34::43:1;;231;236:31:236:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;237:31:237:32:0;:20::47:1;:51::64:0;:12::66:1;227:28:238:9;;238:15:260::0;:19:238:28;:32::33;:19:::1;:35:249:9:0;240:34:240:43;:50::51;:34::52:1;:::55;:30::56;:59::60:0;:30:::1;241:34:241:43:0;:50::51;:34::52:1;:::55;:62::63:0;:34::64:1;:::67;:30::68;:71::72:0;:30:::1;242:41:242:42:0;:34::43:1;;243::243:44:0;;:51::53;:34::54:1;:::57;:64::65:0;:34::66:1;:::69;242;244:41:244:52:0;;:34::53:1;;242;245:41:245:52:0;:34::53:1;;242;246:41:246:42:0;:34::43:1;;242;247:31:247:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;248:31:248:32:0;:20::47:1;:51::64:0;:12::66:1;238:35:249:9;;249:15:260::0;251:34:251:43;:50::51;:34::52:1;:::55;:30::56;:59::61:0;:30:::1;252:34:252:43:0;:50::51;:34::52:1;:::55;:62::63:0;:34::64:1;:::67;:30::68;:71::73:0;:30:::1;253:41:253:42:0;:34::43:1;;254::254:44:0;;:51::53;:34::54:1;:::57;:64::65:0;:34::66:1;:::69;253;255:41:255:52:0;;:34::53:1;;253;256:41:256:52:0;:34::53:1;;253;257:41:257:42:0;:34::43:1;;253;258:31:258:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;259:31:259:32:0;:20::47:1;:51::64:0;:12::66:1;249:15:260:9;;;238;205:4:261:5;;;;;;;266::281::0;;;;;267:16:267:37;:41::42;:8::44:1;269:37:269:38:0;:27::53:1;270:24:270:34:0;:41::42;:24::43:1;:::46;:20::47;272:25:272:26:0;:8::28:1;274:27:274:37:0;:44::46;:27::47:1;:::50;:57::59:0;:27::60:1;:::63;:23::64;275:16:275:27:0;:::39:1;:8::41;277:37:277:38:0;:30::39:1;;:42::52:0;:59::60;:42::61:1;:::64;:30;279:27:279:28:0;:16::45:1;:59::60:0;:49::77:1;:8::79;280:27:280:28:0;:16::43:1;:8::62;266:4:281:5;;;;;286::352::0;;;;;291:16:291:37;:41::42;:8::44:1;293:37:293:38:0;:27::53:1;294:24:294:34:0;:41::42;:24::43:1;:::46;:20::47;296:25:296:26:0;:8::28:1;298:28:298:38:0;:45::47;:28::48:1;:::51;:58::60:0;:28::61:1;:::64;:24::65;299:32:299:42:0;:49::51;:32::52:1;:::55;:62::64:0;:32::65:1;:::68;302:30:302:40:0;;:47::49;:30::50:1;:::53;:60::62:0;:30::63:1;:::66;:26::67;303:30:303:40:0;;:47::49;:30::50:1;:::53;:60::62:0;:30::63:1;:::66;:26::67;306:31:306:41:0;;:44::54;;:31:::1;:57::67:0;;:31:::1;:70::77:0;;:31:::1;:23::78;307:50:307:54:0;:36::55:1;:28::56;309:12:309:21:0;;:25::26;:12:::1;:28:323:9:0;311:30:311:32;:40::49;:56::57;:40::58:1;:::61;:36::62;:65::67:0;:36:::1;:30::68;312::312:32:0;:40::49;;:56::57;:40::58:1;:::61;:68::69:0;:40::70:1;:::73;:36::74;:77::79:0;:36:::1;:30::80;313:33:313:44:0;;:47::58;;:33:::1;314::314:44:0;;:47::58;;:33:::1;315:41:315:42:0;:34::43:1;;316::316:44:0;;:51::53;:34::54:1;:::57;:64::65:0;:34::66:1;:::69;315;317:41:317:52:0;;:34::53:1;;315;318:41:318:52:0;;:34::53:1;;315;319:41:319:55:0;;:34::56:1;;315;320:41:320:55:0;:34::56:1;;315;321:31:321:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;322:31:322:32:0;:20::47:1;:51::64:0;:12::66:1;309:28:323:9;;;323:15:351::0;:19:323:28;;:32::33;:19:::1;:35:337:9:0;325:34:325:43;:50::51;:34::52:1;:::55;:30::56;:59::60:0;:30:::1;326:34:326:43:0;:50::51;:34::52:1;:::55;:62::63:0;:34::64:1;:::67;:30::68;:71::72:0;:30:::1;327:33:327:44:0;;:47::58;;:33:::1;328::328:44:0;;:47::58;;:33:::1;329:41:329:42:0;:34::43:1;;330::330:44:0;;:51::53;:34::54:1;:::57;:64::65:0;:34::66:1;:::69;329;331:41:331:52:0;;:34::53:1;;329;332:41:332:52:0;;:34::53:1;;329;333:41:333:55:0;;:34::56:1;;329;334:41:334:55:0;:34::56:1;;329;335:31:335:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;336:31:336:32:0;:20::47:1;:51::64:0;:12::66:1;323:35:337:9;;;337:15:351::0;339:34:339:43;:50::51;:34::52:1;:::55;:30::56;:59::61:0;:30:::1;340:34:340:43:0;:50::51;:34::52:1;:::55;:62::63:0;:34::64:1;:::67;:30::68;:71::73:0;:30:::1;341:33:341:44:0;;:47::58;;:33:::1;342::342:44:0;;:47::58;;:33:::1;343:41:343:42:0;:34::43:1;;344::344:44:0;;:51::53;:34::54:1;:::57;:64::65:0;:34::66:1;:::69;343;345:41:345:52:0;;:34::53:1;;343;346:41:346:52:0;;:34::53:1;;343;347:41:347:55:0;;:34::56:1;;343;348:41:348:55:0;:34::56:1;;343;349:31:349:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;350:31:350:32:0;:20::47:1;:51::64:0;:12::66:1;337:15:351:9;;;;323;286:4:352:5;;;;;;;;359::402::0;;;;360:16:360:37;:41::42;:8::44:1;362:37:362:38:0;:27::53:1;363:24:363:34:0;:41::42;:24::43:1;:::46;:20::47;365:25:365:26:0;:8::28:1;368:33:368:43:0;:50::52;:33::53:1;:::56;:63::65:0;:33::66:1;:::69;:29::70;369:33:369:43:0;:50::52;:33::53:1;:::56;:63::65:0;:33::66:1;:::69;:29::70;372:36:372:37:0;:26::50:1;373:16:373:27:0;:30::31;:16:::1;:8::33;376:12:376:26:0;;:30::44;;:12:::1;:46:385:9:0;378:30:378:31;:20::46:1;:50::67:0;;:20:::1;379:30:379:31:0;:20::46:1;:50::67:0;;:20:::1;378;:12::69;380:26:380:37:0;:40::44;:26:::1;:47::59:0;;:26:::1;:63::68:0;:25:::1;381:31:381:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;382:31:382:32:0;:20::47:1;:51::61:0;;:12::63:1;383:31:383:32:0;:20::39:1;:53::54:0;:43::61:1;:64::70:0;;:43:::1;:73::77:0;:43:::1;:20;:12::79;384:31:384:32:0;:20::39:1;:43::49:0;:20:::1;:12::51;376:46:385:9;385:15:401::0;:19:385:33;;:36::50;;:19:::1;:52:393:9:0;387:30:387:31;:20::46:1;:50::67:0;;:12::69:1;388:26:388:37:0;:40::45;:26:::1;:48::60:0;;:26:::1;:64::69:0;:25:::1;389:31:389:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;390:31:390:32:0;:20::47:1;:51::61:0;;:12::63:1;391:31:391:32:0;:20::39:1;:53::54:0;:43::61:1;:64::70:0;;:43:::1;:73::77:0;:43:::1;:20;:12::79;392:31:392:32:0;:20::39:1;:43::49:0;:20:::1;:12::51;385:52:393:9;393:15:401::0;395:30:395:31;:20::46:1;:50::67:0;;:12::69:1;396:26:396:37:0;:40::45;:26:::1;:48::60:0;;:26:::1;:64::69:0;:25:::1;397:31:397:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;398:31:398:32:0;:20::47:1;:51::61:0;;:12::63:1;399:31:399:32:0;:20::39:1;:53::54:0;:43::61:1;:64::70:0;;:43:::1;:73::77:0;:43:::1;:20;:12::79;400:31:400:32:0;:20::39:1;:43::49:0;:20:::1;:12::51;393:15:401:9;;385;359:4:402:5;;;;;;29:0:403:1;;;;;",
+    "bytecode": "5579009c63c0009d00cf76517f758176009c78529c9b6978597f75517f7781527901117f75597f778151c6022202947600a069765979597a9495587a965a7a6353797895537952799396765a79965579527994557954799352795f79a269527900a0697800a0697600a06958795180527958807e7858807e5a7901117f777e00cd00c78800d2788800cc00c658799302e80394a26951d15c798851d35479a2696d6d756752797895547952799396765a79965579537993557953799452795f79a269527900a0697800a0697600a06958795180527958807e7858807e5a7901117f777e00cd00c78800d2788800cc00c658799302e80394a26951d15d798851d35479a2696d6d75686d6d6d6d6d7551675579519c63c0009d00cf76517f758176009c78529c9b6978597f75517f7781527901117f75597f77815a7a6351ce55798851d07600a069765a7995765a795a7994955a799653797895557952799396557953799355795279945279011179a269527900a0697800a0697600a06958795180527958807e7858807e5a7901117f777e00cd00c78800d2788800cc00c655799402e80394a26951cc5479a2696d6d6d756751ce56798851d07600a069765a7995765a795a7994955a7996547978955479527993965579789455795479935279011179a269527900a0697800a0697600a06958795180527958807e7858807e5a7901117f777e00cd00c78800d2788800cc00c655799402e80394a26951cc5479a2696d6d6d75686d6d6d6d6d7551675579529c63c0009d00cf76517f7581009d7601157f7501117f7781c5a1695151807c517f777e00cd00c78800d2886d6d6d51675579539c63c0009d00cf76517f7581519d76011a7f7501197f77817801227f75011a7f77597a5a7a7e5a7a7e7c7eaa01487eaa78009c63011e78527f7581012e9793011e5279547f75527f7781012e9793525180557901227f75517f777e527951807e7851807e0052807e00cd00c78800d278886d756778519c6376517f7581559778527f75517f77815597525180557901227f75517f777e527951807e7851807e0052807e00cd00c78800d278886d756776527f7581011d9778547f75527f7781011d97525180557901227f75517f777e527951807e7851807e0052807e00cd00c78800d278886d7568686d6d6d6d7551675579549c63c0009d00cf76517f7581529d7601197f7501157f7781c5a1695351807c517f777e00cd00c78800d2886d6d6d51675579559c63c0009d00cf76517f7581539d76011a7f7501197f77817801227f75011a7f77527901237f7501227f7781537901247f7501237f77815b7a5c7a7e5c7a7e537a7eaa01467eaa5379009c63011e78527f7581012e9793011e5279547f75527f7781012e979354795279935479527993545180597901227f75517f777e577951807e567951807e527951807e7851807e00cd00c78800d278886d6d75675379519c6376517f7581559778527f75517f7781559754795279935479527993545180597901227f75517f777e577951807e567951807e527951807e7851807e00cd00c78800d278886d6d756776527f7581011d9778547f75527f7781011d9754795279935479527993545180597901227f75517f777e577951807e567951807e527951807e7851807e00cd00c78800d278886d6d7568686d6d6d6d6d755167557a569dc0009d00cf76517f7581549d7601257f7501247f77817801267f7501257f778151d07600a069527952799c6351ce55798751ce5779879b6976597995529600cd00c78800d255798800cc00c652799402e80394a26951cc78a269756752795279a06351ce5579887659799500cd00c78800d255798800cc00c652799402e80394a26951cc78a269756751ce5679887659799500cd00c78800d255798800cc00c652799402e80394a26951cc78a2697568686d6d6d6d7551686868686868",
+    "sourceMap": "46:4:112:5;;;;;47:16:47:37;:41::42;:8::44:1;49:37:49:38:0;:27::53:1;50:24:50:34:0;:41::42;:24::43:1;:::46;:20::47;53:16:53:21:0;:25::26;:16:::1;:30::35:0;:39::40;:30:::1;:16;:8::42;56:34:56:44:0;:51::52;:34::53:1;:::56;:63::64:0;:34::65:1;:::68;:30::69;57:34:57:44:0;;:51::53;:34::54:1;:::57;:64::65:0;:34::66:1;:::69;:30::70;60::60:31:0;:20::38:1;:41::44:0;:20:::1;61:16:61:21:0;:24::25;:16:::1;:8::27;64:27:64:32:0;:36::50;;:53::65;;:36:::1;:27::66;:70::84:0;;:26:::1;67:12:67:19:0;;:21:89:9;69:30:69:45;;:48::59;:30:::1;:64::79:0;;:82::93;;:64:::1;:29::94;70:28:70:38:0;:41::53;;:28:::1;71:37:71:52:0;;:55::65;;:37:::1;72::72:52:0;;:55::66;;:37:::1;74:20:74:29:0;;:33::45;;:20:::1;:12::47;75:20:75:29:0;;:32::33;:20:::1;:12::35;76:20:76:38:0;:41::42;:20:::1;:12::44;77:20:77:38:0;:41::42;:20:::1;:12::44;79:41:79:46:0;;:34::47:1;;80:41:80:59:0;;:34::60:1;;79;81:41:81:59:0;:34::60:1;;79;82::82:44:0;;:51::53;:34::54:1;:::57;79;84:31:84:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;85:31:85:32:0;:20::47:1;:51::64:0;:12::66:1;86:31:86:32:0;:20::39:1;:53::54:0;:43::61:1;:64::69:0;;:43:::1;:72::76:0;:43:::1;:20;:12::78;87:31:87:32:0;:20::47:1;:51::68:0;;:12::70:1;88:31:88:32:0;:20::45:1;:49::58:0;;:20:::1;:12::60;67:21:89:9;;;89:15:111::0;91:30:91:45;;:48::59;:30:::1;:64::79:0;;:82::93;;:64:::1;:29::94;92:28:92:38:0;:41::53;;:28:::1;93:37:93:52:0;;:55::66;;:37:::1;94::94:52:0;;:55::65;;:37:::1;96:20:96:29:0;;:33::45;;:20:::1;:12::47;97:20:97:29:0;;:32::33;:20:::1;:12::35;98:20:98:38:0;:41::42;:20:::1;:12::44;99:20:99:38:0;:41::42;:20:::1;:12::44;101:41:101:46:0;;:34::47:1;;102:41:102:59:0;;:34::60:1;;101;103:41:103:59:0;:34::60:1;;101;104::104:44:0;;:51::53;:34::54:1;:::57;101;106:31:106:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;107:31:107:32:0;:20::47:1;:51::64:0;:12::66:1;108:31:108:32:0;:20::39:1;:53::54:0;:43::61:1;:64::69:0;;:43:::1;:72::76:0;:43:::1;:20;:12::78;109:31:109:32:0;:20::47:1;:51::68:0;;:12::70:1;110:31:110:32:0;:20::45:1;:49::58:0;;:20:::1;:12::60;89:15:111:9;;;;46:4:112:5;;;;;;;;119::186::0;;;;;120:16:120:37;:41::42;:8::44:1;122:37:122:38:0;:27::53:1;123:24:123:34:0;:41::42;:24::43:1;:::46;:20::47;124:16:124:21:0;:25::26;:16:::1;:30::35:0;:39::40;:30:::1;:16;:8::42;126:34:126:44:0;:51::52;:34::53:1;:::56;:63::64:0;:34::65:1;:::68;:30::69;127:34:127:44:0;;:51::53;:34::54:1;:::57;:64::65:0;:34::66:1;:::69;:30::70;129:12:129:20:0;;:22:157:9;130:30:130:31;:20::46:1;:50::67:0;;:12::69:1;131:37:131:38:0;:27::51:1;132:20:132:28:0;:31::32;:20:::1;:12::34;135:25:135:33:0;:36::48;;:25:::1;136:33:136:39:0;:43::57;;:60::72;;:43:::1;:33::73;:77::91:0;;:32:::1;139:27:139:42:0;;:45::58;:27:::1;:63::78:0;;:81::94;;:63:::1;:26::95;140:37:140:52:0;;:55::61;;:37:::1;141::141:52:0;;:55::62;;:37:::1;143:20:143:27:0;;:31::40;;:20:::1;:12::42;144:20:144:27:0;;:30::31;:20:::1;:12::33;145:20:145:38:0;:41::42;:20:::1;:12::44;146:20:146:38:0;:41::42;:20:::1;:12::44;148:41:148:46:0;;:34::47:1;;149:41:149:59:0;;:34::60:1;;148;150:41:150:59:0;:34::60:1;;148;151::151:44:0;;:51::53;:34::54:1;:::57;148;153:31:153:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;154:31:154:32:0;:20::47:1;:51::64:0;:12::66:1;155:31:155:32:0;:20::39:1;:53::54:0;:43::61:1;:64::71:0;;:43:::1;:74::78:0;:43:::1;:20;:12::80;156:31:156:32:0;:20::39:1;:43::50:0;;:20:::1;:12::52;129:22:157:9;;;;157:15:185::0;158:30:158:31;:20::46:1;:50::67:0;;:12::69:1;159:37:159:38:0;:27::51:1;160:20:160:28:0;:31::32;:20:::1;:12::34;163:25:163:33:0;:36::48;;:25:::1;164:33:164:39:0;:43::57;;:60::72;;:43:::1;:33::73;:77::91:0;;:32:::1;167:27:167:42:0;;:45::58;:27:::1;:63::78:0;;:81::94;;:63:::1;:26::95;168:37:168:52:0;;:55::62;:37:::1;169::169:52:0;;:55::61;;:37:::1;171:20:171:27:0;;:31::40;;:20:::1;:12::42;172:20:172:27:0;;:30::31;:20:::1;:12::33;173:20:173:38:0;:41::42;:20:::1;:12::44;174:20:174:38:0;:41::42;:20:::1;:12::44;176:41:176:46:0;;:34::47:1;;177:41:177:59:0;;:34::60:1;;176;178:41:178:59:0;:34::60:1;;176;179::179:44:0;;:51::53;:34::54:1;:::57;176;181:31:181:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;182:31:182:32:0;:20::47:1;:51::64:0;:12::66:1;183:31:183:32:0;:20::39:1;:53::54:0;:43::61:1;:64::71:0;;:43:::1;:74::78:0;:43:::1;:20;:12::80;184:31:184:32:0;:20::39:1;:43::50:0;;:20:::1;:12::52;157:15:185:9;;;;;119:4:186:5;;;;;;;;193::208::0;;;;;194:16:194:37;:41::42;:8::44:1;196:37:196:38:0;:27::53:1;197:24:197:34:0;:41::42;:24::43:1;:::46;:20::47;199:25:199:26:0;:8::28:1;201:32:201:42:0;:49::51;:32::52:1;:::55;:62::64:0;:32::65:1;:::68;:28::69;202:16:202:27:0;:::44:1;:8::46;204:37:204:38:0;:30::39:1;;:42::52:0;:59::60;:42::61:1;:::64;:30;206:27:206:28:0;:16::45:1;:59::60:0;:49::77:1;:8::79;207:27:207:28:0;:16::43:1;:8::62;193:4:208:5;;;;;220::272::0;;;;;225:16:225:37;:41::42;:8::44:1;227:37:227:38:0;:27::53:1;228:24:228:34:0;:41::42;:24::43:1;:::46;:20::47;230:25:230:26:0;:8::28:1;232:28:232:38:0;:45::47;:28::48:1;:::51;:58::60:0;:28::61:1;:::64;:24::65;233:32:233:42:0;:49::51;:32::52:1;:::55;:62::64:0;:32::65:1;:::68;235:31:235:41:0;;:44::54;;:31:::1;:57::67:0;;:31:::1;:70::77:0;:31:::1;:23::78;236:50:236:54:0;:36::55:1;:28::56;238:12:238:21:0;:25::26;:12:::1;:28:249:9:0;240:30:240:32;:40::49;:56::57;:40::58:1;:::61;:36::62;:65::67:0;:36:::1;:30::68;241::241:32:0;:40::49;;:56::57;:40::58:1;:::61;:68::69:0;:40::70:1;:::73;:36::74;:77::79:0;:36:::1;:30::80;242:41:242:42:0;:34::43:1;;243::243:44:0;;:51::53;:34::54:1;:::57;:64::65:0;:34::66:1;:::69;242;244:41:244:52:0;;:34::53:1;;242;245:41:245:52:0;:34::53:1;;242;246:41:246:42:0;:34::43:1;;242;247:31:247:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;248:31:248:32:0;:20::47:1;:51::64:0;:12::66:1;238:28:249:9;;249:15:271::0;:19:249:28;:32::33;:19:::1;:35:260:9:0;251:34:251:43;:50::51;:34::52:1;:::55;:30::56;:59::60:0;:30:::1;252:34:252:43:0;:50::51;:34::52:1;:::55;:62::63:0;:34::64:1;:::67;:30::68;:71::72:0;:30:::1;253:41:253:42:0;:34::43:1;;254::254:44:0;;:51::53;:34::54:1;:::57;:64::65:0;:34::66:1;:::69;253;255:41:255:52:0;;:34::53:1;;253;256:41:256:52:0;:34::53:1;;253;257:41:257:42:0;:34::43:1;;253;258:31:258:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;259:31:259:32:0;:20::47:1;:51::64:0;:12::66:1;249:35:260:9;;260:15:271::0;262:34:262:43;:50::51;:34::52:1;:::55;:30::56;:59::61:0;:30:::1;263:34:263:43:0;:50::51;:34::52:1;:::55;:62::63:0;:34::64:1;:::67;:30::68;:71::73:0;:30:::1;264:41:264:42:0;:34::43:1;;265::265:44:0;;:51::53;:34::54:1;:::57;:64::65:0;:34::66:1;:::69;264;266:41:266:52:0;;:34::53:1;;264;267:41:267:52:0;:34::53:1;;264;268:41:268:42:0;:34::43:1;;264;269:31:269:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;270:31:270:32:0;:20::47:1;:51::64:0;:12::66:1;260:15:271:9;;;249;220:4:272:5;;;;;;;277::292::0;;;;;278:16:278:37;:41::42;:8::44:1;280:37:280:38:0;:27::53:1;281:24:281:34:0;:41::42;:24::43:1;:::46;:20::47;283:25:283:26:0;:8::28:1;285:27:285:37:0;:44::46;:27::47:1;:::50;:57::59:0;:27::60:1;:::63;:23::64;286:16:286:27:0;:::39:1;:8::41;288:37:288:38:0;:30::39:1;;:42::52:0;:59::60;:42::61:1;:::64;:30;290:27:290:28:0;:16::45:1;:59::60:0;:49::77:1;:8::79;291:27:291:28:0;:16::43:1;:8::62;277:4:292:5;;;;;297::361::0;;;;;302:16:302:37;:41::42;:8::44:1;304:37:304:38:0;:27::53:1;305:24:305:34:0;:41::42;:24::43:1;:::46;:20::47;307:25:307:26:0;:8::28:1;309:28:309:38:0;:45::47;:28::48:1;:::51;:58::60:0;:28::61:1;:::64;:24::65;310:32:310:42:0;:49::51;:32::52:1;:::55;:62::64:0;:32::65:1;:::68;312:30:312:40:0;;:47::49;:30::50:1;:::53;:60::62:0;:30::63:1;:::66;:26::67;313:30:313:40:0;;:47::49;:30::50:1;:::53;:60::62:0;:30::63:1;:::66;:26::67;315:31:315:41:0;;:44::54;;:31:::1;:57::67:0;;:31:::1;:70::77:0;;:31:::1;:23::78;316:50:316:54:0;:36::55:1;:28::56;318:12:318:21:0;;:25::26;:12:::1;:28:332:9:0;320:30:320:32;:40::49;:56::57;:40::58:1;:::61;:36::62;:65::67:0;:36:::1;:30::68;321::321:32:0;:40::49;;:56::57;:40::58:1;:::61;:68::69:0;:40::70:1;:::73;:36::74;:77::79:0;:36:::1;:30::80;322:33:322:44:0;;:47::58;;:33:::1;323::323:44:0;;:47::58;;:33:::1;324:41:324:42:0;:34::43:1;;325::325:44:0;;:51::53;:34::54:1;:::57;:64::65:0;:34::66:1;:::69;324;326:41:326:52:0;;:34::53:1;;324;327:41:327:52:0;;:34::53:1;;324;328:41:328:55:0;;:34::56:1;;324;329:41:329:55:0;:34::56:1;;324;330:31:330:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;331:31:331:32:0;:20::47:1;:51::64:0;:12::66:1;318:28:332:9;;;332:15:360::0;:19:332:28;;:32::33;:19:::1;:35:346:9:0;334:34:334:43;:50::51;:34::52:1;:::55;:30::56;:59::60:0;:30:::1;335:34:335:43:0;:50::51;:34::52:1;:::55;:62::63:0;:34::64:1;:::67;:30::68;:71::72:0;:30:::1;336:33:336:44:0;;:47::58;;:33:::1;337::337:44:0;;:47::58;;:33:::1;338:41:338:42:0;:34::43:1;;339::339:44:0;;:51::53;:34::54:1;:::57;:64::65:0;:34::66:1;:::69;338;340:41:340:52:0;;:34::53:1;;338;341:41:341:52:0;;:34::53:1;;338;342:41:342:55:0;;:34::56:1;;338;343:41:343:55:0;:34::56:1;;338;344:31:344:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;345:31:345:32:0;:20::47:1;:51::64:0;:12::66:1;332:35:346:9;;;346:15:360::0;348:34:348:43;:50::51;:34::52:1;:::55;:30::56;:59::61:0;:30:::1;349:34:349:43:0;:50::51;:34::52:1;:::55;:62::63:0;:34::64:1;:::67;:30::68;:71::73:0;:30:::1;350:33:350:44:0;;:47::58;;:33:::1;351::351:44:0;;:47::58;;:33:::1;352:41:352:42:0;:34::43:1;;353::353:44:0;;:51::53;:34::54:1;:::57;:64::65:0;:34::66:1;:::69;352;354:41:354:52:0;;:34::53:1;;352;355:41:355:52:0;;:34::53:1;;352;356:41:356:55:0;;:34::56:1;;352;357:41:357:55:0;:34::56:1;;352;358:31:358:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;359:31:359:32:0;:20::47:1;:51::64:0;:12::66:1;346:15:360:9;;;;332;297:4:361:5;;;;;;;;369::409::0;;;;370:16:370:37;:41::42;:8::44:1;372:37:372:38:0;:27::53:1;373:24:373:34:0;:41::42;:24::43:1;:::46;:20::47;375:25:375:26:0;:8::28:1;377:33:377:43:0;:50::52;:33::53:1;:::56;:63::65:0;:33::66:1;:::69;:29::70;378:33:378:43:0;:50::52;:33::53:1;:::56;:63::65:0;:33::66:1;:::69;:29::70;380:36:380:37:0;:26::50:1;381:16:381:27:0;:30::31;:16:::1;:8::33;383:12:383:26:0;;:30::44;;:12:::1;:46:392:9:0;385:30:385:31;:20::46:1;:50::67:0;;:20:::1;386:30:386:31:0;:20::46:1;:50::67:0;;:20:::1;385;:12::69;387:26:387:37:0;:40::52;;:26:::1;:56::57:0;:25:::1;388:31:388:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;389:31:389:32:0;:20::47:1;:51::61:0;;:12::63:1;390:31:390:32:0;:20::39:1;:53::54:0;:43::61:1;:64::70:0;;:43:::1;:73::77:0;:43:::1;:20;:12::79;391:31:391:32:0;:20::39:1;:43::49:0;:20:::1;:12::51;383:46:392:9;392:15:408::0;:19:392:33;;:36::50;;:19:::1;:52:400:9:0;394:30:394:31;:20::46:1;:50::67:0;;:12::69:1;395:25:395:36:0;:39::51;;:25:::1;396:31:396:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;397:31:397:32:0;:20::47:1;:51::61:0;;:12::63:1;398:31:398:32:0;:20::39:1;:53::54:0;:43::61:1;:64::70:0;;:43:::1;:73::77:0;:43:::1;:20;:12::79;399:31:399:32:0;:20::39:1;:43::49:0;:20:::1;:12::51;392:52:400:9;400:15:408::0;402:30:402:31;:20::46:1;:50::67:0;;:12::69:1;403:25:403:36:0;:39::51;;:25:::1;404:31:404:32:0;:20::49:1;:63::64:0;:53::81:1;:12::83;405:31:405:32:0;:20::47:1;:51::61:0;;:12::63:1;406:31:406:32:0;:20::39:1;:53::54:0;:43::61:1;:64::70:0;;:43:::1;:73::77:0;:43:::1;:20;:12::79;407:31:407:32:0;:20::39:1;:43::49:0;:20:::1;:12::51;400:15:408:9;;392;369:4:409:5;;;;;;31:0:410:1;;;;;",
     "logs": [],
     "requires": [
       {
         "ip": 12,
-        "line": 42
+        "line": 47
       },
       {
         "ip": 27,
-        "line": 48
+        "line": 53
       },
       {
         "ip": 52,
-        "line": 56
-      },
-      {
-        "ip": 90,
-        "line": 67
+        "line": 61
       },
       {
         "ip": 95,
-        "line": 68
+        "line": 74
       },
       {
-        "ip": 99,
-        "line": 69
+        "ip": 100,
+        "line": 75
       },
       {
-        "ip": 103,
-        "line": 70
+        "ip": 104,
+        "line": 76
       },
       {
-        "ip": 127,
+        "ip": 108,
         "line": 77
       },
       {
-        "ip": 131,
-        "line": 78
+        "ip": 132,
+        "line": 84
       },
       {
-        "ip": 142,
-        "line": 79
+        "ip": 136,
+        "line": 85
       },
       {
         "ip": 147,
-        "line": 80
+        "line": 86
       },
       {
-        "ip": 153,
-        "line": 81
-      },
-      {
-        "ip": 182,
+        "ip": 152,
         "line": 87
       },
       {
-        "ip": 187,
+        "ip": 158,
         "line": 88
       },
       {
-        "ip": 191,
-        "line": 89
+        "ip": 192,
+        "line": 96
       },
       {
-        "ip": 195,
-        "line": 90
-      },
-      {
-        "ip": 219,
+        "ip": 197,
         "line": 97
       },
       {
-        "ip": 223,
+        "ip": 201,
         "line": 98
       },
       {
-        "ip": 234,
+        "ip": 205,
         "line": 99
       },
       {
-        "ip": 239,
-        "line": 100
+        "ip": 229,
+        "line": 106
       },
       {
-        "ip": 245,
-        "line": 101
+        "ip": 233,
+        "line": 107
       },
       {
-        "ip": 264,
+        "ip": 244,
+        "line": 108
+      },
+      {
+        "ip": 249,
         "line": 109
       },
       {
-        "ip": 279,
-        "line": 113
+        "ip": 255,
+        "line": 110
+      },
+      {
+        "ip": 275,
+        "line": 120
+      },
+      {
+        "ip": 290,
+        "line": 124
       },
       {
         "ip": 315,
-        "line": 121
-      },
-      {
-        "ip": 321,
-        "line": 123
-      },
-      {
-        "ip": 348,
-        "line": 129
-      },
-      {
-        "ip": 353,
         "line": 130
       },
       {
-        "ip": 357,
-        "line": 131
-      },
-      {
-        "ip": 361,
+        "ip": 321,
         "line": 132
       },
       {
-        "ip": 385,
-        "line": 139
+        "ip": 361,
+        "line": 143
       },
       {
-        "ip": 389,
-        "line": 140
-      },
-      {
-        "ip": 400,
-        "line": 141
-      },
-      {
-        "ip": 406,
-        "line": 142
-      },
-      {
-        "ip": 415,
+        "ip": 366,
         "line": 144
       },
       {
-        "ip": 421,
+        "ip": 370,
+        "line": 145
+      },
+      {
+        "ip": 374,
         "line": 146
       },
       {
-        "ip": 444,
-        "line": 152
-      },
-      {
-        "ip": 449,
+        "ip": 398,
         "line": 153
       },
       {
-        "ip": 453,
+        "ip": 402,
         "line": 154
       },
       {
-        "ip": 457,
+        "ip": 413,
         "line": 155
       },
       {
-        "ip": 481,
-        "line": 162
+        "ip": 419,
+        "line": 156
       },
       {
-        "ip": 485,
-        "line": 163
+        "ip": 429,
+        "line": 158
       },
       {
-        "ip": 496,
-        "line": 164
+        "ip": 435,
+        "line": 160
       },
       {
-        "ip": 502,
-        "line": 165
+        "ip": 474,
+        "line": 171
       },
       {
-        "ip": 521,
-        "line": 176
+        "ip": 479,
+        "line": 172
       },
       {
-        "ip": 530,
+        "ip": 483,
+        "line": 173
+      },
+      {
+        "ip": 487,
+        "line": 174
+      },
+      {
+        "ip": 511,
+        "line": 181
+      },
+      {
+        "ip": 515,
         "line": 182
       },
       {
-        "ip": 541,
-        "line": 186
+        "ip": 526,
+        "line": 183
       },
       {
-        "ip": 554,
-        "line": 191
+        "ip": 532,
+        "line": 184
       },
       {
-        "ip": 557,
-        "line": 192
+        "ip": 553,
+        "line": 194
       },
       {
-        "ip": 570,
-        "line": 210
+        "ip": 562,
+        "line": 199
       },
       {
-        "ip": 579,
-        "line": 216
+        "ip": 573,
+        "line": 202
       },
       {
-        "ip": 664,
-        "line": 236
+        "ip": 586,
+        "line": 206
       },
       {
-        "ip": 668,
-        "line": 237
+        "ip": 589,
+        "line": 207
       },
       {
-        "ip": 722,
+        "ip": 602,
+        "line": 225
+      },
+      {
+        "ip": 611,
+        "line": 230
+      },
+      {
+        "ip": 696,
         "line": 247
       },
       {
-        "ip": 726,
+        "ip": 700,
         "line": 248
       },
       {
-        "ip": 776,
+        "ip": 754,
         "line": 258
       },
       {
-        "ip": 780,
+        "ip": 758,
         "line": 259
       },
       {
-        "ip": 799,
-        "line": 267
-      },
-      {
         "ip": 808,
-        "line": 272
+        "line": 269
       },
       {
-        "ip": 819,
-        "line": 275
+        "ip": 812,
+        "line": 270
       },
       {
-        "ip": 832,
-        "line": 279
+        "ip": 831,
+        "line": 278
       },
       {
-        "ip": 835,
-        "line": 280
+        "ip": 840,
+        "line": 283
       },
       {
-        "ip": 848,
+        "ip": 851,
+        "line": 286
+      },
+      {
+        "ip": 864,
+        "line": 290
+      },
+      {
+        "ip": 867,
         "line": 291
       },
       {
-        "ip": 857,
-        "line": 296
+        "ip": 880,
+        "line": 302
       },
       {
-        "ip": 978,
-        "line": 321
+        "ip": 889,
+        "line": 307
       },
       {
-        "ip": 982,
-        "line": 322
+        "ip": 1010,
+        "line": 330
       },
       {
-        "ip": 1054,
-        "line": 335
+        "ip": 1014,
+        "line": 331
       },
       {
-        "ip": 1058,
-        "line": 336
+        "ip": 1086,
+        "line": 344
       },
       {
-        "ip": 1125,
-        "line": 349
+        "ip": 1090,
+        "line": 345
       },
       {
-        "ip": 1129,
-        "line": 350
+        "ip": 1157,
+        "line": 358
       },
       {
-        "ip": 1149,
-        "line": 360
+        "ip": 1161,
+        "line": 359
       },
       {
-        "ip": 1158,
-        "line": 365
+        "ip": 1181,
+        "line": 370
       },
       {
-        "ip": 1180,
-        "line": 373
+        "ip": 1190,
+        "line": 375
       },
       {
-        "ip": 1198,
-        "line": 378
-      },
-      {
-        "ip": 1211,
+        "ip": 1212,
         "line": 381
       },
       {
-        "ip": 1216,
-        "line": 382
+        "ip": 1230,
+        "line": 385
       },
       {
-        "ip": 1227,
-        "line": 383
+        "ip": 1241,
+        "line": 388
       },
       {
-        "ip": 1232,
-        "line": 384
-      },
-      {
-        "ip": 1245,
-        "line": 387
-      },
-      {
-        "ip": 1258,
+        "ip": 1246,
         "line": 389
       },
       {
-        "ip": 1263,
+        "ip": 1257,
         "line": 390
       },
       {
-        "ip": 1274,
+        "ip": 1262,
         "line": 391
       },
       {
-        "ip": 1279,
-        "line": 392
+        "ip": 1275,
+        "line": 394
       },
       {
-        "ip": 1286,
-        "line": 395
+        "ip": 1284,
+        "line": 396
       },
       {
-        "ip": 1299,
+        "ip": 1289,
         "line": 397
       },
       {
-        "ip": 1304,
+        "ip": 1300,
         "line": 398
       },
       {
-        "ip": 1315,
+        "ip": 1305,
         "line": 399
       },
       {
-        "ip": 1320,
-        "line": 400
+        "ip": 1312,
+        "line": 402
+      },
+      {
+        "ip": 1321,
+        "line": 404
+      },
+      {
+        "ip": 1326,
+        "line": 405
+      },
+      {
+        "ip": 1337,
+        "line": 406
+      },
+      {
+        "ip": 1342,
+        "line": 407
       }
     ]
   },
@@ -457,5 +457,5 @@
     "name": "cashc",
     "version": "0.12.1"
   },
-  "updatedAt": "2026-02-24T21:05:12.516Z"
+  "updatedAt": "2026-02-25T14:07:27.347Z"
 }

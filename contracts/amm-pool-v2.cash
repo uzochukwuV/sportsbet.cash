@@ -9,18 +9,15 @@
  *   k = reserveHomeSats * reserveAwaySats (preserved across trades).
  *   tokensOut = satsBought / pricePerUnit
  *
- * State NFT Commitment Format (50 bytes):
- *   [0]: state (1 byte)
- *   [1-8]: reserveHomeSats (8 bytes) - BCH sats committed to HOME side
- *   [9-16]: reserveAwaySats (8 bytes) - BCH sats committed to AWAY side
- *   [17-20]: creationBlock (4 bytes)
- *   [21-24]: halftimeBlock (4 bytes) - block when halftime is revealed
- *   [25-28]: endBlock (4 bytes) - block when final is revealed
- *   [29]: sportType (1 byte)
- *   [30-37]: matchId (8 bytes)
- *   [38-41]: homeTeam (4 bytes)
- *   [42-45]: awayTeam (4 bytes)
- *   [46-49]: scores (4 bytes) - home1H, away1H, homeFinal, awayFinal
+ * State NFT Commitment Format (38 bytes, within 40-byte consensus limit):
+ *   [0]:     state (1 byte)
+ *   [1-8]:   reserveHomeSats (8 bytes) - BCH sats committed to HOME side
+ *   [9-16]:  reserveAwaySats (8 bytes) - BCH sats committed to AWAY side
+ *   [17-20]: halftimeBlock (4 bytes) - block when halftime is revealed
+ *   [21-24]: endBlock (4 bytes) - block when final is revealed
+ *   [25]:    sportType (1 byte)
+ *   [26-33]: matchId (8 bytes)
+ *   [34-37]: scores (4 bytes) - home1H, away1H, homeFinal, awayFinal
  *
  * States:
  *   0 = TRADING (pre-match betting)
@@ -201,7 +198,7 @@ contract AmmPoolV2(
 
         require(state == 0);
 
-        int halftimeBlock = int(commitment.split(25)[0].split(21)[1]);
+        int halftimeBlock = int(commitment.split(21)[0].split(17)[1]);
         require(tx.locktime >= halftimeBlock);
 
         bytes newCommitment = bytes1(1) + commitment.split(1)[1];
@@ -232,8 +229,8 @@ contract AmmPoolV2(
 
         require(state == 1);
 
-        int sportType = int(commitment.split(30)[0].split(29)[1]);
-        bytes8 matchId = bytes8(commitment.split(38)[0].split(30)[1]);
+        int sportType = int(commitment.split(26)[0].split(25)[1]);
+        bytes8 matchId = bytes8(commitment.split(34)[0].split(26)[1]);
 
         bytes32 seed = hash256(blockHash1 + blockHash2 + blockHash3 + matchId);
         bytes32 scoreHash = hash256(seed + bytes1(0x48)); // 'H' for halftime
@@ -243,7 +240,7 @@ contract AmmPoolV2(
             int homeScore1H = 30 + (int(scoreHash.split(2)[0]) % 46);
             int awayScore1H = 30 + (int(scoreHash.split(4)[0].split(2)[1]) % 46);
             bytes newCommitment = bytes1(2) +
-                                  commitment.split(46)[0].split(1)[1] +
+                                  commitment.split(34)[0].split(1)[1] +
                                   bytes1(homeScore1H) +
                                   bytes1(awayScore1H) +
                                   bytes2(0);
@@ -254,7 +251,7 @@ contract AmmPoolV2(
             int homeScore1H = int(scoreHash.split(1)[0]) % 5;
             int awayScore1H = int(scoreHash.split(2)[0].split(1)[1]) % 5;
             bytes newCommitment = bytes1(2) +
-                                  commitment.split(46)[0].split(1)[1] +
+                                  commitment.split(34)[0].split(1)[1] +
                                   bytes1(homeScore1H) +
                                   bytes1(awayScore1H) +
                                   bytes2(0);
@@ -265,7 +262,7 @@ contract AmmPoolV2(
             int homeScore1H = int(scoreHash.split(2)[0]) % 29;
             int awayScore1H = int(scoreHash.split(4)[0].split(2)[1]) % 29;
             bytes newCommitment = bytes1(2) +
-                                  commitment.split(46)[0].split(1)[1] +
+                                  commitment.split(34)[0].split(1)[1] +
                                   bytes1(homeScore1H) +
                                   bytes1(awayScore1H) +
                                   bytes2(0);
@@ -285,7 +282,7 @@ contract AmmPoolV2(
 
         require(state == 2);
 
-        int endBlock = int(commitment.split(29)[0].split(25)[1]);
+        int endBlock = int(commitment.split(25)[0].split(21)[1]);
         require(tx.locktime >= endBlock);
 
         bytes newCommitment = bytes1(3) + commitment.split(1)[1];
@@ -309,11 +306,11 @@ contract AmmPoolV2(
 
         require(state == 3);
 
-        int sportType = int(commitment.split(30)[0].split(29)[1]);
-        bytes8 matchId = bytes8(commitment.split(38)[0].split(30)[1]);
+        int sportType = int(commitment.split(26)[0].split(25)[1]);
+        bytes8 matchId = bytes8(commitment.split(34)[0].split(26)[1]);
 
-        int homeScore1H = int(commitment.split(47)[0].split(46)[1]);
-        int awayScore1H = int(commitment.split(48)[0].split(47)[1]);
+        int homeScore1H = int(commitment.split(35)[0].split(34)[1]);
+        int awayScore1H = int(commitment.split(36)[0].split(35)[1]);
 
         bytes32 seed = hash256(blockHash1 + blockHash2 + blockHash3 + matchId);
         bytes32 scoreHash = hash256(seed + bytes1(0x46)); // 'F' for final
@@ -325,7 +322,7 @@ contract AmmPoolV2(
             int homeScoreFinal = homeScore1H + homeScore2H;
             int awayScoreFinal = awayScore1H + awayScore2H;
             bytes newCommitment = bytes1(4) +
-                                  commitment.split(46)[0].split(1)[1] +
+                                  commitment.split(34)[0].split(1)[1] +
                                   bytes1(homeScore1H) +
                                   bytes1(awayScore1H) +
                                   bytes1(homeScoreFinal) +
@@ -339,7 +336,7 @@ contract AmmPoolV2(
             int homeScoreFinal = homeScore1H + homeScore2H;
             int awayScoreFinal = awayScore1H + awayScore2H;
             bytes newCommitment = bytes1(4) +
-                                  commitment.split(46)[0].split(1)[1] +
+                                  commitment.split(34)[0].split(1)[1] +
                                   bytes1(homeScore1H) +
                                   bytes1(awayScore1H) +
                                   bytes1(homeScoreFinal) +
@@ -353,7 +350,7 @@ contract AmmPoolV2(
             int homeScoreFinal = homeScore1H + homeScore2H;
             int awayScoreFinal = awayScore1H + awayScore2H;
             bytes newCommitment = bytes1(4) +
-                                  commitment.split(46)[0].split(1)[1] +
+                                  commitment.split(34)[0].split(1)[1] +
                                   bytes1(homeScore1H) +
                                   bytes1(awayScore1H) +
                                   bytes1(homeScoreFinal) +
@@ -377,8 +374,8 @@ contract AmmPoolV2(
 
         require(state == 4); // Must be SETTLED
 
-        int homeScoreFinal = int(commitment.split(49)[0].split(48)[1]);
-        int awayScoreFinal = int(commitment.split(50)[0].split(49)[1]);
+        int homeScoreFinal = int(commitment.split(37)[0].split(36)[1]);
+        int awayScoreFinal = int(commitment.split(38)[0].split(37)[1]);
 
         int tokenAmount = tx.inputs[1].tokenAmount;
         require(tokenAmount > 0);

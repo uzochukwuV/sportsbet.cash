@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(export PATH=$PATH:\"/c/Users/ASUS FX95G/AppData/Roaming/npm\")",
+      "Bash(yarn test)",
+      "Bash(yarn deploy:*)",
+      "Bash(yarn frontend:build:*)"
+    ]
+  }
+}

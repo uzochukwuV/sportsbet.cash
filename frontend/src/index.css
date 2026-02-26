@@ -21,11 +21,13 @@
   --color-accent-600: #4f46e5;
 
   /* Success/Win - green */
+  --color-win-300: #86efac;
   --color-win-400: #4ade80;
   --color-win-500: #22c55e;
   --color-win-600: #16a34a;
 
   /* Error/Lose - red */
+  --color-lose-300: #fca5a5;
   --color-lose-400: #f87171;
   --color-lose-500: #ef4444;
   --color-lose-600: #dc2626;
@@ -112,23 +114,23 @@ body {
 }
 
 .btn-primary {
-  @apply btn bg-gradient-to-r from-primary-500 to-primary-600 text-white hover:from-primary-400 hover:to-primary-500 focus:ring-primary-500 shadow-lg shadow-primary-500/25;
+  @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-gradient-to-r from-primary-500 to-primary-600 text-white hover:from-primary-400 hover:to-primary-500 focus:ring-primary-500 shadow-lg shadow-primary-500/25;
 }
 
 .btn-secondary {
-  @apply btn bg-slate-800 text-slate-100 hover:bg-slate-700 focus:ring-slate-500 border border-slate-700;
+  @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-slate-800 text-slate-100 hover:bg-slate-700 focus:ring-slate-500 border border-slate-700;
 }
 
 .btn-ghost {
-  @apply btn text-slate-400 hover:text-slate-100 hover:bg-slate-800/50;
+  @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-slate-400 hover:text-slate-100 hover:bg-slate-800/50;
 }
 
 .btn-success {
-  @apply btn bg-gradient-to-r from-win-500 to-win-600 text-white hover:from-win-400 hover:to-win-500 focus:ring-win-500;
+  @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-gradient-to-r from-win-500 to-win-600 text-white hover:from-win-400 hover:to-win-500 focus:ring-win-500;
 }
 
 .btn-danger {
-  @apply btn bg-gradient-to-r from-lose-500 to-lose-600 text-white hover:from-lose-400 hover:to-lose-500 focus:ring-lose-500;
+  @apply inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer bg-gradient-to-r from-lose-500 to-lose-600 text-white hover:from-lose-400 hover:to-lose-500 focus:ring-lose-500;
 }
 
 /* Input styles */
@@ -142,19 +144,19 @@ body {
 }
 
 .badge-primary {
-  @apply badge bg-primary-500/20 text-primary-300 border border-primary-500/30;
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary-500/20 text-primary-300 border border-primary-500/30;
 }
 
 .badge-success {
-  @apply badge bg-win-500/20 text-win-300 border border-win-500/30;
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-win-500/20 text-win-300 border border-win-500/30;
 }
 
 .badge-danger {
-  @apply badge bg-lose-500/20 text-lose-300 border border-lose-500/30;
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-lose-500/20 text-lose-300 border border-lose-500/30;
 }
 
 .badge-warning {
-  @apply badge bg-amber-500/20 text-amber-300 border border-amber-500/30;
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30;
 }
 
 /* Stat card */
