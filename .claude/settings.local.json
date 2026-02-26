@@ -5,7 +5,10 @@
       "Bash(yarn test)",
       "Bash(yarn deploy:*)",
       "Bash(yarn frontend:build:*)",
-      "Bash(node --input-type=module:*)"
+      "Bash(node --input-type=module:*)",
+      "Bash(export PATH=\"$PATH:/c/Users/ASUS FX95G/AppData/Roaming/npm\")",
+      "Bash(yarn ts-node:*)",
+      "Bash(yarn tsx:*)"
     ]
   }
 }
