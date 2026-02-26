@@ -149,6 +149,8 @@ export function useMatches(): UseMatchesReturn {
   const lastBlockRef = useRef<number>(0);
 
   const fetchMatches = useCallback(async () => {
+    if (!electrum.isConnected) return; // wait until WebSocket is open
+
     if (POOL_REGISTRY.length === 0) {
       // No pools registered yet — show empty state, not an error
       setMatches([]);
@@ -199,10 +201,10 @@ export function useMatches(): UseMatchesReturn {
     }
   }, [electrum]);
 
-  // Fetch on mount
+  // Fetch when connected (or reconnected) and on mount
   useEffect(() => {
-    fetchMatches();
-  }, [fetchMatches]);
+    if (electrum.isConnected) fetchMatches();
+  }, [electrum.isConnected, fetchMatches]);
 
   // Refresh whenever a new block arrives (re-check pool states)
   useEffect(() => {

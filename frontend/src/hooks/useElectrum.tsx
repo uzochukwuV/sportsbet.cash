@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
+import { createContext, useContext, useState, useEffect, useRef, ReactNode, useCallback } from 'react';
 
 // Electrum server configuration
 const ELECTRUM_SERVERS = {
@@ -13,12 +13,6 @@ const ELECTRUM_SERVERS = {
 };
 
 export type Network = 'mainnet' | 'chipnet';
-
-interface ElectrumMessage {
-  id: number;
-  method: string;
-  params: unknown[];
-}
 
 interface ElectrumResponse {
   id: number;
@@ -46,11 +40,6 @@ interface TxHistory {
   height: number;
 }
 
-interface BlockHeader {
-  height: number;
-  hex: string;
-}
-
 interface ElectrumContextType {
   isConnected: boolean;
   network: Network;
@@ -70,149 +59,155 @@ interface ElectrumContextType {
 const ElectrumContext = createContext<ElectrumContextType | null>(null);
 
 export function ElectrumProvider({ children }: { children: ReactNode }) {
-  const [ws, setWs] = useState<WebSocket | null>(null);
+  // Use refs for mutable values that don't need to trigger re-renders.
+  // This eliminates stale-closure bugs where sendRequest captures an old ws/requestId.
+  const wsRef            = useRef<WebSocket | null>(null);
+  const requestIdRef     = useRef(0);
+  const pendingRequests  = useRef<Map<number, { resolve: (v: unknown) => void; reject: (e: Error) => void }>>(new Map());
+  const subscriptions    = useRef<Map<string, () => void>>(new Map());
+
   const [isConnected, setIsConnected] = useState(false);
-  const [network, setNetwork] = useState<Network>('chipnet');
+  const [network, setNetwork]         = useState<Network>('chipnet');
   const [blockHeight, setBlockHeight] = useState(0);
-  const [error, setError] = useState<string | null>(null);
-  const [requestId, setRequestId] = useState(0);
-  const [pendingRequests, setPendingRequests] = useState<Map<number, {
-    resolve: (value: unknown) => void;
-    reject: (error: Error) => void;
-  }>>(new Map());
-  const [subscriptions, setSubscriptions] = useState<Map<string, () => void>>(new Map());
+  const [error, setError]             = useState<string | null>(null);
 
-  // Connect to Electrum server
-  const connect = useCallback(async () => {
-    const servers = ELECTRUM_SERVERS[network];
-    const server = servers[0]; // Use first server, could implement failover
-
-    const url = `${server.protocol}://${server.host}:${server.port}`;
-
-    try {
-      const socket = new WebSocket(url);
-
-      socket.onopen = () => {
-        setIsConnected(true);
-        setError(null);
-
-        // Subscribe to block headers
-        socket.send(JSON.stringify({
-          id: 0,
-          method: 'blockchain.headers.subscribe',
-          params: [],
-        }));
-      };
-
-      socket.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data) as ElectrumResponse;
-
-          // Handle block header subscription
-          if (data.id === 0 && data.result) {
-            const header = data.result as { height: number };
-            setBlockHeight(header.height);
-          }
-
-          // Handle subscription notifications (no id)
-          if (!('id' in data) && 'method' in data) {
-            const notification = data as unknown as { method: string; params: unknown[] };
-            if (notification.method === 'blockchain.headers.subscribe') {
-              const [header] = notification.params as [{ height: number }];
-              setBlockHeight(header.height);
-            }
-            if (notification.method === 'blockchain.scripthash.subscribe') {
-              const [scripthash] = notification.params as [string];
-              const callback = subscriptions.get(scripthash);
-              if (callback) callback();
-            }
-          }
-
-          // Handle pending request responses
-          if (data.id && pendingRequests.has(data.id)) {
-            const { resolve, reject } = pendingRequests.get(data.id)!;
-            if (data.error) {
-              reject(new Error(data.error.message));
-            } else {
-              resolve(data.result);
-            }
-            pendingRequests.delete(data.id);
-          }
-        } catch (e) {
-          console.error('Failed to parse Electrum message:', e);
-        }
-      };
-
-      socket.onerror = (e) => {
-        setError('WebSocket error');
-        console.error('Electrum WebSocket error:', e);
-      };
-
-      socket.onclose = () => {
-        setIsConnected(false);
-        // Attempt reconnect after 5 seconds
-        setTimeout(() => connect(), 5000);
-      };
-
-      setWs(socket);
-    } catch (e) {
-      setError(`Failed to connect: ${e}`);
-    }
-  }, [network, pendingRequests, subscriptions]);
-
-  // Connect on mount and network change
-  useEffect(() => {
-    connect();
-    return () => {
-      if (ws) ws.close();
-    };
-  }, [network]);
-
-  // Send request helper
+  // sendRequest is stable — it reads wsRef.current at call time, no stale closures.
   const sendRequest = useCallback((method: string, params: unknown[]): Promise<unknown> => {
     return new Promise((resolve, reject) => {
-      if (!ws || ws.readyState !== WebSocket.OPEN) {
+      const socket = wsRef.current;
+      if (!socket || socket.readyState !== WebSocket.OPEN) {
         reject(new Error('Not connected to Electrum server'));
         return;
       }
 
-      const id = requestId + 1;
-      setRequestId(id);
+      const id = ++requestIdRef.current;
+      pendingRequests.current.set(id, { resolve, reject });
 
-      pendingRequests.set(id, { resolve, reject });
-
-      ws.send(JSON.stringify({
-        id,
-        method,
-        params,
-      }));
+      socket.send(JSON.stringify({ id, method, params }));
 
       // Timeout after 30 seconds
       setTimeout(() => {
-        if (pendingRequests.has(id)) {
-          pendingRequests.delete(id);
+        if (pendingRequests.current.has(id)) {
+          pendingRequests.current.delete(id);
           reject(new Error('Request timeout'));
         }
       }, 30000);
     });
-  }, [ws, requestId, pendingRequests]);
+  }, []); // no dependencies — reads refs at call time
 
-  // Convert address to scripthash (Electrum format)
+  // Connect to Electrum server
+  const connect = useCallback(() => {
+    const servers = ELECTRUM_SERVERS[network];
+    const server  = servers[0];
+    const url     = `${server.protocol}://${server.host}:${server.port}`;
+
+    const socket = new WebSocket(url);
+    wsRef.current = socket;
+
+    socket.onopen = () => {
+      setIsConnected(true);
+      setError(null);
+      socket.send(JSON.stringify({ id: 0, method: 'blockchain.headers.subscribe', params: [] }));
+    };
+
+    socket.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data) as ElectrumResponse;
+
+        // Block header subscription initial response
+        if (data.id === 0 && data.result) {
+          const header = data.result as { height: number };
+          setBlockHeight(header.height);
+        }
+
+        // Subscription notifications (no id field)
+        if (!('id' in data) && 'method' in data) {
+          const notif = data as unknown as { method: string; params: unknown[] };
+          if (notif.method === 'blockchain.headers.subscribe') {
+            const [header] = notif.params as [{ height: number }];
+            setBlockHeight(header.height);
+          }
+          if (notif.method === 'blockchain.scripthash.subscribe') {
+            const [scripthash] = notif.params as [string];
+            const cb = subscriptions.current.get(scripthash);
+            if (cb) cb();
+          }
+        }
+
+        // Resolve/reject pending requests
+        if (data.id && pendingRequests.current.has(data.id)) {
+          const { resolve, reject } = pendingRequests.current.get(data.id)!;
+          pendingRequests.current.delete(data.id);
+          if (data.error) {
+            reject(new Error(data.error.message));
+          } else {
+            resolve(data.result);
+          }
+        }
+      } catch (e) {
+        console.error('Failed to parse Electrum message:', e);
+      }
+    };
+
+    socket.onerror = (e) => {
+      setError('WebSocket error');
+      console.error('Electrum WebSocket error:', e);
+    };
+
+    socket.onclose = () => {
+      setIsConnected(false);
+      // Attempt reconnect after 5 seconds
+      setTimeout(() => connect(), 5000);
+    };
+  }, [network]); // only re-create when network changes
+
+  // Connect on mount and when network changes
+  useEffect(() => {
+    connect();
+    return () => {
+      wsRef.current?.close();
+    };
+  }, [network]); // intentionally omit connect to avoid infinite loop; connect is stable per network
+
+  // Convert a CashAddress to an Electrum scripthash.
+  // Electrum scripthash = SHA256(scriptPubKey), reversed (little-endian).
+  //
+  // scriptPubKey:
+  //   P2PKH:  OP_DUP OP_HASH160 <20-byte-hash> OP_EQUALVERIFY OP_CHECKSIG
+  //           = 76 a9 14 <hash20> 88 ac
+  //   P2SH:   OP_HASH160 <20-byte-hash> OP_EQUAL
+  //           = a9 14 <hash20> 87
+  //   P2PKH with tokens: same script as P2PKH (same locking bytecode)
+  //   P2SH  with tokens: same script as P2SH
   const addressToScripthash = async (address: string): Promise<string> => {
-    // Simple P2PKH scripthash calculation
-    // In production, use @bitauth/libauth for full address parsing
-    const { sha256 } = await import('@bitauth/libauth');
+    const { decodeCashAddress, sha256 } = await import('@bitauth/libauth');
 
-    // Decode cashaddr to get hash160
-    // This is a simplified version - full implementation needs proper cashaddr parsing
-    const hash = address.includes(':') ? address.split(':')[1] : address;
+    const addr = address.includes(':') ? address : `bitcoincash:${address}`;
+    const decoded = decodeCashAddress(addr);
+    if (typeof decoded === 'string') {
+      throw new Error(`Invalid address "${address}": ${decoded}`);
+    }
 
-    // For demo purposes, return a hash of the address
-    // Real implementation should use cashAddressToLockingBytecode
-    const encoder = new TextEncoder();
-    const hashBytes = sha256.hash(encoder.encode(address));
+    const payload = decoded.payload as Uint8Array; // 20-byte hash
 
-    // Reverse for little-endian
+    let scriptPubKey: Uint8Array;
+    const type = decoded.type as string;
+    if (type === 'p2pkh' || type === 'p2pkhWithTokens') {
+      // OP_DUP OP_HASH160 <push 20> <hash20> OP_EQUALVERIFY OP_CHECKSIG
+      scriptPubKey = new Uint8Array([0x76, 0xa9, 0x14, ...payload, 0x88, 0xac]);
+    } else if (type === 'p2sh' || type === 'p2shWithTokens') {
+      if (payload.length === 20) {
+        // P2SH20: OP_HASH160 <push 20> <hash20> OP_EQUAL
+        scriptPubKey = new Uint8Array([0xa9, 0x14, ...payload, 0x87]);
+      } else {
+        // P2SH32: OP_HASH256 <push 32> <hash32> OP_EQUAL (CashScript default)
+        scriptPubKey = new Uint8Array([0xaa, 0x20, ...payload, 0x87]);
+      }
+    } else {
+      throw new Error(`Unsupported address type: ${type}`);
+    }
+
+    const hashBytes = sha256.hash(scriptPubKey);
     const reversed = new Uint8Array(hashBytes).reverse();
     return Array.from(reversed).map(b => b.toString(16).padStart(2, '0')).join('');
   };
@@ -232,7 +227,7 @@ export function ElectrumProvider({ children }: { children: ReactNode }) {
 
   const getUtxos = useCallback(async (address: string): Promise<UTXO[]> => {
     const scripthash = await addressToScripthash(address);
-    const utxos = await sendRequest('blockchain.scripthash.listunspent', [scripthash]) as Array<{
+    const utxos = await sendRequest('blockchain.scripthash.listunspent', [scripthash, 'include_tokens']) as Array<{
       tx_hash: string;
       tx_pos: number;
       value: number;
@@ -287,14 +282,14 @@ export function ElectrumProvider({ children }: { children: ReactNode }) {
 
   const subscribeToAddress = useCallback(async (address: string, callback: () => void) => {
     const scripthash = await addressToScripthash(address);
-    subscriptions.set(scripthash, callback);
+    subscriptions.current.set(scripthash, callback);
     await sendRequest('blockchain.scripthash.subscribe', [scripthash]);
-  }, [sendRequest, subscriptions]);
+  }, [sendRequest]);
 
   const switchNetwork = useCallback((newNetwork: Network) => {
-    if (ws) ws.close();
+    wsRef.current?.close();
     setNetwork(newNetwork);
-  }, [ws]);
+  }, []);
 
   const value: ElectrumContextType = {
     isConnected,
