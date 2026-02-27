@@ -3,10 +3,7 @@ import SignClient from '@walletconnect/sign-client';
 import { WalletConnectModal } from '@walletconnect/modal';
 import { useElectrum } from './useElectrum';
 import {
-  generatePrivateKey,
   instantiateSecp256k1,
-  privateKeyToP2pkhCashAddress,
-  cashAddressToLockingBytecode,
   hexToBin,
   binToHex,
   decodeTransaction,
@@ -14,6 +11,7 @@ import {
   generateSigningSerializationBCH,
   type Secp256k1,
 } from '@bitauth/libauth';
+import { privKeyToAddress } from './walletUtils';
 
 // ---------------------------------------------------------------------------
 // WalletConnect configuration
@@ -22,7 +20,6 @@ const WC_PROJECT_ID = import.meta.env.VITE_WALLETCONNECT_PROJECT_ID ?? '';
 const IS_CHIPNET = import.meta.env.VITE_NETWORK !== 'mainnet';
 const BCH_NAMESPACE = 'bch';
 const BCH_CHAIN = IS_CHIPNET ? 'bch:bchtest' : 'bch:bitcoincash';
-const ADDRESS_PREFIX = IS_CHIPNET ? 'bchtest' : 'bitcoincash';
 
 const LOCAL_WALLET_KEY = 'sportsbet_local_wallet';
 
@@ -69,27 +66,8 @@ interface WalletContextType {
 const WalletContext = createContext<WalletContextType | null>(null);
 
 // ---------------------------------------------------------------------------
-// Local wallet helpers
+// Local wallet helpers (generateLocalPrivKey, privKeyToAddress live in walletUtils.ts)
 // ---------------------------------------------------------------------------
-
-/** Generate a fresh random private key (hex string) */
-export function generateLocalPrivKey(): string {
-  // generatePrivateKey does not need secp256k1 WASM — just random bytes + range check
-  const privKey = generatePrivateKey(() => crypto.getRandomValues(new Uint8Array(32)));
-  if (typeof privKey === 'string') throw new Error('Key generation failed: ' + privKey);
-  return binToHex(privKey);
-}
-
-/**
- * Derive a P2PKH cash address from a hex private key.
- * Uses the compiler template path (no raw WASM needed at derive time).
- */
-function privKeyToAddress(privKeyHex: string): string {
-  const privKeyBytes = hexToBin(privKeyHex);
-  const result = privateKeyToP2pkhCashAddress({ privateKey: privKeyBytes, prefix: ADDRESS_PREFIX });
-  if (typeof result === 'string') throw new Error('Address derivation failed: ' + result);
-  return result.address;
-}
 
 /**
  * Sign all P2PKH inputs of a raw unsigned transaction using BIP143/BCH sighash.
@@ -125,7 +103,7 @@ async function signWithLocalKey(
         token: {
           amount: o.token.amount,
           category: o.token.category,
-          ...(o.token.nft ? { nft: { capability: o.token.nft.capability, commitment: o.token.nft.commitment } } : {}),
+          ...(o.token.nft ? { nft: { capability: o.token.nft.capability as 'none' | 'mutable' | 'minting', commitment: o.token.nft.commitment } } : {}),
         },
       } : {}),
     }));
@@ -141,7 +119,7 @@ async function signWithLocalKey(
       },
     };
 
-    const serialization = generateSigningSerializationBCH(signingContext, {
+    const serialization = generateSigningSerializationBCH(signingContext as never, {
       coveredBytecode: src.lockingBytecode,
       signingSerializationType: new Uint8Array([SIGHASH_ALL_FORKID]),
     });
@@ -295,18 +273,19 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // Balance polling
+  const { isConnected: electrumConnected, getBalance } = electrum;
   useEffect(() => {
-    if (!address || !electrum.isConnected) return;
+    if (!address || !electrumConnected) return;
     const refresh = async () => {
       try {
-        const { confirmed, unconfirmed } = await electrum.getBalance(address);
+        const { confirmed, unconfirmed } = await getBalance(address);
         setBalance(confirmed + unconfirmed);
       } catch { /* best-effort */ }
     };
     refresh();
     const id = setInterval(refresh, 30_000);
     return () => clearInterval(id);
-  }, [address, electrum.isConnected]);
+  }, [address, electrumConnected, getBalance]);
 
   const connect = useCallback(async () => {
     await initWalletConnect();
@@ -435,20 +414,4 @@ export function useWallet(): WalletContextType {
   return context;
 }
 
-// ---------------------------------------------------------------------------
-// Re-exports
-// ---------------------------------------------------------------------------
-
-export { cashAddressToLockingBytecode };
 export type { SourceOutput };
-
-// Used by WalletSetupModal to validate an imported private key
-export function validateAndDeriveAddress(privKeyHex: string): string | null {
-  try {
-    if (!/^[0-9a-fA-F]{64}$/.test(privKeyHex)) return null;
-    return privKeyToAddress(privKeyHex);
-  } catch {
-    return null;
-  }
-}
-

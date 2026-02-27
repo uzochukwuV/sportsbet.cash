@@ -12,7 +12,7 @@ import {
   ShieldCheck,
   Smartphone,
 } from 'lucide-react';
-import { generateLocalPrivKey, validateAndDeriveAddress } from '../hooks/useWallet';
+import { generateLocalPrivKey, validateAndDeriveAddress } from '../hooks/walletUtils';
 import { useWallet } from '../hooks/useWallet';
 
 type Tab = 'choose' | 'generate' | 'import' | 'walletconnect';
