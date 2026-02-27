@@ -116,24 +116,28 @@ async function signWithLocalKey(
     const src = sourceOutputs[i];
     if (!src) continue;
 
-    // Build the BIP143 signing serialization using libauth's helper
+    // Build the BIP143 signing serialization using libauth's helper.
+    // CompilationContextBCH = { inputIndex, sourceOutputs: Output[], transaction }
+    const sourceOutputsAll = sourceOutputs.map(o => ({
+      lockingBytecode: o.lockingBytecode,
+      valueSatoshis: o.valueSatoshis,
+      ...(o.token ? {
+        token: {
+          amount: o.token.amount,
+          category: o.token.category,
+          ...(o.token.nft ? { nft: { capability: o.token.nft.capability, commitment: o.token.nft.commitment } } : {}),
+        },
+      } : {}),
+    }));
+
     const signingContext = {
-      version: tx.version,
-      inputs: tx.inputs,
-      outputs: tx.outputs,
-      locktime: tx.locktime,
       inputIndex: i,
-      sourceOutput: {
-        lockingBytecode: src.lockingBytecode,
-        valueSatoshis: src.valueSatoshis,
-        // Token data if present (for CashTokens)
-        ...(src.token ? {
-          token: {
-            amount: src.token.amount,
-            category: src.token.category,
-            ...(src.token.nft ? { nft: { capability: src.token.nft.capability, commitment: src.token.nft.commitment } } : {}),
-          },
-        } : {}),
+      sourceOutputs: sourceOutputsAll,
+      transaction: {
+        version: tx.version,
+        inputs: tx.inputs,
+        outputs: tx.outputs,
+        locktime: tx.locktime,
       },
     };
 
