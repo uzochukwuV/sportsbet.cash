@@ -11,8 +11,7 @@ import {
   binToHex,
   decodeTransaction,
   encodeTransaction,
-  generateSigningSerializationBch,
-  SigningSerializationTypeBch,
+  generateSigningSerializationBCH,
   type Secp256k1,
 } from '@bitauth/libauth';
 
@@ -89,7 +88,7 @@ function privKeyToAddress(privKeyHex: string): string {
   const privKeyBytes = hexToBin(privKeyHex);
   const result = privateKeyToP2pkhCashAddress({ privateKey: privKeyBytes, prefix: ADDRESS_PREFIX });
   if (typeof result === 'string') throw new Error('Address derivation failed: ' + result);
-  return result;
+  return result.address;
 }
 
 /**
@@ -138,7 +137,7 @@ async function signWithLocalKey(
       },
     };
 
-    const serialization = generateSigningSerializationBch(signingContext, {
+    const serialization = generateSigningSerializationBCH(signingContext, {
       coveredBytecode: src.lockingBytecode,
       signingSerializationType: new Uint8Array([SIGHASH_ALL_FORKID]),
     });
@@ -179,7 +178,8 @@ function concatBytes(...arrays: Uint8Array[]): Uint8Array {
 }
 
 async function dsha256(data: Uint8Array): Promise<Uint8Array> {
-  const h1 = await crypto.subtle.digest('SHA-256', data);
+  const buf = data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength) as ArrayBuffer;
+  const h1 = await crypto.subtle.digest('SHA-256', buf);
   const h2 = await crypto.subtle.digest('SHA-256', h1);
   return new Uint8Array(h2);
 }
@@ -448,6 +448,3 @@ export function validateAndDeriveAddress(privKeyHex: string): string | null {
   }
 }
 
-// Suppress unused import warning — SigningSerializationTypeBch is referenced
-// by generateSigningSerializationBch internally; keep the import for tree-shaking
-void (SigningSerializationTypeBch satisfies unknown);
