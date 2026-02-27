@@ -132,7 +132,7 @@ export function MarketsPage() {
   const [sportFilter, setSportFilter] = useState<SportFilter>('all');
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<SortKey>('status');
-  const [showSettled, setShowSettled] = useState(false);
+  const [showSettled, setShowSettled] = useState(true);
 
   const filtered = useMemo(() => {
     let list = matches;

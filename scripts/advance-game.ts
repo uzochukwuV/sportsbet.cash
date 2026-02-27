@@ -192,6 +192,53 @@ function parseCommitment(hex: string): PoolState {
 const STATE_NAMES = ['TRADING', 'HALFTIME_PENDING', 'HALFTIME_TRADING', 'FINAL_PENDING', 'SETTLED'];
 
 // =============================================================================
+// Script integer arithmetic helpers
+// =============================================================================
+
+/**
+ * Interpret bytes as a Bitcoin Script integer (little-endian, sign bit in MSB of last byte).
+ * This matches CashScript's `int(bytes)` operator.
+ */
+function scriptIntFromBytes(bytes: Uint8Array): number {
+  if (bytes.length === 0) return 0;
+  let result = 0;
+  for (let i = 0; i < bytes.length; i++) {
+    result |= bytes[i] << (i * 8);
+  }
+  // Check sign bit (top bit of last byte)
+  const isNegative = (bytes[bytes.length - 1] & 0x80) !== 0;
+  if (isNegative) {
+    // Clear sign bit and negate
+    result &= ~(0x80 << ((bytes.length - 1) * 8));
+    result = -result;
+  }
+  return result;
+}
+
+/**
+ * Perform OP_MOD semantics: result has same sign as dividend (like C remainder, not Python modulo).
+ */
+function scriptMod(a: number, b: number): number {
+  return a % b; // JS % already matches OP_MOD sign behavior
+}
+
+/**
+ * Encode a Script integer as N bytes (mirrors CashScript's bytesN(x) = NUM2BIN(x, N)).
+ * For N=1: positive < 128 → the byte value; negative → (|x| | 0x80).
+ */
+function scriptIntToBytes1(value: number): number {
+  if (value >= 0) {
+    if (value > 127) throw new Error(`Value ${value} does not fit in 1 signed byte`);
+    return value;
+  } else {
+    // Negative: store magnitude with sign bit set
+    const magnitude = -value;
+    if (magnitude > 127) throw new Error(`Value ${value} does not fit in 1 signed byte`);
+    return magnitude | 0x80;
+  }
+}
+
+// =============================================================================
 // Commitment builders (mirror the contract logic)
 // =============================================================================
 
@@ -233,34 +280,35 @@ function computeHalftimeCommitment(
   let homeScore1H: number;
   let awayScore1H: number;
 
-  // CashScript int(bytes) = little-endian interpretation
-  // scoreHash.split(2)[0] = bytes[0..1], little-endian int = bytes[0] | (bytes[1] << 8)
-  // scoreHash.split(4)[0].split(2)[1] = bytes[2..3], little-endian int = bytes[2] | (bytes[3] << 8)
+  // CashScript int(bytes) = Bitcoin Script integer (little-endian, sign bit in MSB of last byte)
+  // Must use scriptIntFromBytes() to match OP_BIN2NUM behavior exactly.
   if (sportType === 0) {
     // Basketball: 30-75 (range 46)
-    const v1 = scoreHash[0] | (scoreHash[1] << 8); // little-endian bytes[0..1]
-    const v2 = scoreHash[2] | (scoreHash[3] << 8); // little-endian bytes[2..3]
-    homeScore1H = 30 + (v1 % 46);
-    awayScore1H = 30 + (v2 % 46);
+    const v1 = scriptIntFromBytes(scoreHash.slice(0, 2));
+    const v2 = scriptIntFromBytes(scoreHash.slice(2, 4));
+    homeScore1H = 30 + scriptMod(v1, 46);
+    awayScore1H = 30 + scriptMod(v2, 46);
   } else if (sportType === 1) {
     // Football/Soccer: 0-4 (range 5)
-    // scoreHash.split(1)[0] = bytes[0], int = bytes[0]
-    // scoreHash.split(2)[0].split(1)[1] = bytes[1], int = bytes[1]
-    homeScore1H = scoreHash[0] % 5;
-    awayScore1H = scoreHash[1] % 5;
+    // scoreHash.split(1)[0] = byte[0] only (1 byte, sign bit in bit 7)
+    // scoreHash.split(2)[0].split(1)[1] = byte[1] only (1 byte)
+    const v1 = scriptIntFromBytes(scoreHash.slice(0, 1));
+    const v2 = scriptIntFromBytes(scoreHash.slice(1, 2));
+    homeScore1H = scriptMod(v1, 5);
+    awayScore1H = scriptMod(v2, 5);
   } else {
     // American football: 0-28 (range 29)
-    const v1 = scoreHash[0] | (scoreHash[1] << 8);
-    const v2 = scoreHash[2] | (scoreHash[3] << 8);
-    homeScore1H = v1 % 29;
-    awayScore1H = v2 % 29;
+    const v1 = scriptIntFromBytes(scoreHash.slice(0, 2));
+    const v2 = scriptIntFromBytes(scoreHash.slice(2, 4));
+    homeScore1H = scriptMod(v1, 29);
+    awayScore1H = scriptMod(v2, 29);
   }
 
   const result = new Uint8Array(38);
   result[0] = 2; // HALFTIME_TRADING
   result.set(bytes.slice(1, 34), 1); // preserve reserves, blocks, sportType, matchId
-  result[34] = homeScore1H;
-  result[35] = awayScore1H;
+  result[34] = scriptIntToBytes1(homeScore1H);
+  result[35] = scriptIntToBytes1(awayScore1H);
   result[36] = 0;
   result[37] = 0;
   return binToHex(result);
@@ -285,8 +333,10 @@ function computeFinalCommitment(
   const bytes = hexToBin(currentHex);
   const sportType = bytes[25];
   const matchId = bytes.slice(26, 34);
-  const homeScore1H = bytes[34];
-  const awayScore1H = bytes[35];
+  // Scores are stored as Script integer bytes (bytes1 encoding).
+  // Must decode them back to Script integers to match the contract's int() read.
+  const homeScore1H = scriptIntFromBytes(bytes.slice(34, 35));
+  const awayScore1H = scriptIntFromBytes(bytes.slice(35, 36));
 
   // seed = hash256(h1 + h2 + h3 + matchId)
   const seedInput = new Uint8Array([...h1, ...h2, ...h3, ...matchId]);
@@ -299,20 +349,22 @@ function computeFinalCommitment(
   let homeScore2H: number;
   let awayScore2H: number;
 
-  // CashScript int(bytes) = little-endian
+  // CashScript int(bytes) = Bitcoin Script integer (little-endian, sign bit in MSB of last byte)
   if (sportType === 0) {
-    const v1 = scoreHash[0] | (scoreHash[1] << 8);
-    const v2 = scoreHash[2] | (scoreHash[3] << 8);
-    homeScore2H = 30 + (v1 % 46);
-    awayScore2H = 30 + (v2 % 46);
+    const v1 = scriptIntFromBytes(scoreHash.slice(0, 2));
+    const v2 = scriptIntFromBytes(scoreHash.slice(2, 4));
+    homeScore2H = 30 + scriptMod(v1, 46);
+    awayScore2H = 30 + scriptMod(v2, 46);
   } else if (sportType === 1) {
-    homeScore2H = scoreHash[0] % 5;
-    awayScore2H = scoreHash[1] % 5;
+    const v1 = scriptIntFromBytes(scoreHash.slice(0, 1));
+    const v2 = scriptIntFromBytes(scoreHash.slice(1, 2));
+    homeScore2H = scriptMod(v1, 5);
+    awayScore2H = scriptMod(v2, 5);
   } else {
-    const v1 = scoreHash[0] | (scoreHash[1] << 8);
-    const v2 = scoreHash[2] | (scoreHash[3] << 8);
-    homeScore2H = v1 % 29;
-    awayScore2H = v2 % 29;
+    const v1 = scriptIntFromBytes(scoreHash.slice(0, 2));
+    const v2 = scriptIntFromBytes(scoreHash.slice(2, 4));
+    homeScore2H = scriptMod(v1, 29);
+    awayScore2H = scriptMod(v2, 29);
   }
 
   const homeFinal = homeScore1H + homeScore2H;
@@ -321,10 +373,10 @@ function computeFinalCommitment(
   const result = new Uint8Array(38);
   result[0] = 4; // SETTLED
   result.set(bytes.slice(1, 34), 1);
-  result[34] = homeScore1H;
-  result[35] = awayScore1H;
-  result[36] = homeFinal;
-  result[37] = awayFinal;
+  result[34] = scriptIntToBytes1(homeScore1H);
+  result[35] = scriptIntToBytes1(awayScore1H);
+  result[36] = scriptIntToBytes1(homeFinal);
+  result[37] = scriptIntToBytes1(awayFinal);
   return binToHex(result);
 }
 
